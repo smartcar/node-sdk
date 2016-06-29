@@ -1,0 +1,434 @@
+{
+	"info": {
+		"type": "get",
+		"endpoint": null
+	},
+	"accelerometer": {
+		"type": "get",
+		"endpoint": "accelerometer"
+   },
+    "airbags": {
+    	"type": "get",
+    	"endpoint": "airbags", 
+    	"key": "airbags"
+    },
+    "pressure": {
+    	"type": "get",
+    	"endpoint": "barometer", 
+    	"key": "pressure"
+    },
+    "battery": {
+    	"type": "get",
+    	"endpoint": "battery"
+    },
+    "charge": {
+    	"type": "get",
+    	"endpoint": "charge", 
+    	"key": "state"
+    },
+    "chargeLimit": {
+    	"type": "get",
+    	"endpoint": "charge/limit"
+    },
+    "chargeSchedule": {
+    	"type": "get",
+    	"endpoint": "charge/schedule"
+    },
+    "climate": {
+    	"type": "get",
+    	"endpoint": "climate"
+    },
+    "collisionSensor": {
+    	"type": "get",
+    	"endpoint": "collisionSensor", 
+    	"key": "isTriggered"
+    },
+    "heading": {
+    	"type": "get",
+    	"endpoint": "compass", 
+    	"key": "heading"
+    },
+    "cruiseControl": {
+    	"type": "get",
+    	"endpoint": "cruise_control"
+    },
+    "dimensions": {
+    	"type": "get",
+    	"endpoint": "dimension"
+    },
+    "doors": {
+    	"type": "get",
+    	"endpoint": "doors", 
+    	"key": "doors"
+    },
+    "childLocks": {
+    	"type": "get",
+    	"endpoint": "safety_locks", 
+    	"key": "safetyLocks"
+    },
+    "driveMode": {
+    	"type": "get",
+    	"endpoint": "drive_mode", 
+    	"key": "mode"
+    },
+    "engine": {
+    	"type": "get",
+    	"endpoint": "engine", 
+    	"key": "state"
+    },
+    "engineCoolant": {
+    	"type": "get",
+    	"endpoint": "engine/coolant"
+    },
+    "hood": {
+    	"type": "get",
+    	"endpoint": "engine/hood", 
+    	"key": "isOpen"
+    },
+    "engineOil": {
+    	"type": "get",
+    	"endpoint": "engine/oil"
+    },
+    "throttlePosition": {
+    	"type": "get",
+    	"endpoint": "engine/throttle", 
+    	"key": "percentOpen"
+    },
+    "fuel": {
+    	"type": "get",
+    	"endpoint": "fuel"
+    },
+    "headlights": {
+    	"type": "get",
+    	"endpoint": "lights/headlight", 
+    	"key": "state"
+    },
+    "interiorLights": {
+    	"type": "get",
+    	"endpoint": "lights/interior", 
+    	"key": "lights"
+    },
+    "turnIndicator": {
+    	"type": "get",
+    	"endpoint": "lights/turn_indicator", 
+    	"key": "state"
+    },
+    "location": {
+    	"type": "get",
+    	"endpoint": "location"
+    },
+    "mirrors": {
+    	"type": "get",
+    	"endpoint": "mirrors", 
+    	"key": "mirrors"
+    },
+    "odometer": {
+    	"type": "get",
+    	"endpoint": "odometer", 
+    	"key": "distance"
+    },
+    "tripOdometers": {
+    	"type": "get",
+    	"endpoint": "odometer/trip", 
+    	"key": "trips"
+    },
+    "acceleratorPosition": {
+    	"type": "get",
+    	"endpoint": "pedals/accelerator", 
+    	"key": "percentDepressed"
+    },
+    "brakePedalPosition": {
+    	"type": "get",
+    	"endpoint": "pedals/brake", 
+    	"key": "percentDepressed"
+    },
+    "raining": {
+    	"type": "get",
+    	"endpoint": "rain_sensor", 
+    	"key": "isRaining"
+    },
+    "seats": {
+    	"type": "get",
+    	"endpoint": "seats", 
+    	"key": "seats"
+    },
+    "locked": {
+    	"type": "get",
+    	"endpoint": "security", 
+    	"key": "isLocked"
+    },
+    "sliBattery": {
+    	"type": "get",
+    	"endpoint": "sli_battery"
+    },
+    "speedometer": {
+    	"type": "get",
+    	"endpoint": "speedometer", 
+    	"key": "speed"
+    },
+    "steeringWheel": {
+    	"type": "get",
+    	"endpoint": "steering_wheel"
+    },
+    "sunroof": {
+    	"type": "get",
+    	"endpoint": "sunroof"
+    },
+    "tachometer": {
+    	"type": "get",
+    	"endpoint": "tachometer", 
+    	"key": "speed"
+    },
+    "interiorTemperature": {
+    	"type": "get",
+    	"endpoint": "thermistors/interior", 
+    	"key": "temperature"
+    },
+    "tirePressures": {
+    	"type": "get",
+    	"endpoint": "tires", 
+    	"key": "tires"
+    },
+    "transmission": {
+    	"type": "get",
+    	"endpoint": "transmission"
+    },
+    "transmissionFluid": {
+    	"type": "get",
+    	"endpoint": "transmission/fluid"
+    },
+    "frontTrunkOpen": {
+    	"type": "get",
+    	"endpoint": "trunks/front", 
+    	"key": "isOpen"
+    },
+    "rearTrunkOpen": {
+    	"type": "get",
+    	"endpoint": "trunks/rear", 
+    	"key": "isOpen"
+    },
+    "vin": {
+    	"type": "get",
+    	"endpoint": "vin", 
+    	"key": "vin"
+    },
+    "washerFluidRemaining": {
+    	"type": "get",
+    	"endpoint": "washer_fluid", 
+    	"key": "percentRemaining"
+    },
+    "wheelDiameters": {
+    	"type": "get",
+    	"endpoint": "wheels", 
+    	"key": "wheels"
+    },
+    "wheelSpeeds": {
+    	"type": "get",
+    	"endpoint": "wheels/speed", 
+    	"key": "wheelSpeed"
+    },
+    "windows": {
+    	"type": "get",
+    	"endpoint": "windows", 
+    	"key": "windows"
+    },
+    "yawRate": {
+    	"type": "get",
+    	"endpoint": "yaw", 
+    	"key": "rate"
+    },
+	"startCharging": {
+        "type": "action",
+        "endpoint": "charge",
+        "action": "START"
+    },
+    "stopCharging": {
+        "type": "action",
+        "endpoint": "charge",
+        "action": "STOP"
+    },
+    "enableChargeLimit": {
+        "type": "action",
+        "endpoint": "charge/limit",
+        "action": "ENABLE",
+        "key": "limit"
+    },
+    "disableChargeLimit": {
+        "type": "action",
+        "endpoint": "charge/limit",
+        "action": "DISABLE"
+    },
+    "enableChargeSchedule": {
+        "type": "action",
+        "endpoint": "charge/schedule",
+        "action": "ENABLE",
+        "key": "startTime"
+    },
+    "disableChargeSchedule": {
+        "type": "action",
+        "endpoint": "charge/schedule",
+        "action": "DISABLE"
+    },
+    "startClimate": {
+        "type": "action",
+        "endpoint": "climate",
+        "action": "START",
+        "key": "temperature"
+    },
+    "stopClimate": {
+        "type": "action",
+        "endpoint": "climate",
+        "action": "STOP"
+    },
+    "startEngine": {
+        "type": "action",
+        "endpoint": "engine",
+        "action": "START"
+    },
+    "stopEngine": {
+        "type": "action",
+        "endpoint": "engine",
+        "action": "STOP"
+    },
+    "turnEngineOn": {
+        "type": "action",
+        "endpoint": "engine",
+        "action": "ON"
+    },
+    "turnEngineAC1": {
+        "type": "action",
+        "endpoint": "engine",
+        "action": "ACCESSORY_1"
+    },
+    "turnEngineAC2": {
+        "type": "action",
+        "endpoint": "engine",
+        "action": "ACCESSORY_2"
+    },
+    "openHood": {
+        "type": "action",
+        "endpoint": "engine/hood",
+        "action": "OPEN"
+    },
+    "closeHood": {
+        "type": "action",
+        "endpoint": "engine/hood",
+        "action": "CLOSE"
+    },
+    "honkHorn": {
+        "type": "action",
+        "endpoint": "horn",
+        "action": "HONK"
+    },
+    "flashHeadlights": {
+        "type": "action",
+        "endpoint": "lights/headlights",
+        "action": "FLASH"
+    },
+    "adjustMirrors": {
+        "type": "action",
+        "endpoint": "mirrors",
+        "action": "TILT",
+        "key": "mirrors"
+    },
+    "startPanic": {
+        "type": "action",
+        "endpoint": "panic",
+        "action": "START"
+    },
+    "stopPanic": {
+        "type": "action",
+        "endpoint": "panic",
+        "action": "STOP"
+    },
+    "openChargePort": {
+        "type": "action",
+        "endpoint": "ports/charge",
+        "action": "OPEN"
+    },
+    "closeChargePort": {
+        "type": "action",
+        "endpoint": "ports/charge",
+        "action": "CLOSE"
+    },
+    "openFuelPort": {
+        "type": "action",
+        "endpoint": "ports/fuel",
+        "action": "OPEN"
+    },
+    "closeFuelPort": {
+        "type": "action",
+        "endpoint": "ports/fuel",
+        "action": "CLOSE"
+    },
+    "lock": {
+        "type": "action",
+        "endpoint": "security",
+        "action": "LOCK"
+    },
+    "unlock": {
+        "type": "action",
+        "endpoint": "security",
+        "action": "UNLOCK"
+    },
+    "openSunroof": {
+        "type": "action",
+        "endpoint": "sunroof",
+        "action": "OPEN",
+        "key": "percentOpen"
+    },
+    "ventSunroof": {
+        "type": "action",
+        "endpoint": "sunroof",
+        "action": "VENT"
+    },
+    "closeSunroof": {
+        "type": "action",
+        "endpoint": "sunroof",
+        "action": "CLOSE"
+    },
+    "openFrontTrunk": {
+        "type": "action",
+        "endpoint": "trunks/front",
+        "action": "OPEN"
+    },
+    "closeFrontTrunk": {
+        "type": "action",
+        "endpoint": "trunks/front",
+        "action": "CLOSE"
+    },
+    "openRearTrunk": {
+        "type": "action",
+        "endpoint": "trunks/rear",
+        "action": "OPEN"
+    },
+    "closeRearTrunk": {
+        "type": "action",
+        "endpoint": "trunks/rear",
+        "action": "CLOSE"
+    },
+    "openWindows": {
+        "type": "action",
+        "endpoint": "windows",
+        "action": "OPEN",
+        "key": "windows"
+    },
+    "closeWindows": {
+        "type": "action",
+        "endpoint": "windows",
+        "action": "CLOSE",
+        "key": "windows"
+    },
+    "lockWindows": {
+        "type": "action",
+        "endpoint": "windows",
+        "action": "LOCK",
+        "key": "windows"
+    },
+    "unlockWindows": {
+        "type": "action",
+        "endpoint": "windows",
+        "action": "UNLOCK",
+        "key": "windows"
+    }
+}

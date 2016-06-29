@@ -22,3 +22,8 @@ var client = smartcar.client({
 // something to do with tokens and authentication and then getting vehicles
 
 ```
+
+#TODO
+
+ * [ ] handle refresh tokens
+ * [ ] allow callbacks and promise style "nodify"
