@@ -43,3 +43,5 @@ app.get('/userinterface', function(req, res, next){
 
  * [ ] handle refresh tokens
  * [ ] allow callbacks and promise style "nodify"
+ * [ ] re write vehicle with prototypes/class
+ * [ ] write tests with mocha/nock/sinon/rewires
