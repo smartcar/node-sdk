@@ -3,17 +3,35 @@
   "version": "1.0.0",
   "description": "nodejs sdk for the smartcar platform",
   "main": "sdk.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "lodash": "^4.13.1",
+    "request-promise": "^3.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "cross-env": "^1.0.8",
+    "dirty-chai": "^1.2.2",
+    "istanbul": "^0.4.4",
+    "mocha": "^2.5.3",
+    "nock": "^8.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test-unit",
+    "test-unit": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
+    "test-integration": "cross-env NOCK_OFF=true npm run test-unit",
+    "cover": "npm run cover-unit",
+    "coveralls": "npm run-script cover && coveralls < coverage/lcov.info",
+    "cover-unit": "cross-env NODE_ENV=development istanbul cover node_modules/mocha/bin/_mocha -- --ui=tdd --recursive --timeout=10000",
+    "cover-integration": "NOCK_OFF=true npm run cover-unit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zzggbb/smartcar-sdk.git"
   },
   "author": "Zane Bradley",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/zzggbb/smartcar-sdk/issues"
   },
