@@ -1,47 +1,45 @@
 ### Smartcar SDK
 
-Here lies the smartcar software developement kit (or is this an API to the smartcar API?)
-Currently there is only support for Node
-There **_WILL_** be support for Swift and Java
-There *PROBABLY* will be support for Python, Ruby, and Go
+Node.js client SDK for the Smartcar API.
 
-It will work something like this:
+###Example Usage
 ```javascript
-var Smartcar = require('node-sdk')
+var Smartcar = require('node-sdk');
+var express = require('express');
+
+var app = expres();
 var client = new Smartcar({
-    clientId: '945feb12-921c-4c28-916d-649612ae831c',
-    clientSecret: '123e4567-e89b-12d3-a456-426655440000',
-    redirectUri: 'https://sub.domain.tld/callback',
-    scope: [
-        'read_engine_hood',
-        'control_trunk',
-        'control_panic'
-    ],
+    clientId: 'your app id',
+    clientSecret: 'your app secret',
+    redirectUri: 'your callback',
+    scope: [ 'read_vehicle_info' ]
 });
 
 client.serializeToken(function(access, req, next){
 	put_into_my_db(access);
 	next();
 });
-app.get('/callback', client.handleAuthCode, 
+app.get('callback endpoint', client.handleAuthCode, 
 	function(req, res, next){
-		res.render('callback');
+        res.redirect('main app endpoint');
 	}
 );
-app.get('/userinterface', function(req, res, next){
-	client.getVehicles(access_from_my_db)
+app.get('main app endpoint', function(req, res, next){
+    var access = 'access token from db'
+	client.getVehicles(access)
 	.then(function(vehicles){
-		return vehicles[0].odometer();
-	}).then(function(distance){
-		res.send("" + distance);
-	})
+		return vehicles[0].info();
+	}).then(function(info){
+        do_something_with(info);
+	});
 });
-
+app.get('homepage endpoint', function(req, res, next){
+    res.redirect(client.getAuthUrl('oem name'));
+});
+app.listen(4000);
 ```
 
-#TODO
+###TODO
 
- * [ ] handle refresh tokens
- * [ ] allow callbacks and promise style "nodify"
- * [ ] re write vehicle with prototypes/class
- * [ ] write tests with mocha/nock/sinon/rewires
+ * handle refresh tokens
+ * allow callbacks and promise style with nodeify
