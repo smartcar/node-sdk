@@ -1,5 +1,5 @@
 {
-  "name": "smartcar-sdk",
+  "name": "node-sdk",
   "version": "1.0.0",
   "description": "nodejs sdk for the smartcar platform",
   "main": "sdk.js",
@@ -29,12 +29,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zzggbb/smartcar-sdk.git"
+    "url": "git+https://github.com/smartcar/node-sdk.git"
   },
   "author": "Zane Bradley",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zzggbb/smartcar-sdk/issues"
+    "url": "https://github.com/smartcar/node-sdk/issues"
   },
-  "homepage": "https://github.com/zzggbb/smartcar-sdk#readme"
+  "homepage": "https://github.com/smartcar/node-sdk#readme"
 }

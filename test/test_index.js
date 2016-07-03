@@ -61,14 +61,12 @@ suite('index', function(){
     });
 
     test('getVehicles no access', function(){
-        expect(client.getVehicles).to.throw('access is not set');
+        expect(client.getVehicles).to.throw('token is not set');
     });
 
     test('getVehicles with access', function(){
-        access = {
-            access_token: VALID_TOKEN
-        }
-        client.getVehicles(access).then(function(vehicles){
+        var token = VALID_TOKEN
+        client.getVehicles(token).then(function(vehicles){
             expect(vehicles[0]).to.be.instanceof(Vehicle);
         })
     });

@@ -26,7 +26,7 @@ app.get('callback endpoint', client.handleAuthCode,
 );
 app.get('main app endpoint', function(req, res, next){
     var access = 'access token from db'
-	client.getVehicles(access)
+	client.getVehicles(access.access_token)
 	.then(function(vehicles){
 		return vehicles[0].info();
 	}).then(function(info){
