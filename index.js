@@ -7,13 +7,11 @@ var AUTH = 'https://auth.smartcar.com/oauth/token'
 /**
  * Initializes Smartcar object
  * @constructor
- * @param options - sdk configuration object
- * @param {String} options.clientId - application client identifier
- * @param {String} options.clientSecret - application secret
- * @param {String} options.redirectUri - redirect here after OEM authorization
- * @param {String[]} options.scope - list of application's permissions
- * @param {String} [options.state] - oauth application state
- * @param {boolean} [options.forcePrompt=false] - force permission dialog if true */
+ * @param options sdk configuration object
+ * @param {String} options.clientId application client identifier
+ * @param {String} options.clientSecret application secret
+ * @param {String} options.redirectUri redirect here after OEM authorization
+ * @param {String[]} options.scope list of application's permissions */
 function Smartcar (options){
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
@@ -23,17 +21,14 @@ function Smartcar (options){
     };
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
-    this.state = options.state;
-    this.forcePrompt = options.forcePrompt;
-    this.serialize = function(req, res, next){
-        next();
-    };
 };
 /**
  * return oem authorization URI
- * @param  {String} oem - name of oem 
- * @return {String} - oauth authorize URI for the specified oem */
-Smartcar.prototype.getAuthUrl = function(oem){
+ * @param  {String} oem name of oem
+ * @param  {String} [options.state] oauth application state
+ * @param  {boolean} [options.forcePrompt=false] force permission dialog
+ * @return {String} oauth authorize URI for the specified oem */
+Smartcar.prototype.getAuthUrl = function(oem, options){
     var baseString = `https://${oem}.smartcar.com/oauth/authorize?`;
     var parameters = {
         response_type: 'code',
@@ -41,10 +36,10 @@ Smartcar.prototype.getAuthUrl = function(oem){
         redirect_uri: this.redirectUri,
         scope: querystring.escape(this.scope.join(' '))
     }
-    if (this.state){
-        parameters.state = this.state;
+    if (options && options.state){
+        parameters.state = options.state;
     }
-    if (this.forcePrompt){
+    if (options && options.forcePrompt){
         parameters.approval_prompt = 'force';
     }
     var queryString = querystring.stringify(parameters);
@@ -52,20 +47,16 @@ Smartcar.prototype.getAuthUrl = function(oem){
 };
 /**
  * set the created_at property of an access object
- * @param {Access} access - access object
+ * @param {Access} access access object
  * @return {Access}
  */
 Smartcar.prototype.setCreation = function(access){
-    access.created_at = Date.now() / 1000;
+    access.created_at = Date.now();
     return access;
 }
 /**
  * exchange a code for an access object
- * @param  {String} code - code to exchange
- * @param  auth - authentication object
- * @param  {String} auth.user - client id
- * @param  {String} auth.pass - client secret
- * @param  {String} redirect - redirect URI
+ * @param  {String} code code to exchange
  * @return {Promise} promise containing access object */
 Smartcar.prototype.exchangeCode = function(code){
     return util.request({
@@ -81,10 +72,10 @@ Smartcar.prototype.exchangeCode = function(code){
 };
 /**
  * exchange a refresh token for a new access object
- * @param  {String} refresh_token - refresh token to exchange
- * @param  auth - authentication object
- * @param  {String} auth.user - client id
- * @param  {String} auth.pass - client secret 
+ * @param  {String} refresh_token refresh token to exchange
+ * @param  auth authentication object
+ * @param  {String} auth.user client id
+ * @param  {String} auth.pass client secret 
  * @return {Promise} promise containing a new access object */
 Smartcar.prototype.exchangeToken = function(refresh_token){
     return util.request({
@@ -98,12 +89,11 @@ Smartcar.prototype.exchangeToken = function(refresh_token){
     }).then(this.setCreation);
 };
 /**
- * refresh an expired access object
- * @param  {Access} access
- * @return {Access}
- */
+ * get new access if access is expired
+ * @param  {Access} access to be checked
+ * @return {Access} */
 Smartcar.prototype.refreshAccess = function(access){
-    if (access.created_at + access.expires_in > Date.now() / 1000){
+    if (Date.now() > access.created_at + access.expires_in * 1000){
         return this.exchangeToken(access.refresh_token);
     } else {
         return access;
@@ -111,11 +101,11 @@ Smartcar.prototype.refreshAccess = function(access){
 }
 /**
  * return list of the user's vehicles
- * @param  {String} token - access token
- * @param  {Paging} [paging] - Paging object
- * @param  {number} [paging.limit] - number of vehicles to return
- * @param  {number} [paging.offset] - index to start vehicle list
- * @return {Vehicle[]} - list of Vehicles
+ * @param  {String} token access token
+ * @param  {Paging} [paging] Paging object
+ * @param  {number} [paging.limit] number of vehicles to return
+ * @param  {number} [paging.offset] index to start vehicle list
+ * @return {Vehicle[]} list of Vehicles
  */
 Smartcar.prototype.getVehicles = function(token, paging){
     var options = {
@@ -137,8 +127,8 @@ Smartcar.prototype.getVehicles = function(token, paging){
 };
 /**
  * get a specific vehicle
- * @param  {String} vid - vehicle identifier 
- * @return {Vehicle} - user's vehicle
+ * @param  {String} vid vehicle identifier 
+ * @return {Vehicle} user's vehicle
  */
 Smartcar.prototype.getVehicle = function(token, vid){
     return new Vehicle(token, vid);
