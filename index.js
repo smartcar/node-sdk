@@ -3,8 +3,9 @@ var Vehicle = require('./lib/vehicle');
 var Promise = require('bluebird');
 var util = require('./lib/util');
 
+var AUTH = 'https://auth.smartcar.com/oauth/token'
 /**
- * @description Initializes Smartcar object
+ * Initializes Smartcar object
  * @constructor
  * @param options - sdk configuration object
  * @param {String} options.clientId - application client identifier
@@ -12,42 +13,33 @@ var util = require('./lib/util');
  * @param {String} options.redirectUri - redirect here after OEM authorization
  * @param {String[]} options.scope - list of application's permissions
  * @param {String} [options.state] - oauth application state
- * @param {boolean} [options.forcePrompt=false] - force permission dialog if true
- */
+ * @param {boolean} [options.forcePrompt=false] - force permission dialog if true */
 function Smartcar (options){
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
+    this.auth = { 
+        user: this.clientId, 
+        pass: this.clientSecret
+    };
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.state = options.state;
     this.forcePrompt = options.forcePrompt;
-    this.handleAuthCode = this.handleAuthCodeWrap();
-    this.serializer = function(req, res, next){
+    this.serialize = function(req, res, next){
         next();
     };
 };
-
 /**
- * @description register a callback function into the client to handle tokens
- * @param {Function} callback - function to register
- * and refresh tokens
- */
-Smartcar.prototype.serializeToken = function(callback){
-    this.serializer = callback;
-};
-
-/**
- * @description return oauth authorization URL for user to login to smartcar
+ * return oem authorization URI
  * @param  {String} oem - name of oem 
- * @return {String} - oauth authorize URI for the specified oem
- */
+ * @return {String} - oauth authorize URI for the specified oem */
 Smartcar.prototype.getAuthUrl = function(oem){
     var baseString = `https://${oem}.smartcar.com/oauth/authorize?`;
     var parameters = {
         response_type: 'code',
         client_id: this.clientId,
         redirect_uri: this.redirectUri,
-        scope: querystring.escape(this.scope.join(' '))        
+        scope: querystring.escape(this.scope.join(' '))
     }
     if (this.state){
         parameters.state = this.state;
@@ -58,55 +50,67 @@ Smartcar.prototype.getAuthUrl = function(oem){
     var queryString = querystring.stringify(parameters);
     return baseString + queryString;
 };
-
 /**
- * @description exchange a code for a token
- * @param  {String} code - code to exchange
- * @return {Promise} - promise containing token data
+ * set the created_at property of an access object
+ * @param {Access} access - access object
+ * @return {Access}
  */
-Smartcar.prototype.getToken = function(code){
+Smartcar.prototype.setCreation = function(access){
+    access.created_at = Date.now() / 1000;
+    return access;
+}
+/**
+ * exchange a code for an access object
+ * @param  {String} code - code to exchange
+ * @param  auth - authentication object
+ * @param  {String} auth.user - client id
+ * @param  {String} auth.pass - client secret
+ * @param  {String} redirect - redirect URI
+ * @return {Promise} promise containing access object */
+Smartcar.prototype.exchangeCode = function(code){
     return util.request({
-        uri: 'https://auth.smartcar.com/oauth/token', 
+        uri: AUTH, 
         method: 'POST',
-        auth: {
-            user: this.clientId,
-            pass: this.clientSecret
-        },
+        auth: this.auth,
         form: {
             'grant_type': 'authorization_code',
             'code': code,
             'redirect_uri': this.redirectUri
         }
-    });
+    }).then(this.setCreation);
 };
-
 /**
- * @return {Function} - take auth code, use getToken on the code, then call your
- * token handler registered with serializeToken
+ * exchange a refresh token for a new access object
+ * @param  {String} refresh_token - refresh token to exchange
+ * @param  auth - authentication object
+ * @param  {String} auth.user - client id
+ * @param  {String} auth.pass - client secret 
+ * @return {Promise} promise containing a new access object */
+Smartcar.prototype.exchangeToken = function(refresh_token){
+    return util.request({
+        uri: AUTH,
+        method: 'POST',
+        auth: this.auth,
+        form: {
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token
+        }
+    }).then(this.setCreation);
+};
+/**
+ * refresh an expired access object
+ * @param  {Access} access
+ * @return {Access}
  */
-Smartcar.prototype.handleAuthCodeWrap = function() {
-    var self = this;
-    return function(req, res, next){
-        Promise.try(function() {
-            if (req.query.error){
-                var message = "permissions denied"
-                throw new Error(message);
-            }
-            if (!self.clientId && !self.clientSecret){
-                var message = "clientId and clientSecret are undefined"
-                throw new Error(message);
-            }
-            return self.getToken(req.query.code);
-        })
-        .then(function(body){
-            self.serializer(body, req, next);
-        })
-        .catch(next);
-    };
-};
-
+Smartcar.prototype.refreshAccess = function(access){
+    if (access.created_at + access.expires_in > Date.now() / 1000){
+        return this.exchangeToken(access.refresh_token);
+    } else {
+        return access;
+    }
+}
 /**
- * @description return list of the user's vehicles
+ * return list of the user's vehicles
  * @param  {String} token - access token
  * @param  {Paging} [paging] - Paging object
  * @param  {number} [paging.limit] - number of vehicles to return
@@ -114,10 +118,6 @@ Smartcar.prototype.handleAuthCodeWrap = function() {
  * @return {Vehicle[]} - list of Vehicles
  */
 Smartcar.prototype.getVehicles = function(token, paging){
-    if (!token) {
-        throw new Error('token is not set');
-    }
-
     var options = {
         uri: util.getUrl(), 
         method: 'GET',
@@ -135,15 +135,12 @@ Smartcar.prototype.getVehicles = function(token, paging){
         });
     });
 };
-
 /**
- * @description get a user's specific vehicle
- * @param  {String} token - access token
+ * get a specific vehicle
  * @param  {String} vid - vehicle identifier 
  * @return {Vehicle} - user's vehicle
  */
 Smartcar.prototype.getVehicle = function(token, vid){
     return new Vehicle(token, vid);
 };
-
 module.exports = Smartcar;

@@ -15,18 +15,17 @@ var client = new Smartcar({
     scope: [ 'read_vehicle_info' ]
 });
 
-client.serializeToken(function(access, req, next){
-	put_into_my_db(access);
-	next();
-});
 app.get('callback endpoint', client.handleAuthCode, 
 	function(req, res, next){
         res.redirect('main app endpoint');
 	}
 );
 app.get('main app endpoint', function(req, res, next){
-    var access = 'access token from db'
-	client.getVehicles(access.access_token)
+    var access = 'access token'
+    client.refreshAccess(access)
+    .then(function(newAccess){
+        return client.getVehicles(newAccess.access_token);
+    })
 	.then(function(vehicles){
 		return vehicles[0].info();
 	}).then(function(info){

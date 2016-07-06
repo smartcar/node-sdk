@@ -83,7 +83,7 @@ suite('index', function(){
             redirectUri: 'fakeuri',
             scope: ['fakescope']
         })
-        serializeClient.serializeToken(function(body, req, next){
+        serializeClient.accessSerializer(function(body, req, next){
             expect(body).to.have.all.keys(
                 'access_token', 'token_type', 'expires_in', 'refresh_token'
             );
