@@ -9,12 +9,12 @@ Node.js client SDK for the Smartcar API.
 * Redirect the user to an OEM login page with `getAuthUrl`
 * The user will login, and then accept or deny your `scope`'s permissions
 * Handle the get request to `redirectUri`
-    * If the user accepted your permissions, `req.query.code` will contain an
+  * If the user accepted your permissions, `req.query.code` will contain an
     authentication code
-        * Use `exchangeCode` with this code to obtain an access object 
-        containing an access token (lasting 2 hours) and a refresh token 
-        (lasting 60 days)
-        * save this access object
+    * Use `exchangeCode` with this code to obtain an access object 
+    containing an access token (lasting 2 hours) and a refresh token 
+    (lasting 60 days)
+      * save this access object
     * If the user denied your permissions, `req.query.error` will be set 
     to `"access_denied"`
     * If you passed a state parameter to `getAuthUrl`, req.query.state will 
@@ -33,52 +33,52 @@ var express = require('express');
 
 var app = express();
 var client = new Smartcar({
-    clientId: 'your app id',
-    clientSecret: 'your app secret',
-    redirectUri: 'your callback',
-    scope: [ 'read_vehicle_info' ]
+  clientId: 'your app id',
+  clientSecret: 'your app secret',
+  redirectUri: 'your callback',
+  scope: [ 'read_vehicle_info' ]
 });
 handleAuthCode = function(req, res, next){
-    if (req.query.error) {
-        // the user denied your requested permissions
-        // handle this somehow!
-        next();
-    } else {
-        client.exchangeCode(req.query.code)
-        .then(function(access){
-            // put your access object somewhere safe!
-            next();
-        })
-    }
+  if (req.query.error) {
+    // the user denied your requested permissions
+    // handle this somehow!
+    next();
+  } else {
+    client.exchangeCode(req.query.code)
+    .then(function(access){
+      // put your access object somewhere safe!
+      next();
+    })
+  }
 }
 app.get('callback endpoint', 
-    handleAuthCode, 
-    function(req, res, next){
-        res.redirect('main app endpoint');
-    }
+  handleAuthCode, 
+  function(req, res, next){
+    res.redirect('main app endpoint');
+  }
 );
 app.get('main app endpoint', function(req, res, next){
-    // load access from that safe place
-    var access = 'access object'
-    // make sure the access is fresh
-    client.refreshAccess(access)
-    .then(function(newAccess){
-        // get the user's vehicles
-        return client.getVehicles(newAccess.access_token);
-    })
-    .then(function(vehicles){
-        // get some data
-        return vehicles[0].info();
-    })
-    .then(function(data){
-        // do something with the data!
-    });
+  // load access from that safe place
+  var access = 'access object'
+  // make sure the access is fresh
+  client.refreshAccess(access)
+  .then(function(newAccess){
+    // get the user's vehicles
+    return client.getVehicles(newAccess.access_token);
+  })
+  .then(function(vehicles){
+    // get some data
+    return vehicles[0].info();
+  })
+  .then(function(data){
+    // do something with the data!
+  });
 });
 app.get('homepage endpoint', function(req, res, next){
-    // get a link to the oem login page
-    var auth = client.getAuthUrl('oem name')
-    // redirect to the link
-    res.redirect(auth);
+  // get a link to the oem login page
+  var auth = client.getAuthUrl('oem name')
+  // redirect to the link
+  res.redirect(auth);
 });
 app.listen(4000);
 ```
