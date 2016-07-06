@@ -96,7 +96,7 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
 /**
  * get new access if access is expired
  * @param  {Access} access to be checked
- * @return {Access} 
+ * @return {Promise} promise containing a fresh access object, or the old one 
  */
 Smartcar.prototype.refreshAccess = Promise.method(function(access) {
   if (Date.now() > access.created_at + access.expires_in * 1000) {
