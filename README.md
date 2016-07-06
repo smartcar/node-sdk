@@ -4,12 +4,12 @@ Node.js client SDK for the Smartcar API.
 
 ### Overall Flow
 
-* Create a new `Smartcar` object with your `clientId`, `clientSecret`, `redirectUri`, 
-and `scope`
+* Create a new `Smartcar` object with your `clientId`, `clientSecret`, 
+`redirectUri`, and `scope`
 * Redirect the user to an OEM login page with `getAuthUrl`
 * The user will login, and then accept or deny your `scope`'s permissions
 * Handle the get request to `redirectUri`
-    * If the user accepted your permissions, `req.query.code` will contain an 
+    * If the user accepted your permissions, `req.query.code` will contain an
     authentication code
         * Use `exchangeCode` with this code to obtain an access object 
         containing an access token (lasting 2 hours) and a refresh token 
@@ -17,6 +17,8 @@ and `scope`
         * save this access object
     * If the user denied your permissions, `req.query.error` will be set 
     to `"access_denied"`
+    * If you passed a state parameter to `getAuthUrl`, req.query.state will 
+    contain the state value.
 * Redirect to your main app endpoint
 * Handle the get request to your main app endpoint
 * Use `refreshAccess` on your saved access object to automatically refresh an 
@@ -29,7 +31,7 @@ expired `access_token`
 var Smartcar = require('node-sdk');
 var express = require('express');
 
-var app = expres();
+var app = express();
 var client = new Smartcar({
     clientId: 'your app id',
     clientSecret: 'your app secret',
