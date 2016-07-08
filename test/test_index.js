@@ -92,13 +92,15 @@ suite('index', function() {
     });
   });
 
-  test('refreshAccess with valid access', function() {
+  test('refreshAccess with valid access', function(done) {
     var access = {
       created_at: Date.now(),
       expires_in: 7200,
     };
-    var newAccess = client.refreshAccess(access);
-    expect(newAccess).to.equal(access);
+    client.refreshAccess(access).then(function(newAccess){
+      expect(newAccess).to.equal(access);
+      done();
+    });
   });
   test('refreshAccess with expired access', function(done) {
     var past = Date.now() - 3 * 3600 * 1000;
