@@ -179,6 +179,11 @@
     "endpoint": "tachometer", 
     "key": "speed"
   },
+  "exteriorTemperature": {
+    "type": "get",
+    "endpoint": "thermistors/exterior",
+    "key": "temperature"
+  },
   "interiorTemperature": {
     "type": "get",
     "endpoint": "thermistors/interior", 
