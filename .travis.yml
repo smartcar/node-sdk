@@ -8,10 +8,10 @@ node_js:
 after_script:
   - npm run coveralls
 
-#deploy:
-#  on:
-#    branch: master
-#    node: stable
-#  provider: npm
-#  email: hello@smartcar.com
-#  api_key: $NPM_API_TOKEN
+deploy:
+  on:
+    branch: master
+    node: stable
+  provider: npm
+  email: hello@smartcar.com
+  api_key: $NPM_API_TOKEN
