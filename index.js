@@ -50,7 +50,7 @@ Smartcar.prototype.getAuthUrl = function(oem, options) {
 };
 /**
  * set the created_at property of an access object
- * @param {Access} access access object
+ * @param  {Access} access access object
  * @return {Access}
  */
 Smartcar.prototype.setCreation = function(access) {
