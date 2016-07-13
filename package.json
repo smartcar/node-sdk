@@ -1,5 +1,5 @@
 {
-  "name": "smartcar",
+  "name": "node-sdk",
   "version": "1.0.1",
   "description": "nodejs sdk for the smartcar platform",
   "main": "sdk.js",
