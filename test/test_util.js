@@ -1,4 +1,5 @@
 'use strict';
+
 var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var util = require('../lib/util');
@@ -6,7 +7,7 @@ var util = require('../lib/util');
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 
-suite('util', function() {
+suite('Util', function() {
   suiteSetup(function() {
     var apiNock = nock('https://api.smartcar.com/v1.0').persist();
 
