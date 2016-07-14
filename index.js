@@ -1,10 +1,12 @@
 'use strict';
+
 var querystring = require('querystring');
 var Vehicle = require('./lib/vehicle');
 var Promise = require('bluebird');
 var util = require('./lib/util');
+var config = require('./lib/config');
+var errors = require('./lib/errors');
 
-var AUTH = 'https://auth.smartcar.com/oauth/token';
 /**
  * Initializes Smartcar object
  * @constructor
@@ -24,13 +26,14 @@ function Smartcar(options) {
   this.redirectUri = options.redirectUri;
   this.scope = options.scope;
 }
+Smartcar.errors = errors;
 /**
  * return oem authorization URI
  * @param  {String} oem name of oem
  * @param  {String} [options.state] oauth application state
  * @param  {boolean} [options.forcePrompt=false] force permission dialog
  * @return {String} oauth authorize URI for the specified oem 
- */
+ */ 
 Smartcar.prototype.getAuthUrl = function(oem, options) {
   var baseString = "https://" + oem + ".smartcar.com/oauth/authorize?";
   var parameters = {
@@ -64,7 +67,7 @@ Smartcar.prototype.setCreation = function(access) {
  */
 Smartcar.prototype.exchangeCode = function(code) {
   return util.request({
-    uri: AUTH,
+    uri: config.auth,
     method: 'POST',
     auth: this.auth,
     form: {
@@ -84,7 +87,7 @@ Smartcar.prototype.exchangeCode = function(code) {
  */
 Smartcar.prototype.exchangeToken = function(refresh_token) {
   return util.request({
-    uri: AUTH,
+    uri: config.auth,
     method: 'POST',
     auth: this.auth,
     form: {
@@ -94,16 +97,22 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
   }).then(this.setCreation);
 };
 /**
+ * check if an access object's access token is expired
+ * @param  {Access} access access object to be checked
+ * @return {Boolean} true if expired, false if not expired
+ */
+Smartcar.prototype.expired = function(access){
+  return Date.now() > access.created_at + access.expires_in * 1000;
+};
+/**
  * get new access if access is expired
  * @param  {Access} access to be checked
  * @return {Promise} promise containing a fresh access object, or the old one 
  */
 Smartcar.prototype.refreshAccess = Promise.method(function(access) {
-  if (Date.now() > access.created_at + access.expires_in * 1000) {
-    return this.exchangeToken(access.refresh_token);
-  } else {
-    return access;
-  }
+  return this.expired(access) ? 
+    this.exchangeToken(access.refresh_token) : 
+    access;
 });
 /**
  * return list of the user's vehicles

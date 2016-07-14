@@ -1,4 +1,5 @@
 'use strict';
+
 var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var util = require('../lib/util');
@@ -6,25 +7,29 @@ var util = require('../lib/util');
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 
-suite('util', function() {
+suite('Util', function() {
   suiteSetup(function() {
     var apiNock = nock('https://api.smartcar.com/v1.0').persist();
 
-    apiNock.get('/vehicles')
-    .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .reply(200, { vehicles: ['fakecar'] });
+    apiNock
+      .get('/vehicles')
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, { vehicles: ['fakecar'] });
 
-    apiNock.get('/vehicles/fakeid/barometer')
-    .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .reply(200, {pressure: 1000});
+    apiNock
+      .get('/vehicles/fakeid/barometer')
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, {pressure: 1000});
 
-    apiNock.post('/vehicles/fakeid/sunroof')
-    .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .reply(200, {status: 'success'});
+    apiNock
+      .post('/vehicles/fakeid/sunroof')
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, {status: 'success'});
 
-    apiNock.post('/vehicles/fakeid/panic')
-    .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .reply(200, {status: 'success'});
+    apiNock
+      .post('/vehicles/fakeid/panic')
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, {status: 'success'});
   });
   suiteTeardown(function() {
     nock.cleanAll();

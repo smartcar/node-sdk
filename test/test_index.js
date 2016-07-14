@@ -7,7 +7,7 @@ var Vehicle = require('../lib/vehicle.js');
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 
-suite('index', function() {
+suite('Index', function() {
   var client;
   suiteSetup(function() {
     client = new Smartcar({
