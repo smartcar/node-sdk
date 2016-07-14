@@ -15,6 +15,7 @@ var INVALID_ENDPOINT = 'invalid-endpoint';
 var NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
 var INVALID_REQUEST_BODY = { invalidkey: 'invalidvalue' };
 var API_URL = config.api + '/v' + config.version;
+var REALLY_BAD_URL = 'really-bad-url';
 
 suite('Errors', function(){
   suiteSetup(function(){
@@ -35,6 +36,9 @@ suite('Errors', function(){
       .get(INVALID_ENDPOINT)
       .reply(404);
     apiNock
+      .get(REALLY_BAD_URL)
+      .reply(500);
+    apiNock
       .get(NOT_CAPABLE_ENDPOINT)
       .matchHeader('Authorization', VALID_AUTH)
       .reply(501);
@@ -43,6 +47,13 @@ suite('Errors', function(){
   suiteTeardown(function(){
     nock.cleanAll();
   });
+
+  test('SmartcarError', function(){
+    Object.keys(errors).forEach(function(key){
+      expect(new errors[key]).to.be.instanceof(errors.SmartcarError);
+    });
+    expect(new errors.SmartcarError).to.be.instanceof(Error);
+  })
 
   test('ValidationError', function(){
     util.request({
@@ -74,7 +85,11 @@ suite('Errors', function(){
   });
 
   test('PermissionError', function(){
-
+    try {
+      throw new errors.PermissionError;
+    } catch (err) {
+      expect(err).to.have.property('statusCode', 403);
+    }
   });
   test('ResourceNotFoundError', function(){
     util.request({
@@ -88,6 +103,44 @@ suite('Errors', function(){
       expect(err).to.have.property('statusCode', 404);
     });
   });
+
+  test('StateError', function(){
+    try {
+      throw new errors.StateError;
+    } catch (err) {
+      expect(err).to.have.property('statusCode', 409);
+    }
+  });
+
+  test('RateLimitingError', function(){
+    try {
+      throw new errors.RateLimitingError;
+    } catch (err) {
+      expect(err).to.have.property('statusCode', 429);
+    }
+  });
+
+  test('MonthlyLimitExceeded', function(){
+    try {
+      throw new errors.MonthlyLimitExceeded;
+    } catch (err) {
+      expect(err).to.have.property('statusCode', 430);
+    }
+  });
+
+  test('ServerError', function(){
+    util.request({
+      url: REALLY_BAD_URL,
+      method: 'GET',
+    })
+    .then(function(){
+      throw new Error('The server got a bad url, request should have failed');
+    })
+    .catch(errors.ServerError, function(err){
+      expect(err).to.have.property('statusCode', 500);
+    });
+  });
+
   test('NotCapableError', function(){
     util.request({
       url: API_URL + NOT_CAPABLE_ENDPOINT,
@@ -101,5 +154,6 @@ suite('Errors', function(){
       expect(err).to.have.property('statusCode', 501);
     });
   });
+
 
 });
