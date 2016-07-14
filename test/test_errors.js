@@ -15,7 +15,7 @@ var INVALID_ENDPOINT = 'invalid-endpoint';
 var NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
 var INVALID_REQUEST_BODY = { invalidkey: 'invalidvalue' };
 var API_URL = config.api + '/v' + config.version;
-var REALLY_BAD_URL = 'really-bad-url';
+var REALLY_BAD_URL = 'http://really-bad-url';
 
 suite('Errors', function(){
   suiteSetup(function(){
