@@ -3,8 +3,8 @@ var querystring = require('querystring');
 var Vehicle = require('./lib/vehicle');
 var Promise = require('bluebird');
 var util = require('./lib/util');
+var config = require('./lib/config');
 
-var AUTH = 'https://auth.smartcar.com/oauth/token';
 /**
  * Initializes Smartcar object
  * @constructor
@@ -64,7 +64,7 @@ Smartcar.prototype.setCreation = function(access) {
  */
 Smartcar.prototype.exchangeCode = function(code) {
   return util.request({
-    uri: AUTH,
+    uri: config.auth,
     method: 'POST',
     auth: this.auth,
     form: {
@@ -84,7 +84,7 @@ Smartcar.prototype.exchangeCode = function(code) {
  */
 Smartcar.prototype.exchangeToken = function(refresh_token) {
   return util.request({
-    uri: AUTH,
+    uri: config.auth,
     method: 'POST',
     auth: this.auth,
     form: {
