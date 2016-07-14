@@ -1,5 +1,0 @@
-{
-  "auth": "https://auth.smartcar.com/oauth/token",
-  "api": "https://api.smartcar.com",
-  "version": "1.0"
-}
