@@ -25,8 +25,8 @@ function Smartcar(options) {
   };
   this.redirectUri = options.redirectUri;
   this.scope = options.scope;
-  this.errors = errors;
 }
+Smartcar.errors = errors;
 /**
  * return oem authorization URI
  * @param  {String} oem name of oem
