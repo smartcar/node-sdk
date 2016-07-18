@@ -14,7 +14,7 @@ suite('Index', function() {
       clientId: 'fakeid',
       clientSecret: 'fakesecret',
       redirectUri: 'fakeuri',
-      scope: ['fakescope'],
+      scope: ['control_smell_sensor', 'control_seat_freezer'],
     });
 
     var authNock = nock('https://auth.smartcar.com').persist();
@@ -49,24 +49,28 @@ suite('Index', function() {
   });
 
   test('getAuthUrl', function() {
-    var url = client.getAuthUrl('fakeoem');
+    var url = client.getAuthUrl('https://fakeoem.smartcar.com');
     var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=fakescope';
+    '&scope=control_smell_sensor%20control_seat_freezer';
     expect(url).to.equal(expected);
   });
   test('getAuthUrl with state', function() {
-    var url = client.getAuthUrl('fakeoem', {state: 'fakestate'});
+    var url = client.getAuthUrl('https://fakeoem.smartcar.com', {
+      state: 'fakestate'
+    });
     var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=fakescope&state=fakestate';
+    '&scope=control_smell_sensor%20control_seat_freezer&state=fakestate';
     expect(url).to.equal(expected);
   });
   test('getAuthUrl with forcePrompt', function() {
-    var url = client.getAuthUrl('fakeoem', {forcePrompt: true});
+    var url = client.getAuthUrl('https://fakeoem.smartcar.com', {
+      forcePrompt: true
+    });
     var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=fakescope&approval_prompt=force';
+    '&scope=control_smell_sensor%20control_seat_freezer&approval_prompt=force';
     expect(url).to.equal(expected);
   });
 

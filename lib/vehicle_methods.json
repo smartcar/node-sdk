@@ -152,7 +152,7 @@
     "endpoint": "seats", 
     "key": "seats"
   },
-  "locked": {
+  "security": {
     "type": "get",
     "endpoint": "security", 
     "key": "isLocked"
@@ -214,7 +214,7 @@
   },
   "vin": {
     "type": "get",
-    "endpoint": "vin", 
+    "endpoint": "vin",
     "key": "vin"
   },
   "washerFluidRemaining": {
