@@ -29,18 +29,17 @@ function Smartcar(options) {
 Smartcar.errors = errors;
 /**
  * return oem authorization URI
- * @param  {String} oem name of oem
+ * @param  {String} base base url, usually 'https://oem.smartcar.com'
  * @param  {String} [options.state] oauth application state
  * @param  {boolean} [options.forcePrompt=false] force permission dialog
- * @return {String} oauth authorize URI for the specified oem 
+ * @return {String} oauth authorize URI
  */ 
-Smartcar.prototype.getAuthUrl = function(oem, options) {
-  var baseString = "https://" + oem + ".smartcar.com/oauth/authorize?";
+Smartcar.prototype.getAuthUrl = function(base, options) {
   var parameters = {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
-    scope: querystring.escape(this.scope.join(' ')),
+    scope: this.scope.join(' '),
   };
   if (options && options.state) {
     parameters.state = options.state;
@@ -48,8 +47,7 @@ Smartcar.prototype.getAuthUrl = function(oem, options) {
   if (options && options.forcePrompt) {
     parameters.approval_prompt = 'force';
   }
-  var queryString = querystring.stringify(parameters);
-  return baseString + queryString;
+  return base + '/oauth/authorize?' + querystring.stringify(parameters);
 };
 /**
  * set the created_at property of an access object
