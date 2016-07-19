@@ -1,6 +1,6 @@
 {
   "name": "node-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
   "dependencies": {
