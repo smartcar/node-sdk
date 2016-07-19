@@ -122,6 +122,9 @@ Smartcar.prototype.refreshAccess = Promise.method(function(access) {
  * @return {Vehicle[]} list of Vehicles
  */
 Smartcar.prototype.getVehicles = function(token, paging) {
+  if (!token){
+    throw new Error("token is undefined");
+  }
   var options = {
     uri: util.getUrl(),
     method: 'GET',
@@ -145,6 +148,12 @@ Smartcar.prototype.getVehicles = function(token, paging) {
  * @return {Vehicle} user's vehicle
  */
 Smartcar.prototype.getVehicle = function(token, vid) {
+  if (!token){
+    throw new Error("token is undefined");
+  }
+  if(!vid){
+    throw new Error("vid is undefined");
+  }
   return new Vehicle(token, vid);
 };
 module.exports = Smartcar;
