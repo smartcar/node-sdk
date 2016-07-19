@@ -140,4 +140,29 @@ suite('Index', function() {
     var vehicle = client.getVehicle(VALID_TOKEN, 'fakevehicleid');
     expect(vehicle).to.be.instanceof(Vehicle);
   });
+
+  test('getVehicle with undefined token', function(){
+    try {
+      var vehicle = client.getVehicle(null, 'fakevehicleid');
+    } catch (e) {
+      expect(e.message).to.equal("token is undefined");
+    }
+  });
+
+  test('getVehicle with undefined vid', function(){
+    try {
+      var vehicle = client.getVehicle(VALID_TOKEN, null);
+    } catch (e) {
+      expect(e.message).to.equal("vid is undefined");
+    }
+  });
+
+  test('getVehicles with undefined token', function(done){
+    try {
+      client.getVehicles(null)
+    } catch (e) {
+      expect(e.message).to.equal('token is undefined');
+      done();
+    }
+  });
 });
