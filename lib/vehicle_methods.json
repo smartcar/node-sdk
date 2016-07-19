@@ -98,6 +98,11 @@
     "type": "get",
     "endpoint": "fuel"
   },
+  "hazard": {
+    "type": "get",
+    "endpoint": "lights/hazard",
+    "key": "isOn"
+  },
   "headlights": {
     "type": "get",
     "endpoint": "lights/headlight", 

@@ -27,6 +27,7 @@ function Smartcar(options) {
   this.scope = options.scope;
 }
 Smartcar.errors = errors;
+Smartcar.methods = require('./lib/vehicle_methods');
 /**
  * return oem authorization URI
  * @param  {String} base base url, usually 'https://oem.smartcar.com'
