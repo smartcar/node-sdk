@@ -23,8 +23,7 @@
   },
   "charge": {
     "type": "get",
-    "endpoint": "charge", 
-    "key": "state"
+    "endpoint": "charge"
   },
   "chargeLimit": {
     "type": "get",
