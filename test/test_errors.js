@@ -15,7 +15,11 @@ var INVALID_ENDPOINT = 'invalid-endpoint';
 var NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
 var INVALID_REQUEST_BODY = { invalidkey: 'invalidvalue' };
 var API_URL = config.api + '/v' + config.version;
-var REALLY_BAD_URL = 'http://really-bad-url';
+var REALLY_BAD_ENDPOINT = 'really-bad-endpoint';
+var INSUFFICIENT_PERMISSION_ENDPOINT = 'godmode-endpoint';
+var INVALID_STATE_ENDPOINT = 'invalid-state';
+var MONTHLY_LIMIT_ENDPOINT = 'monthly-endpoint';
+var RATE_LIMIT_ENDPOINT = 'rate-endpoint';
 
 suite('Errors', function(){
   suiteSetup(function(){
@@ -33,10 +37,21 @@ suite('Errors', function(){
       .matchHeader('Authorization', INVALID_AUTH)
       .reply(401);
     apiNock
+      .get(INSUFFICIENT_PERMISSION_ENDPOINT)
+      .reply(403);
+    apiNock
       .get(INVALID_ENDPOINT)
       .reply(404);
+    apiNock.get(INVALID_STATE_ENDPOINT)
+      .reply(409);
     apiNock
-      .get(REALLY_BAD_URL)
+      .get(RATE_LIMIT_ENDPOINT)
+      .reply(429);
+    apiNock
+      .get(MONTHLY_LIMIT_ENDPOINT)
+      .reply(430);
+    apiNock
+      .get(REALLY_BAD_ENDPOINT)
       .reply(500);
     apiNock
       .get(NOT_CAPABLE_ENDPOINT)
@@ -85,12 +100,18 @@ suite('Errors', function(){
   });
 
   test('PermissionError', function(){
-    try {
-      throw new errors.PermissionError;
-    } catch (err) {
+    util.request({
+      url: API_URL + INSUFFICIENT_PERMISSION_ENDPOINT,
+      method: 'GET'
+    })
+    .then(function(){
+      throw new Error('Insufficient permission, request should have failed')
+    })
+    .catch(errors.PermissionError, function(err){
       expect(err).to.have.property('statusCode', 403);
-    }
+    })
   });
+
   test('ResourceNotFoundError', function(){
     util.request({
       url: API_URL + INVALID_ENDPOINT,
@@ -105,32 +126,47 @@ suite('Errors', function(){
   });
 
   test('StateError', function(){
-    try {
-      throw new errors.StateError;
-    } catch (err) {
+    util.request({
+      url: API_URL + INVALID_STATE_ENDPOINT,
+      method: 'GET',
+    })
+    .then(function(){
+      throw new Error('Invalid state, request should have failed');
+    })
+    .catch(errors.StateError, function(err){
       expect(err).to.have.property('statusCode', 409);
-    }
+    });
   });
 
   test('RateLimitingError', function(){
-    try {
-      throw new errors.RateLimitingError;
-    } catch (err) {
+    util.request({
+      url: API_URL + RATE_LIMIT_ENDPOINT,
+      method: 'GET',
+    })
+    .then(function(){
+      throw new Error('Rate limit exceeded, request should have failed');
+    })
+    .catch(errors.RateLimitingError, function(err){
       expect(err).to.have.property('statusCode', 429);
-    }
+    });
   });
 
   test('MonthlyLimitExceeded', function(){
-    try {
-      throw new errors.MonthlyLimitExceeded;
-    } catch (err) {
+    util.request({
+      url: API_URL + MONTHLY_LIMIT_ENDPOINT,
+      method: 'GET',
+    })
+    .then(function(){
+      throw new Error('Monthly limit exceeded, request should have failed');
+    })
+    .catch(errors.MonthlyLimitExceeded, function(err){
       expect(err).to.have.property('statusCode', 430);
-    }
+    });
   });
 
   test('ServerError', function(){
     util.request({
-      url: REALLY_BAD_URL,
+      url: API_URL + REALLY_BAD_ENDPOINT,
       method: 'GET',
     })
     .then(function(){
