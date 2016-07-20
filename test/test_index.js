@@ -55,25 +55,17 @@ suite('Index', function() {
     '&scope=control_smell_sensor%20control_seat_freezer';
     expect(url).to.equal(expected);
   });
-  test('getAuthUrl with state', function() {
+  test('getAuthUrl with options', function() {
     var url = client.getAuthUrl('https://fakeoem.smartcar.com', {
-      state: 'fakestate'
+      state: 'fakestate',
+      approval_prompt: 'force',
     });
     var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=control_smell_sensor%20control_seat_freezer&state=fakestate';
+    '&scope=control_smell_sensor%20control_seat_freezer&state=fakestate' +
+    '&approval_prompt=force';
     expect(url).to.equal(expected);
   });
-  test('getAuthUrl with forcePrompt', function() {
-    var url = client.getAuthUrl('https://fakeoem.smartcar.com', {
-      forcePrompt: true
-    });
-    var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
-    'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=control_smell_sensor%20control_seat_freezer&approval_prompt=force';
-    expect(url).to.equal(expected);
-  });
-
   test('setCreation', function() {
     var access = {};
     var newAccess = client.setCreation(access);
