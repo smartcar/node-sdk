@@ -6,6 +6,7 @@ var Promise = require('bluebird');
 var util = require('./lib/util');
 var config = require('./lib/config');
 var errors = require('./lib/errors');
+var _ = require('lodash');
 
 /**
  * Initializes Smartcar object
@@ -32,7 +33,8 @@ Smartcar.methods = require('./lib/vehicle_methods');
  * return oem authorization URI
  * @param  {String} base base url, usually 'https://oem.smartcar.com'
  * @param  {String} [options.state] oauth application state
- * @param  {boolean} [options.forcePrompt=false] force permission dialog
+ * @param  {String} [options.approval_prompt=auto] force permission dialog by
+ * setting options.approval_prompt=force
  * @return {String} oauth authorize URI
  */ 
 Smartcar.prototype.getAuthUrl = function(base, options) {
@@ -42,12 +44,7 @@ Smartcar.prototype.getAuthUrl = function(base, options) {
     redirect_uri: this.redirectUri,
     scope: this.scope.join(' '),
   };
-  if (options && options.state) {
-    parameters.state = options.state;
-  }
-  if (options && options.forcePrompt) {
-    parameters.approval_prompt = 'force';
-  }
+  _.defaults(parameters, options);
   return base + '/oauth/authorize?' + querystring.stringify(parameters);
 };
 /**
