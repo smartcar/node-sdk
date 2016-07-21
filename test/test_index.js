@@ -62,8 +62,8 @@ suite('Index', function() {
     });
     var expected = 'https://fakeoem.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=control_smell_sensor%20control_seat_freezer&state=fakestate' +
-    '&approval_prompt=force';
+    '&scope=control_smell_sensor%20control_seat_freezer' + 
+    '&state=fakestate&approval_prompt=force';
     expect(url).to.equal(expected);
   });
   test('setCreation', function() {
@@ -75,7 +75,8 @@ suite('Index', function() {
   test('exchangeCode', function() {
     client.exchangeCode('fakecode').then(function(response) {
       expect(response).to.have.all.keys(
-        'access_token','token_type','expires_in','refresh_token','created_at'
+        'access_token','token_type','expires_in',
+        'refresh_token','created_at'
       );
     });
   });
@@ -83,7 +84,8 @@ suite('Index', function() {
   test('exchangeToken', function() {
     client.exchangeToken(VALID_TOKEN).then(function(response) {
       expect(response).to.have.all.keys(
-        'access_token','token_type','expires_in','refresh_token','created_at'
+        'access_token','token_type','expires_in',
+        'refresh_token','created_at'
       );
     });
   });
@@ -106,7 +108,8 @@ suite('Index', function() {
     };
     client.refreshAccess(access).then(function(newAccess) {
       expect(newAccess).to.have.all.keys(
-        'access_token','token_type','expires_in','refresh_token','created_at'
+        'access_token','token_type','expires_in',
+        'refresh_token','created_at'
       );
       expect(newAccess.created_at).to.be.within(past, Date.now());
       done();
