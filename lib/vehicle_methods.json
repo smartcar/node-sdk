@@ -184,15 +184,15 @@
     "endpoint": "tachometer", 
     "key": "speed"
   },
-  "exteriorTemperature": {
+  "outideTemperature": {
     "type": "get",
-    "endpoint": "thermistors/exterior",
-    "key": "temperature"
+    "endpoint": "temperature",
+    "key": "outside"
   },
-  "interiorTemperature": {
+  "insideTemperature": {
     "type": "get",
-    "endpoint": "thermistors/interior", 
-    "key": "temperature"
+    "endpoint": "temperature", 
+    "key": "inside"
   },
   "tirePressures": {
     "type": "get",
