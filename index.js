@@ -119,7 +119,7 @@ Smartcar.prototype.refreshAccess = Promise.method(function(access) {
  * @return {Vehicle[]} list of Vehicles
  */
 Smartcar.prototype.getVehicles = function(token, paging) {
-  if (!token){
+  if (token === undefined){
     throw new errors.SmartcarError("token is undefined");
   }
   var options = {
@@ -129,7 +129,7 @@ Smartcar.prototype.getVehicles = function(token, paging) {
       bearer: token,
     },
   };
-  if (paging) {
+  if (paging !== undefined) {
     options.form = paging;
   }
   return util.request(options)
@@ -145,10 +145,10 @@ Smartcar.prototype.getVehicles = function(token, paging) {
  * @return {Vehicle} user's vehicle
  */
 Smartcar.prototype.getVehicle = function(token, vid) {
-  if (!token){
+  if (token === undefined){
     throw new errors.SmartcarError("token is undefined");
   }
-  if(!vid){
+  if (vid === undefined){
     throw new errors.SmartcarError("vid is undefined");
   }
   return new Vehicle(token, vid);
