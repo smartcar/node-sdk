@@ -184,7 +184,7 @@
     "endpoint": "tachometer", 
     "key": "speed"
   },
-  "outideTemperature": {
+  "outsideTemperature": {
     "type": "get",
     "endpoint": "temperature",
     "key": "outside"
