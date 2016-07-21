@@ -176,7 +176,8 @@
   },
   "sunroof": {
     "type": "get",
-    "endpoint": "sunroof"
+    "endpoint": "sunroof",
+    "key": "isOpen"
   },
   "tachometer": {
     "type": "get",
