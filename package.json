@@ -22,7 +22,7 @@
     "test-unit": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
     "test-integration": "cross-env NOCK_OFF=true npm run test-unit",
     "cover": "npm run cover-unit",
-    "coveralls": "npm run-script cover && coveralls < coverage/lcov.info",
+    "coveralls": "npm run cover && coveralls < coverage/lcov.info",
     "cover-unit": "cross-env NODE_ENV=development istanbul cover node_modules/mocha/bin/_mocha -- --ui=tdd --recursive --timeout=10000",
     "cover-integration": "NOCK_OFF=true npm run cover-unit",
     "jsdoc": "jsdoc -c .jsdocrc ."
