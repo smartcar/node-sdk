@@ -29,6 +29,7 @@ function Smartcar(options) {
 }
 Smartcar.errors = errors;
 Smartcar.methods = require('./lib/vehicle_methods');
+
 /**
  * return oem authorization URI
  * @param  {String} base base url, usually 'https://oem.smartcar.com'
@@ -47,6 +48,7 @@ Smartcar.prototype.getAuthUrl = function(base, options) {
   _.defaults(parameters, options);
   return base + '/oauth/authorize?' + querystring.stringify(parameters);
 };
+
 /**
  * set the created_at property of an access object
  * @param  {Access} access access object
@@ -56,6 +58,7 @@ Smartcar.prototype.setCreation = function(access) {
   access.created_at = Date.now();
   return access;
 };
+
 /**
  * exchange a code for an access object
  * @param  {String} code code to exchange
@@ -73,12 +76,10 @@ Smartcar.prototype.exchangeCode = function(code) {
     },
   }).then(this.setCreation);
 };
+
 /**
  * exchange a refresh token for a new access object
  * @param  {String} refresh_token refresh token to exchange
- * @param  auth authentication object
- * @param  {String} auth.user client id
- * @param  {String} auth.pass client secret
  * @return {Promise} promise containing a new access object 
  */
 Smartcar.prototype.exchangeToken = function(refresh_token) {
@@ -92,6 +93,7 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
     },
   }).then(this.setCreation);
 };
+
 /**
  * check if an access object's access token is expired
  * @param  {Access} access access object to be checked
@@ -100,16 +102,7 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
 Smartcar.prototype.expired = function(access){
   return Date.now() > access.created_at + access.expires_in * 1000;
 };
-/**
- * get new access if access is expired
- * @param  {Access} access to be checked
- * @return {Promise} promise containing a fresh access object, or the old one 
- */
-Smartcar.prototype.refreshAccess = Promise.method(function(access) {
-  return this.expired(access) ? 
-    this.exchangeToken(access.refresh_token) : 
-    access;
-});
+
 /**
  * return list of the user's vehicles
  * @param  {String} token access token
@@ -139,6 +132,7 @@ Smartcar.prototype.getVehicles = function(token, paging) {
     });
   });
 };
+
 /**
  * get a specific vehicle
  * @param  {String} vid vehicle identifier
@@ -153,4 +147,5 @@ Smartcar.prototype.getVehicle = function(token, vid) {
   }
   return new Vehicle(token, vid);
 };
+
 module.exports = Smartcar;

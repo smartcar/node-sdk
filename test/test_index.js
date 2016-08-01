@@ -90,32 +90,6 @@ suite('Index', function() {
     });
   });
 
-  test('refreshAccess with valid access', function(done) {
-    var access = {
-      created_at: Date.now(),
-      expires_in: 7200,
-    };
-    client.refreshAccess(access).then(function(newAccess){
-      expect(newAccess).to.equal(access);
-      done();
-    });
-  });
-  test('refreshAccess with expired access', function(done) {
-    var past = Date.now() - 3 * 3600 * 1000;
-    var access = {
-      created_at: past,
-      expires_in: 7200,
-    };
-    client.refreshAccess(access).then(function(newAccess) {
-      expect(newAccess).to.have.all.keys(
-        'access_token','token_type','expires_in',
-        'refresh_token','created_at'
-      );
-      expect(newAccess.created_at).to.be.within(past, Date.now());
-      done();
-    });
-  });
-
   test('getVehicles', function(done) {
     client.getVehicles(VALID_TOKEN).then(function(vehicles) {
       for (var i in vehicles) {

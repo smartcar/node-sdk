@@ -33,35 +33,52 @@ var express = require('express');
 
 var app = express();
 var client = new Smartcar({
-  clientId: 'your app id',
-  clientSecret: 'your app secret',
-  redirectUri: 'your callback',
+  clientId: '...',
+  clientSecret: '...',
+  redirectUri: '...',
   scope: [ 'read_vehicle_info' ]
 });
+
+saveAccess = function(access){
+  // put your access somewhere safe!
+}
+
 handleAuthCode = function(req, res, next){
   if (req.query.error) {
     // the user denied your requested permissions
-    // handle this somehow!
     next();
   } else {
     client.exchangeCode(req.query.code)
-    .then(function(access){
-      // put your access object somewhere safe!
-      next();
-    })
+    .then(saveAccess)
+    .then(next);
   }
 }
+
+getAccess = function(){
+  return loadAccessFromSafePlace()
+  .then(function(access){
+    if(client.expired(access)){
+      client.exchangeToken(access.refresh_token)
+      .tap(saveAccess)
+      .then(function(access){
+        return access;
+      });
+    } else {
+      return access;
+    }
+  });
+}
+
 app.get('callback endpoint', 
   handleAuthCode, 
   function(req, res, next){
     res.redirect('main app endpoint');
   }
 );
+
 app.get('main app endpoint', function(req, res, next){
-  // load access from that safe place
-  var access = 'access object'
-  // make sure the access is fresh
-  client.refreshAccess(access)
+  // load a fresh access
+  getAccess()
   .then(function(newAccess){
     // get the user's vehicles
     return client.getVehicles(newAccess.access_token);
@@ -74,11 +91,13 @@ app.get('main app endpoint', function(req, res, next){
     // do something with the data!
   });
 });
+
 app.get('homepage endpoint', function(req, res, next){
   // get a link to the oem login page
-  var auth = client.getAuthUrl('oem name')
+  var auth = client.getAuthUrl('https://oem.smartcar.com')
   // redirect to the link
   res.redirect(auth);
 });
+
 app.listen(4000);
 ```
