@@ -39,7 +39,7 @@
   },
   "collisionSensor": {
     "type": "get",
-    "endpoint": "collisionSensor", 
+    "endpoint": "collision_sensor", 
     "key": "isTriggered"
   },
   "heading": {
