@@ -32,13 +32,14 @@ Smartcar.methods = require('./lib/vehicle_methods');
 
 /**
  * return oem authorization URI
- * @param  {String} base base url, usually 'https://oem.smartcar.com'
+ * @param  {String} oem oem name
  * @param  {String} [options.state] oauth application state
  * @param  {String} [options.approval_prompt=auto] force permission dialog by
  * setting options.approval_prompt=force
  * @return {String} oauth authorize URI
  */ 
-Smartcar.prototype.getAuthUrl = function(base, options) {
+Smartcar.prototype.getAuthUrl = function(oem, options) {
+  var base = 'https://' + oem + '.smartcar.com'
   var parameters = {
     response_type: 'code',
     client_id: this.clientId,
@@ -49,15 +50,6 @@ Smartcar.prototype.getAuthUrl = function(base, options) {
   return base + '/oauth/authorize?' + querystring.stringify(parameters);
 };
 
-/**
- * set the created_at property of an access object
- * @param  {Access} access access object
- * @return {Access}
- */
-Smartcar.prototype.setCreation = function(access) {
-  access.created_at = Date.now();
-  return access;
-};
 
 /**
  * exchange a code for an access object
@@ -74,7 +66,7 @@ Smartcar.prototype.exchangeCode = function(code) {
       code: code,
       redirect_uri: this.redirectUri,
     },
-  }).then(this.setCreation);
+  }).then(util.setCreation);
 };
 
 /**
@@ -91,7 +83,7 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
       grant_type: 'refresh_token',
       refresh_token: refresh_token,
     },
-  }).then(this.setCreation);
+  }).then(util.setCreation);
 };
 
 /**
@@ -109,7 +101,7 @@ Smartcar.prototype.expired = function(access){
  * @param  {Paging} [paging] Paging object
  * @param  {number} [paging.limit] number of vehicles to return
  * @param  {number} [paging.offset] index to start vehicle list
- * @return {Vehicle[]} list of Vehicles
+ * @return {Promise}
  */
 Smartcar.prototype.getVehicles = function(token, paging) {
   if (token == undefined){
@@ -125,12 +117,7 @@ Smartcar.prototype.getVehicles = function(token, paging) {
   if (paging != undefined) {
     options.form = paging;
   }
-  return util.request(options)
-  .then(function(response) {
-    return response.vehicles.map(function(vid) {
-      return new Vehicle(token, vid);
-    });
-  });
+  return util.request(options);
 };
 
 /**
