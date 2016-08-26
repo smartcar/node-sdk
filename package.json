@@ -1,6 +1,6 @@
 {
-  "name": "node-sdk",
-  "version": "1.0.3",
+  "name": "smartcar-sdk",
+  "version": "1.1.0",
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
   "dependencies": {
@@ -21,9 +21,8 @@
     "test": "npm run test-unit",
     "test-unit": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
     "test-integration": "cross-env NOCK_OFF=true npm run test-unit",
-    "cover": "npm run cover-unit",
-    "coveralls": "npm run cover && coveralls < coverage/lcov.info",
-    "cover-unit": "cross-env NODE_ENV=development istanbul cover node_modules/mocha/bin/_mocha -- --ui=tdd --recursive --timeout=10000",
+    "coveralls": "npm run cover-unit && $(npm bin)/coveralls < coverage/lcov.info",
+    "cover-unit": "cross-env NODE_ENV=development istanbul cover node_modules/mocha/bin/_mocha -- --ui=tdd --recursive --timeout=10000 || exit 0",
     "cover-integration": "NOCK_OFF=true npm run cover-unit",
     "jsdoc": "jsdoc -c .jsdocrc ."
   },

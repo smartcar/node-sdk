@@ -66,7 +66,8 @@ Smartcar.prototype.exchangeCode = function(code) {
       code: code,
       redirect_uri: this.redirectUri,
     },
-  }).then(util.setCreation);
+  })
+  .then(util.setCreation);
 };
 
 /**
@@ -83,7 +84,8 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
       grant_type: 'refresh_token',
       refresh_token: refresh_token,
     },
-  }).then(util.setCreation);
+  })
+  .then(util.setCreation);
 };
 
 /**

@@ -15,13 +15,9 @@ var API_URL = config.api + '/v' + config.version;
 var SUCCESS = { status: 'success' };
 
 suite('Util', function() {
+
   suiteSetup(function() {
     var apiNock = nock(config.api + '/v' + config.version).persist();
-
-    apiNock
-      .get('/vehicles')
-      .matchHeader('Authorization', VALID_AUTHORIZATION)
-      .reply(200, { vehicles: ['fakecar'] });
 
     apiNock
       .get('/vehicles/'+ VALID_VID + '/barometer')
@@ -53,6 +49,12 @@ suite('Util', function() {
     nock.cleanAll();
   });
 
+  test('setCreation', function() {
+    var access = {};
+    var newAccess = util.setCreation(access);
+    expect(newAccess).to.have.all.keys('created_at');
+  });
+
   test('getUrl with id and endpoint', function() {
     var url = util.getUrl(VALID_VID, 'odometer');
     expect(url).to
@@ -64,29 +66,14 @@ suite('Util', function() {
     expect(url).to.equal(API_URL + '/vehicles');
   });
 
-  test('get vehicles', function(done) {
-    return util.get({
-      token: VALID_TOKEN,
-      endpoint: null,
-      vid: null,
-      key: null,
-    })()
-    .then(function(response) {
-      expect(response).to.have.all.keys('vehicles');
-      expect(response.vehicles).to.have.length(1);
-      done();
-    });
-  });
-
   test('get with a key and vid', function(done) {
     return util.get({
       token: VALID_TOKEN,
       endpoint: 'barometer',
       vid: VALID_VID,
-      key: 'pressure',
     })()
     .then(function(response) {
-      expect(response).to.be.a('number');
+      expect(response.pressure).to.be.a('number');
       done();
     });
   });
