@@ -32,14 +32,13 @@ Smartcar.methods = require('./lib/vehicle_methods');
 
 /**
  * return oem authorization URI
- * @param  {String} oem oem name
+ * @param  {String} oem oem url
  * @param  {String} [options.state] oauth application state
- * @param  {String} [options.approval_prompt=auto] force permission dialog by
- * setting options.approval_prompt=force
+ * @param  {String} [options.approval_prompt=auto] force permission 
+ * dialog by setting options.approval_prompt=force
  * @return {String} oauth authorize URI
  */ 
 Smartcar.prototype.getAuthUrl = function(oem, options) {
-  var base = 'https://' + oem + '.smartcar.com'
   var parameters = {
     response_type: 'code',
     client_id: this.clientId,
@@ -47,7 +46,7 @@ Smartcar.prototype.getAuthUrl = function(oem, options) {
     scope: this.scope.join(' '),
   };
   _.defaults(parameters, options);
-  return base + '/oauth/authorize?' + querystring.stringify(parameters);
+  return oem + '/oauth/authorize?' + querystring.stringify(parameters);
 };
 
 
