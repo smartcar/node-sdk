@@ -57,7 +57,7 @@
   },
   "safetyLocks": {
     "type": "get",
-    "endpoint": "safety_locks"
+    "endpoint": "doors/safety_locks"
   },
   "driveMode": {
     "type": "get",
@@ -91,7 +91,7 @@
     "type": "get",
     "endpoint": "lights/hazard"
   },
-  "headlights": {
+  "headlight": {
     "type": "get",
     "endpoint": "lights/headlight"
   },
@@ -220,7 +220,8 @@
   "enableChargeLimit": {
     "type": "action",
     "endpoint": "charge/limit",
-    "action": "ENABLE"
+    "action": "ENABLE",
+    "key": "limit"
   },
   "disableChargeLimit": {
     "type": "action",
@@ -230,7 +231,8 @@
   "enableChargeSchedule": {
     "type": "action",
     "endpoint": "charge/schedule",
-    "action": "ENABLE"
+    "action": "ENABLE",
+    "key": "startTime"
   },
   "disableChargeSchedule": {
     "type": "action",
@@ -240,7 +242,8 @@
   "startClimate": {
     "type": "action",
     "endpoint": "climate",
-    "action": "START"
+    "action": "START",
+    "key": "temperature"
   },
   "stopClimate": {
     "type": "action",
@@ -287,15 +290,16 @@
     "endpoint": "horn",
     "action": "HONK"
   },
-  "flashHeadlights": {
+  "flashHeadlight": {
     "type": "action",
-    "endpoint": "lights/headlights",
+    "endpoint": "lights/headlight",
     "action": "FLASH"
   },
   "adjustMirrors": {
     "type": "action",
     "endpoint": "mirrors",
-    "action": "TILT"
+    "action": "TILT",
+    "key": "mirrors"
   },
   "startPanic": {
     "type": "action",
@@ -340,7 +344,8 @@
   "openSunroof": {
     "type": "action",
     "endpoint": "sunroof",
-    "action": "OPEN"
+    "action": "OPEN",
+    "key": "percentOpen"
   },
   "ventSunroof": {
     "type": "action",
@@ -375,21 +380,25 @@
   "openWindows": {
     "type": "action",
     "endpoint": "windows",
-    "action": "OPEN"
+    "action": "OPEN",
+    "key": "windows"
   },
   "closeWindows": {
     "type": "action",
     "endpoint": "windows",
-    "action": "CLOSE"
+    "action": "CLOSE",
+    "key": "windows"
   },
   "lockWindows": {
     "type": "action",
     "endpoint": "windows",
-    "action": "LOCK"
+    "action": "LOCK",
+    "key": "windows"
   },
   "unlockWindows": {
     "type": "action",
     "endpoint": "windows",
-    "action": "UNLOCK"
+    "action": "UNLOCK",
+    "key": "windows"
   }
 }

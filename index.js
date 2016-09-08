@@ -46,7 +46,7 @@ Smartcar.prototype.getAuthUrl = function(oem, options) {
     scope: this.scope.join(' '),
   };
   _.defaults(parameters, options);
-  return oem + '/oauth/authorize?' + querystring.stringify(parameters);
+  return config.oems[oem] + '/oauth/authorize?' + querystring.stringify(parameters);
 };
 
 
