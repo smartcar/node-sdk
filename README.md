@@ -1,4 +1,4 @@
-### Smartcar SDK [![Build Status](https://travis-ci.com/smartcar/node-sdk.svg?token=NkidHDCxcdxrtMy48fzt&branch=master)](https://travis-ci.com/smartcar/node-sdk) [![Coverage Status](https://coveralls.io/repos/github/smartcar/node-sdk/badge.svg?t=ckIXmq)](https://coveralls.io/github/smartcar/node-sdk)
+### Smartcar SDK [![Build Status](https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master)](https://travis-ci.com/smartcar/node-sdk) [![Coverage Status](https://coveralls.io/repos/github/smartcar/node-sdk/badge.svg?t=ckIXmq)](https://coveralls.io/github/smartcar/node-sdk)
 
 Node.js client SDK for the Smartcar API.
 
