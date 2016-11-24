@@ -28,7 +28,7 @@ expired `access_token`
 
 ### Example
 ```javascript
-var Smartcar = require('node-sdk');
+var Smartcar = require('smartcar-sdk');
 var express = require('express');
 
 var app = express();
@@ -41,6 +41,10 @@ var client = new Smartcar({
 
 saveAccess = function(access){
   // put your access somewhere safe!
+}
+
+loadAccessFromSafePlace = function(access){
+  // Return the saved access
 }
 
 handleAuthCode = function(req, res, next){
@@ -69,34 +73,38 @@ getAccess = function(){
   });
 }
 
-app.get('callback endpoint', 
+// Redirect to OEM login page
+app.get('/oemlogin', function(req, res, next){
+  // get a link to the 'MOCK' oem login page
+  var auth = client.getAuthUrl('mock')
+  // redirect to the link
+  res.redirect(auth);
+});
+
+// Handle the redirectUri
+app.get('/home',
   handleAuthCode, 
   function(req, res, next){
-    res.redirect('main app endpoint');
+    res.redirect('/data');
   }
 );
 
-app.get('main app endpoint', function(req, res, next){
+// Main app endpoint
+app.get('/data', function(req, res, next){
   // load a fresh access
   getAccess()
   .then(function(newAccess){
     // get the user's vehicles
     return client.getVehicles(newAccess.access_token);
   })
-  .then(function(vehicles){
-    // get some data
-    return vehicles[0].info();
+  .then(function(res){
+    // get the first vehicle
+    var vehicle = client.getVehicle(newAccess.access_token, res.vehicles[0]);
+    return vehicle.info();
   })
   .then(function(data){
     // do something with the data!
   });
-});
-
-app.get('homepage endpoint', function(req, res, next){
-  // get a link to the oem login page
-  var auth = client.getAuthUrl('https://oem.smartcar.com')
-  // redirect to the link
-  res.redirect(auth);
 });
 
 app.listen(4000);
