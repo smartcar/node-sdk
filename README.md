@@ -93,13 +93,15 @@ app.get('/home',
 app.get('/data', function(req, res, next){
   // load a fresh access
   getAccess()
+  .bind({})
   .then(function(newAccess){
+    this.access = newAccess;
     // get the user's vehicles
     return client.getVehicles(newAccess.access_token);
   })
   .then(function(res){
     // get the first vehicle
-    var vehicle = client.getVehicle(newAccess.access_token, res.vehicles[0]);
+    var vehicle = client.getVehicle(this.access.access_token, res.vehicles[0]);
     return vehicle.info();
   })
   .then(function(data){
