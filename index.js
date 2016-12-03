@@ -123,17 +123,18 @@ Smartcar.prototype.getVehicles = function(token, paging) {
 
 /**
  * instantiate a specific vehicle
- * @param  {String} vid vehicle identifier
+ * @param {String} vid vehicle identifier
+ * @param {String} token a valid access token
  * @return {Vehicle} user's vehicle
  */
-Smartcar.prototype.Vehicle = function(token, vid) {
-  if (token == undefined){
-    throw new errors.SmartcarError("token is undefined");
-  }
+Smartcar.prototype.Vehicle = function(vid, token) {
   if (vid == undefined){
     throw new errors.SmartcarError("vid is undefined");
   }
-  return new Vehicle(token, vid);
+  if (token == undefined){
+    throw new errors.SmartcarError("token is undefined");
+  }
+  return new Vehicle(vid, token);
 };
 
 module.exports = Smartcar;

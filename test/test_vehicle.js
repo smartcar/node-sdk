@@ -9,7 +9,7 @@ var VALID_VID = 'valid-vid';
 
 suite('Vehicle', function() {
 
-  var vehicle = new Vehicle(VALID_TOKEN, VALID_VID);
+  var vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
 
   suiteSetup(function() {
 

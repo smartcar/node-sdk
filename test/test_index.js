@@ -135,22 +135,22 @@ suite('Index', function() {
     .catch(done);
   })
 
-  test('getVehicle', function() {
-    var vehicle = client.getVehicle(VALID_TOKEN, 'fakevehicleid');
+  test('Vehicle instantiation', function() {
+    var vehicle = client.Vehicle('fakevehicleid', VALID_TOKEN);
     expect(vehicle).to.be.instanceof(Vehicle);
   });
 
-  test('getVehicle with undefined token', function(){
+  test('Vehicle with undefined token', function(){
     try {
-      var vehicle = client.getVehicle(null, 'fakevehicleid');
+      var vehicle = client.Vehicle('fakevehicleid', null);
     } catch (e) {
       expect(e.message).to.equal("token is undefined");
     }
   });
 
-  test('getVehicle with undefined vid', function(){
+  test('Vehicle with undefined vid', function(){
     try {
-      var vehicle = client.getVehicle(VALID_TOKEN, null);
+      var vehicle = client.Vehicle(null, VALID_TOKEN);
     } catch (e) {
       expect(e.message).to.equal("vid is undefined");
     }
