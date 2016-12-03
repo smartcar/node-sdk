@@ -101,7 +101,7 @@ app.get('/data', function(req, res, next){
   })
   .then(function(res){
     // get the first vehicle
-    var vehicle = client.getVehicle(this.access.access_token, res.vehicles[0]);
+    var vehicle = client.Vehicle(this.access.access_token, res.vehicles[0]);
     return vehicle.info();
   })
   .then(function(data){
