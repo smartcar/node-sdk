@@ -49,15 +49,15 @@
   },
   "dimensions": {
     "type": "get",
-    "endpoint": "dimension"
+    "endpoint": "dimensions"
   },
   "doors": {
     "type": "get",
     "endpoint": "doors"
   },
-  "safetyLocks": {
+  "childSafetyLocks": {
     "type": "get",
-    "endpoint": "doors/safety_locks"
+    "endpoint": "doors/child_safety_locks"
   },
   "driveMode": {
     "type": "get",
@@ -87,13 +87,21 @@
     "type": "get",
     "endpoint": "fuel"
   },
-  "hazardLight": {
+  "gyroscope": {
+    "type": "get",
+    "endpoint": "gyroscope"
+  },
+  "ignition": {
+    "type": "get",
+    "endpoint": "ignition"
+  },
+  "hazardLights": {
     "type": "get",
     "endpoint": "lights/hazard"
   },
-  "headlight": {
+  "headlights": {
     "type": "get",
-    "endpoint": "lights/headlight"
+    "endpoint": "lights/headlights"
   },
   "interiorLights": {
     "type": "get",
@@ -107,9 +115,9 @@
     "type": "get",
     "endpoint": "location"
   },
-  "mirrors": {
+  "sideviewMirrors": {
     "type": "get",
-    "endpoint": "mirrors"
+    "endpoint": "mirrors/side_view"
   },
   "odometer": {
     "type": "get",
@@ -117,7 +125,7 @@
   },
   "tripOdometers": {
     "type": "get",
-    "endpoint": "odometer/trip"
+    "endpoint": "odometer/trips"
   },
   "acceleratorPedal": {
     "type": "get",
@@ -159,9 +167,13 @@
     "type": "get",
     "endpoint": "tachometer"
   },
-  "temperature": {
+  "interiorThermistor": {
     "type": "get",
-    "endpoint": "temperature"
+    "endpoint": "thermistors/interior"
+  },
+  "exteriorThermistor": {
+    "type": "get",
+    "endpoint": "thermistors/exterior"
   },
   "tires": {
     "type": "get",
@@ -197,15 +209,11 @@
   },
   "wheelSpeeds": {
     "type": "get",
-    "endpoint": "wheels/speed"
+    "endpoint": "wheels/speeds"
   },
   "windows": {
     "type": "get",
     "endpoint": "windows"
-  },
-  "yaw": {
-    "type": "get",
-    "endpoint": "yaw"
   },
   "startCharging": {
     "type": "action",
@@ -239,6 +247,18 @@
     "endpoint": "charge/schedule",
     "action": "DISABLE"
   },
+  "activateChildSafetyLocks": {
+    "type": "action",
+    "endpoint": "doors/child_safety_locks",
+    "action": "LOCK",
+    "key": "childSafetyLocks"
+  },
+  "disableChildSafetyLocks": {
+    "type": "action",
+    "endpoint": "doors/child_safety_locks",
+    "action": "UNLOCK",
+    "key": "childSafetyLocks"
+  },
   "startClimate": {
     "type": "action",
     "endpoint": "climate",
@@ -250,37 +270,12 @@
     "endpoint": "climate",
     "action": "STOP"
   },
-  "startEngine": {
-    "type": "action",
-    "endpoint": "engine",
-    "action": "START"
-  },
-  "stopEngine": {
-    "type": "action",
-    "endpoint": "engine",
-    "action": "STOP"
-  },
-  "turnEngineOn": {
-    "type": "action",
-    "endpoint": "engine",
-    "action": "ON"
-  },
-  "turnEngineAC1": {
-    "type": "action",
-    "endpoint": "engine",
-    "action": "ACCESSORY_1"
-  },
-  "turnEngineAC2": {
-    "type": "action",
-    "endpoint": "engine",
-    "action": "ACCESSORY_2"
-  },
-  "openHood": {
+  "openEngineHood": {
     "type": "action",
     "endpoint": "engine/hood",
     "action": "OPEN"
   },
-  "closeHood": {
+  "closeEngineHood": {
     "type": "action",
     "endpoint": "engine/hood",
     "action": "CLOSE"
@@ -290,14 +285,35 @@
     "endpoint": "horn",
     "action": "HONK"
   },
-  "flashHeadlight": {
+  "startIgnition": {
     "type": "action",
-    "endpoint": "lights/headlight",
-    "action": "FLASH"
+    "endpoint": "ignition",
+    "action": "START"
   },
-  "adjustMirrors": {
+  "setIgnitionOn": {
     "type": "action",
-    "endpoint": "mirrors",
+    "endpoint": "ignition",
+    "action": "ON"
+  },
+  "setIgnitionAccessory": {
+    "type": "action",
+    "endpoint": "ignition",
+    "action": "ACCESSORY"
+  },
+  "setIgnitionOff": {
+    "type": "action",
+    "endpoint": "ignition",
+    "action": "OFF"
+  },
+  "flashHeadlights": {
+    "type": "action",
+    "endpoint": "lights/headlights",
+    "action": "FLASH",
+    "key": "type"
+  },
+  "tiltSideviewMirrors": {
+    "type": "action",
+    "endpoint": "mirrors/side_view",
     "action": "TILT",
     "key": "mirrors"
   },
