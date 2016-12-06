@@ -4,7 +4,7 @@ Node.js client SDK for the Smartcar API.
 
 ### Overall Flow
 
-* Create a new `Smartcar` object with your `clientId`, `clientSecret`, 
+* Create a new `Client` object with your `clientId`, `clientSecret`,
 `redirectUri`, and `scope`
 * Redirect the user to an OEM login page with `getAuthUrl`
 * The user will login, and then accept or deny your `scope`'s permissions
@@ -24,15 +24,17 @@ Node.js client SDK for the Smartcar API.
 * Use `refreshAccess` on your saved access object to automatically refresh an 
 expired `access_token`
 * Get the user's vehicles with `getVehicles` 
+* Create a new `Vehicle` object using a vehicleId from the previous response, and
+the `access_token`
 * Do stuff with the vehicle data!
 
 ### Example
 ```javascript
-var Smartcar = require('smartcar-sdk');
+var smartcar = require('smartcar-sdk');
 var express = require('express');
 
 var app = express();
-var client = new Smartcar({
+var client = new smartcar.Client({
   clientId: '...',
   clientSecret: '...',
   redirectUri: '...',
@@ -101,7 +103,7 @@ app.get('/data', function(req, res, next){
   })
   .then(function(res){
     // get the first vehicle
-    var vehicle = client.Vehicle(res.vehicles[0], this.access.access_token);
+    var vehicle = new smartcar.Vehicle(res.vehicles[0], this.access.access_token);
     return vehicle.info();
   })
   .then(function(data){
