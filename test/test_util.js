@@ -12,7 +12,7 @@ var VALID_ENDPOINT = 'valid-endpoint';
 var VALID_ACTION = 'valid-action';
 var IMPERIAL_DATA = 'imperial-data';
 var API_URL = config.api + '/v' + config.version;
-var SUCCESS = { status: 'success' };
+var SUCCESS = {status: 'success'};
 
 suite('Util', function() {
 
@@ -20,7 +20,7 @@ suite('Util', function() {
     var apiNock = nock(config.api + '/v' + config.version).persist();
 
     apiNock
-      .get('/vehicles/'+ VALID_VID + '/barometer')
+      .get('/vehicles/' + VALID_VID + '/barometer')
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, {pressure: 1000});
 
@@ -77,13 +77,13 @@ suite('Util', function() {
     });
   });
 
-  test('get with imperial', function(){
+  test('get with imperial', function() {
     return util.get({
       token: VALID_TOKEN,
       endpoint: VALID_ENDPOINT,
-      vid: VALID_VID
+      vid: VALID_VID,
     })({imperial: true})
-    .then(function(response){
+    .then(function(response) {
       expect(response).to.equal(IMPERIAL_DATA);
     });
   });
@@ -115,14 +115,14 @@ suite('Util', function() {
     });
   });
 
-  test('action with imperial', function(){
+  test('action with imperial', function() {
     return util.action({
       token: VALID_TOKEN,
       endpoint: VALID_ENDPOINT,
       vid: VALID_VID,
       action: VALID_ACTION,
     })('fakearg', {imperial: true})
-    .then(function(response){
+    .then(function(response) {
       expect(response).to.equal(IMPERIAL_DATA);
     });
   });

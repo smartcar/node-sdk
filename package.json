@@ -27,6 +27,8 @@
   "scripts": {
     "test": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
     "test:integration": "cross-env NOCK_OFF=true npm test",
+    "posttest": "npm run lint -s",
+    "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
     "cover:integration": "nyc npm test:integration -s",
     "jsdoc": "jsdoc -c .jsdocrc ."
@@ -41,6 +43,8 @@
     "chai": "^3.5.0",
     "cross-env": "^3.1.3",
     "dirty-chai": "^1.2.2",
+    "eslint": "^3.12.2",
+    "eslint-config-smartcar": "^2.0.0",
     "mocha": "^3.2.0",
     "nock": "^8.0.0",
     "nyc": "^10.0.0"

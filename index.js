@@ -2,7 +2,6 @@
 
 var querystring = require('querystring');
 var Vehicle = require('./lib/vehicle');
-var Promise = require('bluebird');
 var util = require('./lib/util');
 var config = require('./lib/config');
 var errors = require('./lib/errors');
@@ -15,7 +14,7 @@ var _ = require('lodash');
  * @param {String} options.clientId application client identifier
  * @param {String} options.clientSecret application secret
  * @param {String} options.redirectUri redirect here after OEM authorization
- * @param {String[]} options.scope list of application's permissions 
+ * @param {String[]} options.scope list of application's permissions
  */
 function Client(options) {
   this.clientId = options.clientId;
@@ -32,26 +31,31 @@ function Client(options) {
  * return oem authorization URI
  * @param  {String} oem oem url
  * @param  {String} [options.state] oauth application state
- * @param  {String} [options.approval_prompt=auto] force permission 
+ * @param  {String} [options.approval_prompt=auto] force permission
  * dialog by setting options.approval_prompt=force
  * @return {String} oauth authorize URI
- */ 
+ */
 Client.prototype.getAuthUrl = function(oem, options) {
+
+  /* eslint-disable camelcase */
   var parameters = {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
     scope: this.scope.join(' '),
   };
+  /* eslint-enable camelcase */
+
   _.defaults(parameters, options);
-  return config.oems[oem] + '/oauth/authorize?' + querystring.stringify(parameters);
+  var query = querystring.stringify(parameters);
+  return config.oems[oem] + '/oauth/authorize?' + query;
 };
 
 
 /**
  * exchange a code for an access object
  * @param  {String} code code to exchange
- * @return {Promise} promise containing access object 
+ * @return {Promise} promise containing access object
  */
 Client.prototype.exchangeCode = function(code) {
   return util.request({
@@ -59,9 +63,11 @@ Client.prototype.exchangeCode = function(code) {
     method: 'POST',
     auth: this.auth,
     form: {
+      /* eslint-disable camelcase */
       grant_type: 'authorization_code',
-      code: code,
+      code,
       redirect_uri: this.redirectUri,
+      /* eslint-enable camelcase */
     },
   })
   .then(util.setCreation);
@@ -70,16 +76,18 @@ Client.prototype.exchangeCode = function(code) {
 /**
  * exchange a refresh token for a new access object
  * @param  {String} refresh_token refresh token to exchange
- * @return {Promise} promise containing a new access object 
+ * @return {Promise} promise containing a new access object
  */
-Client.prototype.exchangeToken = function(refresh_token) {
+Client.prototype.exchangeToken = function(token) {
   return util.request({
     uri: config.auth,
     method: 'POST',
     auth: this.auth,
     form: {
+      /* eslint-disable camelcase */
       grant_type: 'refresh_token',
-      refresh_token: refresh_token,
+      refresh_token: token,
+      /* eslint-enable camelcase */
     },
   })
   .then(util.setCreation);
@@ -91,7 +99,7 @@ Client.prototype.exchangeToken = function(refresh_token) {
  * @return {Boolean} true if expired, false if not expired
  */
 Client.prototype.expired = function(access){
-  return Date.now() > access.created_at + access.expires_in * 1000;
+  return Date.now() > access.created_at + (access.expires_in * 1000);
 };
 
 /**
@@ -102,9 +110,9 @@ Client.prototype.expired = function(access){
  * @param  {number} [paging.offset] index to start vehicle list
  * @return {Promise}
  */
-Client.prototype.getVehicles = function(token, paging) {
-  if (token == undefined){
-    throw new errors.SmartcarError("token is undefined");
+Smartcar.prototype.getVehicles = function(token, paging) {
+  if (!token) {
+    throw new errors.SmartcarError('token is undefined');
   }
   var options = {
     uri: util.getUrl(),
@@ -113,7 +121,7 @@ Client.prototype.getVehicles = function(token, paging) {
       bearer: token,
     },
   };
-  if (paging != undefined) {
+  if (paging) {
     options.form = paging;
   }
   return util.request(options);

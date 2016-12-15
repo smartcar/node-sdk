@@ -13,7 +13,7 @@ var INVALID_AUTH = 'Bearer ' + INVALID_TOKEN;
 var VALID_ENDPOINT = 'valid-endpoint';
 var INVALID_ENDPOINT = 'invalid-endpoint';
 var NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
-var INVALID_REQUEST_BODY = { invalidkey: 'invalidvalue' };
+var INVALID_REQUEST_BODY = {invalidkey: 'invalidvalue'};
 var API_URL = config.api + '/v' + config.version;
 var REALLY_BAD_ENDPOINT = 'really-bad-endpoint';
 var INSUFFICIENT_PERMISSION_ENDPOINT = 'godmode-endpoint';
@@ -21,8 +21,8 @@ var INVALID_STATE_ENDPOINT = 'invalid-state';
 var MONTHLY_LIMIT_ENDPOINT = 'monthly-endpoint';
 var RATE_LIMIT_ENDPOINT = 'rate-endpoint';
 
-suite('Errors', function(){
-  suiteSetup(function(){
+suite('Errors', function() {
+  suiteSetup(function() {
     var apiNock = nock(config.api + '/v' + config.version).persist();
     apiNock
       .get(VALID_ENDPOINT)
@@ -59,134 +59,134 @@ suite('Errors', function(){
       .reply(501);
 
   });
-  suiteTeardown(function(){
+  suiteTeardown(function() {
     nock.cleanAll();
   });
 
-  test('SmartcarError', function(){
-    Object.keys(errors).forEach(function(key){
-      expect(new errors[key]).to.be.instanceof(errors.SmartcarError);
+  test('SmartcarError', function() {
+    Object.keys(errors).forEach(function(key) {
+      expect(new errors[key]()).to.be.instanceof(errors.SmartcarError);
     });
-    expect(new errors.SmartcarError).to.be.instanceof(Error);
-  })
+    expect(new errors.SmartcarError()).to.be.instanceof(Error);
+  });
 
-  test('ValidationError', function(){
+  test('ValidationError', function() {
     util.request({
       url: API_URL + VALID_ENDPOINT,
       method: 'POST',
-      auth: { bearer: VALID_TOKEN },
+      auth: {bearer: VALID_TOKEN},
       form: INVALID_REQUEST_BODY,
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Invalid body data, request should have failed');
     })
-    .catch(errors.ValidationError, function(err){
+    .catch(errors.ValidationError, function(err) {
       expect(err).to.have.property('statusCode', 400);
     });
   });
 
-  test('AuthenticationError', function(){
+  test('AuthenticationError', function() {
     util.request({
       url: API_URL + VALID_ENDPOINT,
       method: 'GET',
-      auth: { bearer: INVALID_TOKEN },
+      auth: {bearer: INVALID_TOKEN},
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Invalid authentication, request should have failed');
     })
-    .catch(errors.AuthenticationError, function(err){
+    .catch(errors.AuthenticationError, function(err) {
       expect(err).to.have.property('statusCode', 401);
     });
   });
 
-  test('PermissionError', function(){
+  test('PermissionError', function() {
     util.request({
       url: API_URL + INSUFFICIENT_PERMISSION_ENDPOINT,
-      method: 'GET'
+      method: 'GET',
     })
-    .then(function(){
-      throw new Error('Insufficient permission, request should have failed')
+    .then(function() {
+      throw new Error('Insufficient permission, request should have failed');
     })
-    .catch(errors.PermissionError, function(err){
+    .catch(errors.PermissionError, function(err) {
       expect(err).to.have.property('statusCode', 403);
-    })
+    });
   });
 
-  test('ResourceNotFoundError', function(){
+  test('ResourceNotFoundError', function() {
     util.request({
       url: API_URL + INVALID_ENDPOINT,
       method: 'GET',
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Invalid endpoint, request should have failed');
     })
-    .catch(errors.ResourceNotFoundError, function(err){
+    .catch(errors.ResourceNotFoundError, function(err) {
       expect(err).to.have.property('statusCode', 404);
     });
   });
 
-  test('StateError', function(){
+  test('StateError', function() {
     util.request({
       url: API_URL + INVALID_STATE_ENDPOINT,
       method: 'GET',
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Invalid state, request should have failed');
     })
-    .catch(errors.StateError, function(err){
+    .catch(errors.StateError, function(err) {
       expect(err).to.have.property('statusCode', 409);
     });
   });
 
-  test('RateLimitingError', function(){
+  test('RateLimitingError', function() {
     util.request({
       url: API_URL + RATE_LIMIT_ENDPOINT,
       method: 'GET',
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Rate limit exceeded, request should have failed');
     })
-    .catch(errors.RateLimitingError, function(err){
+    .catch(errors.RateLimitingError, function(err) {
       expect(err).to.have.property('statusCode', 429);
     });
   });
 
-  test('MonthlyLimitExceeded', function(){
+  test('MonthlyLimitExceeded', function() {
     util.request({
       url: API_URL + MONTHLY_LIMIT_ENDPOINT,
       method: 'GET',
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Monthly limit exceeded, request should have failed');
     })
-    .catch(errors.MonthlyLimitExceeded, function(err){
+    .catch(errors.MonthlyLimitExceeded, function(err) {
       expect(err).to.have.property('statusCode', 430);
     });
   });
 
-  test('ServerError', function(){
+  test('ServerError', function() {
     util.request({
       url: API_URL + REALLY_BAD_ENDPOINT,
       method: 'GET',
     })
-    .then(function(){
+    .then(function() {
       throw new Error('The server got a bad url, request should have failed');
     })
-    .catch(errors.ServerError, function(err){
+    .catch(errors.ServerError, function(err) {
       expect(err).to.have.property('statusCode', 500);
     });
   });
 
-  test('NotCapableError', function(){
+  test('NotCapableError', function() {
     util.request({
       url: API_URL + NOT_CAPABLE_ENDPOINT,
       method: 'GET',
-      auth: { bearer: VALID_TOKEN },
+      auth: {bearer: VALID_TOKEN},
     })
-    .then(function(){
+    .then(function() {
       throw new Error('Vehicle not capable, request should have failed');
     })
-    .catch(errors.NotCapableError, function(err){
+    .catch(errors.NotCapableError, function(err) {
       expect(err).to.have.property('statusCode', 501);
     });
   });
