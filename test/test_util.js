@@ -66,7 +66,7 @@ suite('Util', function() {
     expect(url).to.equal(API_URL + '/vehicles');
   });
 
-  test('get with a key and vid', function(done) {
+  test('get with a key and vid', function() {
     return util.get({
       token: VALID_TOKEN,
       endpoint: 'barometer',
@@ -74,11 +74,10 @@ suite('Util', function() {
     })()
     .then(function(response) {
       expect(response.pressure).to.be.a('number');
-      done();
     });
   });
 
-  test('get with imperial', function(done){
+  test('get with imperial', function(){
     return util.get({
       token: VALID_TOKEN,
       endpoint: VALID_ENDPOINT,
@@ -86,11 +85,10 @@ suite('Util', function() {
     })({imperial: true})
     .then(function(response){
       expect(response).to.equal(IMPERIAL_DATA);
-      done();
     });
   });
 
-  test('action with a key and argument', function(done) {
+  test('action with a key and argument', function() {
     return util.action({
       token: VALID_TOKEN,
       endpoint: 'sunroof',
@@ -101,11 +99,10 @@ suite('Util', function() {
     .then(function(response) {
       expect(response).to.have.all.keys('status');
       expect(response.status).to.equal('success');
-      done();
     });
   });
 
-  test('action with no key or argument', function(done) {
+  test('action with no key or argument', function() {
     return util.action({
       token: VALID_TOKEN,
       endpoint: 'panic',
@@ -115,11 +112,10 @@ suite('Util', function() {
     .then(function(response) {
       expect(response).to.have.all.keys('status');
       expect(response.status).to.equal('success');
-      done();
     });
   });
 
-  test('action with imperial', function(done){
+  test('action with imperial', function(){
     return util.action({
       token: VALID_TOKEN,
       endpoint: VALID_ENDPOINT,
@@ -128,7 +124,6 @@ suite('Util', function() {
     })('fakearg', {imperial: true})
     .then(function(response){
       expect(response).to.equal(IMPERIAL_DATA);
-      done();
     });
   });
 });

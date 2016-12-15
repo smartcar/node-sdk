@@ -45,34 +45,28 @@ suite('Vehicle', function() {
     nock.cleanAll();
   });
 
-  test('disconnect', function(done) {
+  test('disconnect', function() {
     return vehicle.disconnect()
     .then(function(response) {
       expect(response.status).to.equal('success');
-      done();
-    })
-    .catch(done);
+    });
   })
 
-  test('permissions without paging', function(done) {
+  test('permissions without paging', function() {
     return vehicle.permissions()
     .then(function(response) {
       expect(response).to.have.all.keys('permissions');
       expect(response.permissions).to.have.lengthOf(3)
-      done();
-    })
-    .catch(done);
+    });
   })
 
-  test('permissions with paging', function(done) {
+  test('permissions with paging', function() {
     return vehicle.permissions({
       limit: 1
     })
     .then(function(response) {
       expect(response).to.have.all.keys('permissions');
       expect(response.permissions).to.have.lengthOf(1)
-      done();
-    })
-    .catch(done);
+    });
   })
 });
