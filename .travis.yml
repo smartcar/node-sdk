@@ -2,16 +2,28 @@ language:
   - node_js
 
 node_js:
-  - stable
-  - '4.2'
+  - node
+  - 6
+  - 4
 
-after_script:
-  - npm run cover-unit
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+    - .eslintcache
 
-#deploy:
-#  on:
-#    branch: master
-#    node: stable
-#  provider: npm
-#  email: hello@smartcar.com
-#  api_key: $NPM_API_TOKEN
+install:
+  - npm update
+  - npm prune
+
+script:
+  - npm test
+  - npm run cover
+
+deploy:
+  on:
+    branch: master
+    node: 6
+  provider: npm
+  email: hello@smartcar.com
+  api_key: $NPM_API_TOKEN
