@@ -25,7 +25,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
+    "test": "mocha",
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
