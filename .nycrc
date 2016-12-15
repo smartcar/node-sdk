@@ -1,0 +1,13 @@
+{
+  "lines": 98,
+  "branches": 98,
+  "functions": 98,
+  "statements": 98,
+  "all" : false,
+  "cache": true,
+  "reporter": [
+    "lcov",
+    "text"
+  ],
+  "check-coverage": true
+}
