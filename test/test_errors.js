@@ -23,7 +23,7 @@ var RATE_LIMIT_ENDPOINT = 'rate-endpoint';
 
 suite('Errors', function() {
   suiteSetup(function() {
-    var apiNock = nock(config.api + '/v' + config.version).persist();
+    var apiNock = nock(`${config.api}/v${config.version}`).persist();
     apiNock
       .get(VALID_ENDPOINT)
       .matchHeader('Authorization', VALID_AUTH)
@@ -71,7 +71,7 @@ suite('Errors', function() {
   });
 
   test('ValidationError', function() {
-    util.request({
+    return util.request({
       url: API_URL + VALID_ENDPOINT,
       method: 'POST',
       auth: {bearer: VALID_TOKEN},
@@ -86,7 +86,7 @@ suite('Errors', function() {
   });
 
   test('AuthenticationError', function() {
-    util.request({
+    return util.request({
       url: API_URL + VALID_ENDPOINT,
       method: 'GET',
       auth: {bearer: INVALID_TOKEN},
@@ -100,7 +100,7 @@ suite('Errors', function() {
   });
 
   test('PermissionError', function() {
-    util.request({
+    return util.request({
       url: API_URL + INSUFFICIENT_PERMISSION_ENDPOINT,
       method: 'GET',
     })
@@ -113,7 +113,7 @@ suite('Errors', function() {
   });
 
   test('ResourceNotFoundError', function() {
-    util.request({
+    return util.request({
       url: API_URL + INVALID_ENDPOINT,
       method: 'GET',
     })
@@ -126,7 +126,7 @@ suite('Errors', function() {
   });
 
   test('StateError', function() {
-    util.request({
+    return util.request({
       url: API_URL + INVALID_STATE_ENDPOINT,
       method: 'GET',
     })
@@ -139,7 +139,7 @@ suite('Errors', function() {
   });
 
   test('RateLimitingError', function() {
-    util.request({
+    return util.request({
       url: API_URL + RATE_LIMIT_ENDPOINT,
       method: 'GET',
     })
@@ -152,7 +152,7 @@ suite('Errors', function() {
   });
 
   test('MonthlyLimitExceeded', function() {
-    util.request({
+    return util.request({
       url: API_URL + MONTHLY_LIMIT_ENDPOINT,
       method: 'GET',
     })
@@ -165,7 +165,7 @@ suite('Errors', function() {
   });
 
   test('ServerError', function() {
-    util.request({
+    return util.request({
       url: API_URL + REALLY_BAD_ENDPOINT,
       method: 'GET',
     })
@@ -178,7 +178,7 @@ suite('Errors', function() {
   });
 
   test('NotCapableError', function() {
-    util.request({
+    return util.request({
       url: API_URL + NOT_CAPABLE_ENDPOINT,
       method: 'GET',
       auth: {bearer: VALID_TOKEN},

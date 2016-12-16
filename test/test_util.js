@@ -36,12 +36,12 @@ suite('Util', function() {
 
     apiNock
       .post('/vehicles/' + VALID_VID + '/' + VALID_ENDPOINT)
-      .matchHeader('smartcar-unit', 'imperial')
+      .matchHeader('sc-unit-system', 'imperial')
       .reply(200, IMPERIAL_DATA);
 
     apiNock
       .get('/vehicles/' + VALID_VID + '/' + VALID_ENDPOINT)
-      .matchHeader('smartcar-unit', 'imperial')
+      .matchHeader('sc-unit-system', 'imperial')
       .reply(200, IMPERIAL_DATA);
   });
 
