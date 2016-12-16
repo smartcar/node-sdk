@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
-var Smartcar = require('../index');
+var smartcar = require('../index');
 var Vehicle = require('../lib/vehicle');
 
 var VALID_TOKEN = 'valid-token';
@@ -12,7 +12,7 @@ suite('Index', function() {
   var client;
 
   suiteSetup(function() {
-    client = new Smartcar({
+    client = new smartcar.Client({
       clientId: 'fakeid',
       clientSecret: 'fakesecret',
       redirectUri: 'fakeuri',
@@ -135,22 +135,22 @@ suite('Index', function() {
     .catch(done);
   })
 
-  test('getVehicle', function() {
-    var vehicle = client.getVehicle(VALID_TOKEN, 'fakevehicleid');
+  test('Vehicle instantiation', function() {
+    var vehicle = new smartcar.Vehicle('fakevehicleid', VALID_TOKEN);
     expect(vehicle).to.be.instanceof(Vehicle);
   });
 
-  test('getVehicle with undefined token', function(){
+  test('Vehicle with undefined token', function(){
     try {
-      var vehicle = client.getVehicle(null, 'fakevehicleid');
+      var vehicle = new smartcar.Vehicle('fakevehicleid', null);
     } catch (e) {
       expect(e.message).to.equal("token is undefined");
     }
   });
 
-  test('getVehicle with undefined vid', function(){
+  test('Vehicle with undefined vid', function(){
     try {
-      var vehicle = client.getVehicle(VALID_TOKEN, null);
+      var vehicle = new smartcar.Vehicle(null, VALID_TOKEN);
     } catch (e) {
       expect(e.message).to.equal("vid is undefined");
     }

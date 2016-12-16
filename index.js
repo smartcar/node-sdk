@@ -9,7 +9,7 @@ var errors = require('./lib/errors');
 var _ = require('lodash');
 
 /**
- * Initializes Smartcar object
+ * Initializes Client object
  * @constructor
  * @param options sdk configuration object
  * @param {String} options.clientId application client identifier
@@ -17,7 +17,7 @@ var _ = require('lodash');
  * @param {String} options.redirectUri redirect here after OEM authorization
  * @param {String[]} options.scope list of application's permissions 
  */
-function Smartcar(options) {
+function Client(options) {
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
   this.auth = {
@@ -27,8 +27,6 @@ function Smartcar(options) {
   this.redirectUri = options.redirectUri;
   this.scope = options.scope;
 }
-Smartcar.errors = errors;
-Smartcar.methods = require('./lib/vehicle_methods');
 
 /**
  * return oem authorization URI
@@ -38,7 +36,7 @@ Smartcar.methods = require('./lib/vehicle_methods');
  * dialog by setting options.approval_prompt=force
  * @return {String} oauth authorize URI
  */ 
-Smartcar.prototype.getAuthUrl = function(oem, options) {
+Client.prototype.getAuthUrl = function(oem, options) {
   var parameters = {
     response_type: 'code',
     client_id: this.clientId,
@@ -55,7 +53,7 @@ Smartcar.prototype.getAuthUrl = function(oem, options) {
  * @param  {String} code code to exchange
  * @return {Promise} promise containing access object 
  */
-Smartcar.prototype.exchangeCode = function(code) {
+Client.prototype.exchangeCode = function(code) {
   return util.request({
     uri: config.auth,
     method: 'POST',
@@ -74,7 +72,7 @@ Smartcar.prototype.exchangeCode = function(code) {
  * @param  {String} refresh_token refresh token to exchange
  * @return {Promise} promise containing a new access object 
  */
-Smartcar.prototype.exchangeToken = function(refresh_token) {
+Client.prototype.exchangeToken = function(refresh_token) {
   return util.request({
     uri: config.auth,
     method: 'POST',
@@ -92,7 +90,7 @@ Smartcar.prototype.exchangeToken = function(refresh_token) {
  * @param  {Access} access access object to be checked
  * @return {Boolean} true if expired, false if not expired
  */
-Smartcar.prototype.expired = function(access){
+Client.prototype.expired = function(access){
   return Date.now() > access.created_at + access.expires_in * 1000;
 };
 
@@ -104,7 +102,7 @@ Smartcar.prototype.expired = function(access){
  * @param  {number} [paging.offset] index to start vehicle list
  * @return {Promise}
  */
-Smartcar.prototype.getVehicles = function(token, paging) {
+Client.prototype.getVehicles = function(token, paging) {
   if (token == undefined){
     throw new errors.SmartcarError("token is undefined");
   }
@@ -121,19 +119,11 @@ Smartcar.prototype.getVehicles = function(token, paging) {
   return util.request(options);
 };
 
-/**
- * get a specific vehicle
- * @param  {String} vid vehicle identifier
- * @return {Vehicle} user's vehicle
- */
-Smartcar.prototype.getVehicle = function(token, vid) {
-  if (token == undefined){
-    throw new errors.SmartcarError("token is undefined");
-  }
-  if (vid == undefined){
-    throw new errors.SmartcarError("vid is undefined");
-  }
-  return new Vehicle(token, vid);
-};
+var smartcar = {};
 
-module.exports = Smartcar;
+smartcar.errors = errors;
+smartcar.methods = require('./lib/vehicle_methods');
+smartcar.Vehicle = Vehicle;
+smartcar.Client = Client;
+
+module.exports = smartcar;
