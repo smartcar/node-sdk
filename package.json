@@ -1,39 +1,52 @@
 {
   "name": "smartcar-sdk",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
-  "dependencies": {
-    "bluebird": "^3.4.1",
-    "lodash": "^4.13.1",
-    "request-promise": "^3.0.0"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
-    "cross-env": "^1.0.8",
-    "dirty-chai": "^1.2.2",
-    "istanbul": "^0.4.4",
-    "mocha": "^2.5.3",
-    "nock": "^8.0.0"
-  },
-  "scripts": {
-    "test": "npm run test-unit",
-    "test-unit": "cross-env NODE_ENV=development mocha --ui=tdd --recursive --timeout=10000",
-    "test-integration": "cross-env NOCK_OFF=true npm run test-unit",
-    "coveralls": "npm run cover-unit && $(npm bin)/coveralls < coverage/lcov.info",
-    "cover-unit": "cross-env NODE_ENV=development istanbul cover node_modules/mocha/bin/_mocha -- --ui=tdd --recursive --timeout=10000 || exit 0",
-    "cover-integration": "NOCK_OFF=true npm run cover-unit",
-    "jsdoc": "jsdoc -c .jsdocrc ."
-  },
+  "private": true,
+  "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smartcar/node-sdk.git"
   },
-  "author": "Zane Bradley",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/smartcar/node-sdk/issues"
   },
-  "homepage": "https://github.com/smartcar/node-sdk#readme"
+  "homepage": "https://github.com/smartcar/node-sdk#readme",
+  "keywords": [
+    "smartcar",
+    "connected car"
+  ],
+  "files": [
+    "lib",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test:integration": "cross-env NOCK_OFF=true npm test",
+    "posttest": "npm run lint -s",
+    "lint": "eslint . --cache",
+    "cover": "nyc npm test -s",
+    "cover:integration": "nyc npm test:integration -s",
+    "jsdoc": "jsdoc -c .jsdocrc ."
+  },
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "lodash": "^4.13.1",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "cross-env": "^3.1.3",
+    "dirty-chai": "^1.2.2",
+    "eslint": "^3.12.2",
+    "eslint-config-smartcar": "^2.0.0",
+    "mocha": "^3.2.0",
+    "nock": "^8.0.0",
+    "nyc": "^10.0.0"
+  }
 }

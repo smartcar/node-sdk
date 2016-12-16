@@ -19,60 +19,54 @@ suite('Vehicle', function() {
     .matchHeader('Authorization', VALID_AUTHORIZATION)
     .delete('/vehicles/' + VALID_VID + '/application')
     .reply(200, {
-      status: 'success'
+      status: 'success',
     });
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
     .get('/vehicles/' + VALID_VID + '/permissions')
     .reply(200, {
-      permissions: [ 'permission1' , 'permission2', 'permission3' ]
+      permissions: ['permission1', 'permission2', 'permission3'],
     });
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
     .get('/vehicles/' + VALID_VID + '/permissions')
     .query({
-      limit: 1
+      limit: 1,
     })
     .reply(200, {
-      permissions: [ 'permission1' ]
+      permissions: ['permission1'],
     });
 
-  })
+  });
 
   suiteTeardown(function() {
     nock.cleanAll();
   });
 
-  test('disconnect', function(done) {
+  test('disconnect', function() {
     return vehicle.disconnect()
     .then(function(response) {
       expect(response.status).to.equal('success');
-      done();
-    })
-    .catch(done);
-  })
+    });
+  });
 
-  test('permissions without paging', function(done) {
+  test('permissions without paging', function() {
     return vehicle.permissions()
     .then(function(response) {
       expect(response).to.have.all.keys('permissions');
-      expect(response.permissions).to.have.lengthOf(3)
-      done();
-    })
-    .catch(done);
-  })
+      expect(response.permissions).to.have.lengthOf(3);
+    });
+  });
 
-  test('permissions with paging', function(done) {
+  test('permissions with paging', function() {
     return vehicle.permissions({
-      limit: 1
+      limit: 1,
     })
     .then(function(response) {
       expect(response).to.have.all.keys('permissions');
-      expect(response.permissions).to.have.lengthOf(1)
-      done();
-    })
-    .catch(done);
-  })
+      expect(response.permissions).to.have.lengthOf(1);
+    });
+  });
 });

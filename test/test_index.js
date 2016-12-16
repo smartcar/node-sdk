@@ -23,13 +23,15 @@ suite('Index', function() {
 
     authNock.post('/oauth/token')
     .reply(200, {
+      /* eslint-disable camelcase */
       access_token: VALID_TOKEN,
       token_type: 'Bearer',
       expires_in: '1234',
       refresh_token: VALID_TOKEN,
+      /* eslint-enable camelcase */
     });
 
-    var apiNock = nock('https://api.smartcar.com/v1.0')
+    var apiNock = nock('https://api.smartcar.com/v1.0');
 
     apiNock.get('/vehicles')
     .matchHeader('Authorization', VALID_AUTHORIZATION)
@@ -39,12 +41,12 @@ suite('Index', function() {
 
     apiNock.get('/vehicles')
     .query({
-      limit: 1
+      limit: 1,
     })
     .matchHeader('Authorization', VALID_AUTHORIZATION)
     .reply(200, {
-      vehicles: ['vehicle1']
-    })
+      vehicles: ['vehicle1'],
+    });
 
   });
 
@@ -63,11 +65,11 @@ suite('Index', function() {
   test('getAuthUrl with options', function() {
     var url = client.getAuthUrl('ford', {
       state: 'fakestate',
-      approval_prompt: 'force',
+      approval_prompt: 'force', // eslint-disable-line camelcase
     });
     var expected = 'https://ford.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=control_smell_sensor%20control_seat_freezer' + 
+    '&scope=control_smell_sensor%20control_seat_freezer' +
     '&state=fakestate&approval_prompt=force';
     expect(url).to.equal(expected);
   });
@@ -100,59 +102,49 @@ suite('Index', function() {
 
   test('expired', function() {
     var access = {
-      created_at: Date.now() - 7300*1000,
-      expired_in: 7200,
-    }
-    expect(client.expired(access)).to.be.true;
+      /* eslint-disable camelcase */
+      created_at: (Date.now() / 1000) - 7300,
+      expires_in: 7200,
+      /* eslint-enable camelcase */
+    };
+    expect(client.expired(access)).to.be.true();
   });
 
-  test('getVehicles', function(done) {
-    client.getVehicles(VALID_TOKEN)
-    .then(function(response) {
-      expect(response.vehicles).to.have.lengthOf(3);
-      done();
-    })
-    .catch(done);
+  test('getVehicles', function() {
+
+    return client.getVehicles(VALID_TOKEN)
+      .then(function(response) {
+        expect(response.vehicles).to.have.lengthOf(3);
+      });
+
   });
 
-  test('getVehicles with undefined token', function(done){
-    try {
-      client.getVehicles(null)
-    } catch (e) {
-      expect(e.message).to.equal('token is undefined');
-      done();
-    }
+  test('getVehicles with undefined token', function() {
+
+    return client.getVehicles(null)
+      .thenThrow(new Error('TypeError should have been thrown'))
+      .catch(TypeError, function(e) {
+        expect(e.message).to.equal('"token" argument must be a string');
+      });
+
   });
 
-  test('getVehicles with paging', function(done) {
-    client.getVehicles(VALID_TOKEN, {
-      limit: 1
+  test('getVehicles with paging', function() {
+
+    return client.getVehicles(VALID_TOKEN, {
+      limit: 1,
     })
-    .then(function(response) {
-      expect(response.vehicles).to.have.lengthOf(1);
-      done();
-    })
-    .catch(done);
-  })
+      .then(function(response) {
+        expect(response.vehicles).to.have.lengthOf(1);
+      });
+
+  });
 
   test('Vehicle instantiation', function() {
+
     var vehicle = new smartcar.Vehicle('fakevehicleid', VALID_TOKEN);
     expect(vehicle).to.be.instanceof(Vehicle);
+
   });
 
-  test('Vehicle with undefined token', function(){
-    try {
-      var vehicle = new smartcar.Vehicle('fakevehicleid', null);
-    } catch (e) {
-      expect(e.message).to.equal("token is undefined");
-    }
-  });
-
-  test('Vehicle with undefined vid', function(){
-    try {
-      var vehicle = new smartcar.Vehicle(null, VALID_TOKEN);
-    } catch (e) {
-      expect(e.message).to.equal("vid is undefined");
-    }
-  });
 });

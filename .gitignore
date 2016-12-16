@@ -1,5 +1,52 @@
-node_modules
-.vscode
-coverage
-doc
+# System generated files
 *.log
+*.lnk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Packages
+node_modules
+bower_components
+
+# Testing/Coverage/Lint
+out
+doc
+dist
+coverage
+.dockerignore
+.eslintcache
+.tern-project
+.nyc_output
+
+# Editors
+
+## Vscode
+.vscode
+.settings
+tsconfig.json
+jsconfig.json
+
+## Vim
+*~
+tags
+.netrwhist
+Session.vim
+[._]s[a-w][a-z]
+[._]*.]s[a-w][a-z]]
+
+## Sublime
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+sftp-config.json
+Package Control.last-run
+Package Control.ca-list
+Package Control.ca-bundle
+Package Control.system-ca-bundle
+Package Control.cache/
+Package Control.ca-certs/
+bh_unicode_properties.cache
+GitHub.sublime-settings

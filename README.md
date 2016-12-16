@@ -1,4 +1,4 @@
-### Smartcar SDK [![Build Status](https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master)](https://travis-ci.com/smartcar/node-sdk) [![Coverage Status](https://coveralls.io/repos/github/smartcar/node-sdk/badge.svg?t=ckIXmq)](https://coveralls.io/github/smartcar/node-sdk)
+### Smartcar SDK [![Build Status][ci-image]][ci-url]
 
 Node.js client SDK for the Smartcar API.
 
@@ -11,19 +11,19 @@ Node.js client SDK for the Smartcar API.
 * Handle the get request to `redirectUri`
   * If the user accepted your permissions, `req.query.code` will contain an
     authentication code
-    * Use `exchangeCode` with this code to obtain an access object 
-    containing an access token (lasting 2 hours) and a refresh token 
+    * Use `exchangeCode` with this code to obtain an access object
+    containing an access token (lasting 2 hours) and a refresh token
     (lasting 60 days)
       * save this access object
-    * If the user denied your permissions, `req.query.error` will be set 
+    * If the user denied your permissions, `req.query.error` will be set
     to `"access_denied"`
-    * If you passed a state parameter to `getAuthUrl`, req.query.state will 
+    * If you passed a state parameter to `getAuthUrl`, req.query.state will
     contain the state value.
 * Redirect to your main app endpoint
 * Handle the get request to your main app endpoint
-* Use `refreshAccess` on your saved access object to automatically refresh an 
+* Use `refreshAccess` on your saved access object to automatically refresh an
 expired `access_token`
-* Get the user's vehicles with `getVehicles` 
+* Get the user's vehicles with `getVehicles`
 * Create a new `Vehicle` object using a vehicleId from the previous response, and
 the `access_token`
 * Do stuff with the vehicle data!
@@ -85,7 +85,7 @@ app.get('/oemlogin', function(req, res, next){
 
 // Handle the redirectUri
 app.get('/home',
-  handleAuthCode, 
+  handleAuthCode,
   function(req, res, next){
     res.redirect('/data');
   }
@@ -113,3 +113,6 @@ app.get('/data', function(req, res, next){
 
 app.listen(4000);
 ```
+
+[ci-url]: https://travis-ci.com/smartcar/node-sdk
+[ci-image]: https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
