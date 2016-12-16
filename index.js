@@ -6,6 +6,7 @@ var util = require('./lib/util');
 var config = require('./lib/config');
 var errors = require('./lib/errors');
 var _ = require('lodash');
+var Promise = require('bluebird');
 
 /**
  * Initializes Client object
@@ -75,7 +76,7 @@ Client.prototype.exchangeCode = function(code) {
 
 /**
  * exchange a refresh token for a new access object
- * @param  {String} refresh_token refresh token to exchange
+ * @param  {String} token refresh token to exchange
  * @return {Promise} promise containing a new access object
  */
 Client.prototype.exchangeToken = function(token) {
@@ -98,8 +99,8 @@ Client.prototype.exchangeToken = function(token) {
  * @param  {Access} access access object to be checked
  * @return {Boolean} true if expired, false if not expired
  */
-Client.prototype.expired = function(access){
-  return Date.now() > access.created_at + (access.expires_in * 1000);
+Client.prototype.expired = function(access) {
+  return (Date.now() / 1000) > (access.created_at + access.expires_in);
 };
 
 /**
@@ -110,9 +111,9 @@ Client.prototype.expired = function(access){
  * @param  {number} [paging.offset] index to start vehicle list
  * @return {Promise}
  */
-Smartcar.prototype.getVehicles = function(token, paging) {
-  if (!token) {
-    throw new errors.SmartcarError('token is undefined');
+Client.prototype.getVehicles = Promise.method(function(token, paging) {
+  if (typeof token !== 'string') {
+    throw new TypeError('"token" argument must be a string');
   }
   var options = {
     uri: util.getUrl(),
@@ -125,7 +126,7 @@ Smartcar.prototype.getVehicles = function(token, paging) {
     options.form = paging;
   }
   return util.request(options);
-};
+});
 
 var smartcar = {};
 
