@@ -49,10 +49,15 @@ suite('Util', function() {
     nock.cleanAll();
   });
 
-  test('setCreation', function() {
-    var access = {};
-    var newAccess = util.setCreation(access);
-    expect(newAccess).to.have.all.keys('created_at');
+  test('setExpiration', function() {
+    const access = {expires_in: 7200}; // eslint-disable-line camelcase
+    const expected = Date.now() + (7200 * 1000);
+
+    util.setExpiration(access);
+
+    expect(access.expiration).to.be.a('string');
+    const actual = Date.parse(access.expiration);
+    expect(actual).to.be.within(expected - 10, expected + 10);
   });
 
   test('getUrl with id and endpoint', function() {

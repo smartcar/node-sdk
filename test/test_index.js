@@ -75,39 +75,50 @@ suite('Index', function() {
   });
 
   test('exchangeCode', function() {
-    client.exchangeCode('fakecode')
+    return client.exchangeCode('fakecode')
     .then(function(response) {
       expect(response).to.have.all.keys(
         'access_token',
         'token_type',
         'expires_in',
         'refresh_token',
-        'created_at'
+        'expiration'
       );
     });
   });
 
   test('exchangeToken', function() {
-    client.exchangeToken(VALID_TOKEN)
+    return client.exchangeToken(VALID_TOKEN)
     .then(function(response) {
       expect(response).to.have.all.keys(
         'access_token',
         'token_type',
         'expires_in',
         'refresh_token',
-        'created_at'
+        'expiration'
       );
     });
   });
 
-  test('expired', function() {
-    var access = {
-      /* eslint-disable camelcase */
-      created_at: (Date.now() / 1000) - 7300,
-      expires_in: 7200,
-      /* eslint-enable camelcase */
+  test('expiration - bad arg', function() {
+    const access = {expiration: 'pizza'};
+    expect(function() {
+      client.expired(access);
+    }).to.throw(TypeError);
+  });
+
+  test('expired - true', function() {
+    const access = {
+      expiration: new Date(Date.now() - (60 * 1000)).toISOString(),
     };
     expect(client.expired(access)).to.be.true();
+  });
+
+  test('expired - false', function() {
+    const access = {
+      expiration: new Date(Date.now() + (60 * 1000)).toISOString(),
+    };
+    expect(client.expired(access)).to.be.false();
   });
 
   test('getVehicles', function() {
