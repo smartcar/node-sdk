@@ -51,11 +51,13 @@ suite('Util', function() {
 
   test('setExpiration', function() {
     const access = {expires_in: 7200}; // eslint-disable-line camelcase
-    const expected = new Date(Date.now() + (7200 * 1000)).toISOString();
+    const expected = Date.now() + (7200 * 1000);
 
     util.setExpiration(access);
 
-    expect(access.expiration).to.equal(expected);
+    expect(access.expiration).to.be.a('string');
+    const actual = Date.parse(access.expiration);
+    expect(actual).to.be.within(expected - 10, expected + 10);
   });
 
   test('getUrl with id and endpoint', function() {
