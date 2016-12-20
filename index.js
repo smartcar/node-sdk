@@ -71,7 +71,7 @@ Client.prototype.exchangeCode = function(code) {
       /* eslint-enable camelcase */
     },
   })
-  .then(util.setCreation);
+  .then(util.setExpiration);
 };
 
 /**
@@ -91,7 +91,7 @@ Client.prototype.exchangeToken = function(token) {
       /* eslint-enable camelcase */
     },
   })
-  .then(util.setCreation);
+  .then(util.setExpiration);
 };
 
 /**
@@ -100,7 +100,13 @@ Client.prototype.exchangeToken = function(token) {
  * @return {Boolean} true if expired, false if not expired
  */
 Client.prototype.expired = function(access) {
-  return (Date.now() / 1000) > (access.created_at + access.expires_in);
+  const expiration = Date.parse(access.expiration);
+
+  if (isNaN(expiration)) { // eslint-disable-next-line max-len
+    throw new TypeError('"access.expiration" argument must be a valid ISO date string');
+  }
+
+  return Date.now() > expiration;
 };
 
 /**
