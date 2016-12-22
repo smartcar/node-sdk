@@ -8,6 +8,7 @@ var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 var VALID_VID = 'valid-vid';
 var IMPERIAL_ODOMETER_READING = 3.14;
 var METRIC_ODOMETER_READING = 2.71;
+var SUCCESS = {status: 'success'};
 
 suite('Vehicle', function() {
 
@@ -41,21 +42,33 @@ suite('Vehicle', function() {
       permissions: ['permission1'],
     });
 
-    // apiNock
-    //   .get('/vehicles/' + VALID_VID + '/odometer')
-    //   .matchHeader('Authorization', VALID_AUTHORIZATION)
-    //   .reply(200, {distance: METRIC_ODOMETER_READING});
-
     apiNock
       .get('/vehicles/' + VALID_VID + '/odometer')
       .matchHeader('sc-unit-system', 'metric')
       .reply(200, {distance: METRIC_ODOMETER_READING});
 
     apiNock
-      .get('/vehicles/' + VALID_VID + '/odometer')
+      .get('/vehicles/' + VALID_VID + '/odometer').times(2)
       .matchHeader('sc-unit-system', 'imperial')
       .reply(200, {distance: IMPERIAL_ODOMETER_READING});
 
+    apiNock
+      .post('/vehicles/' + VALID_VID + '/panic', {action: 'START'})
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, SUCCESS);
+
+    apiNock
+      .post('/vehicles/' + VALID_VID + '/sunroof', {
+        action: 'OPEN',
+        percentOpen: 0.5,
+      })
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, SUCCESS);
+
+    apiNock
+      .post('/vehicles/' + VALID_VID + '/lights/headlights')
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, SUCCESS);
   });
 
   suiteTeardown(function() {
@@ -102,6 +115,41 @@ suite('Vehicle', function() {
     return imperialVehicle.odometer()
       .then(function(result) {
         expect(result.distance).to.equal(IMPERIAL_ODOMETER_READING);
+      });
+  });
+
+  test('metric vehicle switched to imperial fetches imperial', function() {
+    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
+    metricVehicle.setUnitsToImperial();
+    return metricVehicle.odometer()
+      .then(function(result) {
+        expect(result.distance).to.equal(IMPERIAL_ODOMETER_READING);
+      });
+  });
+
+  test('action with no argument', function() {
+    return vehicle.startPanic()
+    .then(function(response) {
+      expect(response).to.have.all.keys('status');
+      expect(response.status).to.equal('success');
+    });
+  });
+
+  test('action with a key and argument', function() {
+    return vehicle.openSunroof({percentOpen: 0.5})
+    .then(function(response) {
+      expect(response).to.have.all.keys('status');
+      expect(response.status).to.equal('success');
+    });
+  });
+
+  test('action with empirical car', function() {
+    var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
+
+    return imperialVehicle.flashHeadlights()
+      .then(function(response) {
+        expect(response).to.have.all.keys('status');
+        expect(response.status).to.equal('success');
       });
   });
 
