@@ -45,6 +45,16 @@ suite('Vehicle', function() {
     nock.cleanAll();
   });
 
+  test('switch unit system to imperial', function() {
+    vehicle.setUnitsToImperial();
+    expect(vehicle.unitSystem).to.equal('imperial');
+  });
+
+  test('switch unit system to metric', function() {
+    vehicle.setUnitsToMetric();
+    expect(vehicle.unitSystem).to.equal('metric');
+  });
+
   test('disconnect', function() {
     return vehicle.disconnect()
     .then(function(response) {
