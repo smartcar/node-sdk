@@ -6,6 +6,8 @@ var Vehicle = require('../lib/vehicle');
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 var VALID_VID = 'valid-vid';
+var IMPERIAL_ODOMETER_READING = 3.14;
+var METRIC_ODOMETER_READING = 2.71;
 
 suite('Vehicle', function() {
 
@@ -39,6 +41,21 @@ suite('Vehicle', function() {
       permissions: ['permission1'],
     });
 
+    // apiNock
+    //   .get('/vehicles/' + VALID_VID + '/odometer')
+    //   .matchHeader('Authorization', VALID_AUTHORIZATION)
+    //   .reply(200, {distance: METRIC_ODOMETER_READING});
+
+    apiNock
+      .get('/vehicles/' + VALID_VID + '/odometer')
+      .matchHeader('sc-unit-system', 'metric')
+      .reply(200, {distance: METRIC_ODOMETER_READING});
+
+    apiNock
+      .get('/vehicles/' + VALID_VID + '/odometer')
+      .matchHeader('sc-unit-system', 'imperial')
+      .reply(200, {distance: IMPERIAL_ODOMETER_READING});
+
   });
 
   suiteTeardown(function() {
@@ -68,6 +85,24 @@ suite('Vehicle', function() {
       expect(e.message).to.contain('unit');
     }
 
+  });
+
+  test('vehicle initialized to metric fetches metric', function() {
+    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
+
+    return metricVehicle.odometer()
+      .then(function(result) {
+        expect(result.distance).to.equal(METRIC_ODOMETER_READING);
+      });
+  });
+
+  test('vehicle initialized to imperial fetches imperial', function() {
+    var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
+
+    return imperialVehicle.odometer()
+      .then(function(result) {
+        expect(result.distance).to.equal(IMPERIAL_ODOMETER_READING);
+      });
   });
 
   test('disconnect', function() {
