@@ -76,6 +76,7 @@ suite('Util', function() {
       token: VALID_TOKEN,
       endpoint: 'barometer',
       vid: VALID_VID,
+      unitSystem: 'metric',
     })()
     .then(function(response) {
       expect(response.pressure).to.be.a('number');
@@ -87,7 +88,8 @@ suite('Util', function() {
       token: VALID_TOKEN,
       endpoint: VALID_ENDPOINT,
       vid: VALID_VID,
-    })({imperial: true})
+      unitSystem: 'imperial',
+    })()
     .then(function(response) {
       expect(response).to.equal(IMPERIAL_DATA);
     });
@@ -100,6 +102,7 @@ suite('Util', function() {
       vid: VALID_VID,
       action: 'OPEN',
       key: 'percentOpen',
+      unitSystem: 'metric',
     })(0.5)
     .then(function(response) {
       expect(response).to.have.all.keys('status');
@@ -113,6 +116,7 @@ suite('Util', function() {
       endpoint: 'panic',
       vid: VALID_VID,
       action: 'START',
+      unitSystem: 'metric',
     })()
     .then(function(response) {
       expect(response).to.have.all.keys('status');
@@ -126,7 +130,8 @@ suite('Util', function() {
       endpoint: VALID_ENDPOINT,
       vid: VALID_VID,
       action: VALID_ACTION,
-    })('fakearg', {imperial: true})
+      unitSystem: 'imperial',
+    })('fakearg')
     .then(function(response) {
       expect(response).to.equal(IMPERIAL_DATA);
     });

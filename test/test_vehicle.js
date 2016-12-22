@@ -45,6 +45,31 @@ suite('Vehicle', function() {
     nock.cleanAll();
   });
 
+  test('switch unit system to imperial', function() {
+    vehicle.setUnitsToImperial();
+    expect(vehicle.unitSystem).to.equal('imperial');
+  });
+
+  test('switch unit system to metric', function() {
+    vehicle.setUnitsToMetric();
+    expect(vehicle.unitSystem).to.equal('metric');
+  });
+
+  test('vehicle constructor defaults to metric unit', function() {
+    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+    expect(metricVehicle.unitSystem).to.equal('metric');
+  });
+
+  test('vehicle constructor throws error on bad unit param', function() {
+    try {
+      var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
+    } catch (e) {
+      expect(badUnitVehicle).to.not.exist; // eslint-disable-line
+      expect(e.message).to.contain('unit');
+    }
+
+  });
+
   test('disconnect', function() {
     return vehicle.disconnect()
     .then(function(response) {
