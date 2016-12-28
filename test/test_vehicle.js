@@ -87,12 +87,12 @@ suite('Vehicle', function() {
   });
 
   test('switch unit system to imperial', function() {
-    vehicle.setUnitsToImperial();
+    vehicle.setUnitSystem('imperial');
     expect(vehicle.unitSystem).to.equal('imperial');
   });
 
   test('switch unit system to metric', function() {
-    vehicle.setUnitsToMetric();
+    vehicle.setUnitSystem('metric');
     expect(vehicle.unitSystem).to.equal('metric');
   });
 
@@ -104,6 +104,17 @@ suite('Vehicle', function() {
   test('vehicle constructor throws error on bad unit param', function() {
     try {
       var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
+    } catch (e) {
+      expect(badUnitVehicle).to.not.exist; // eslint-disable-line
+      expect(e.message).to.contain('unit');
+    }
+
+  });
+
+  test('setUnitSystem throws error on bad unit param', function() {
+    try {
+      var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+      badUnitVehicle.setUnitSystem('big');
     } catch (e) {
       expect(badUnitVehicle).to.not.exist; // eslint-disable-line
       expect(e.message).to.contain('unit');
@@ -131,7 +142,7 @@ suite('Vehicle', function() {
 
   test('metric vehicle switched to imperial fetches imperial', function() {
     var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
-    metricVehicle.setUnitsToImperial();
+    metricVehicle.setUnitSystem('imperial');
     return metricVehicle.odometer()
       .then(function(result) {
         expect(result.distance).to.equal(IMPERIAL_ODOMETER_READING);
