@@ -65,10 +65,21 @@ suite('Vehicle', function() {
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, SUCCESS);
 
+    // test that we can send multiple args, sunroof does not actually take both
+    apiNock
+      .post('/vehicles/' + VALID_VID + '/sunroof', {
+        action: 'OPEN',
+        percentOpen: 0.5,
+        percentClosed: 0.5,
+      })
+      .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .reply(200, SUCCESS);
+
     apiNock
       .post('/vehicles/' + VALID_VID + '/lights/headlights')
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, SUCCESS);
+
   });
 
   suiteTeardown(function() {
@@ -137,6 +148,14 @@ suite('Vehicle', function() {
 
   test('action with a key and argument', function() {
     return vehicle.openSunroof({percentOpen: 0.5})
+    .then(function(response) {
+      expect(response).to.have.all.keys('status');
+      expect(response.status).to.equal('success');
+    });
+  });
+
+  test('action with a key and multiple argument', function() {
+    return vehicle.openSunroof({percentOpen: 0.5, percentClosed: 0.5})
     .then(function(response) {
       expect(response).to.have.all.keys('status');
       expect(response.status).to.equal('success');
