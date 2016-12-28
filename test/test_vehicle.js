@@ -4,7 +4,7 @@ var nock = require('nock');
 var Vehicle = require('../lib/vehicle');
 
 var VALID_TOKEN = 'valid-token';
-var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
+var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
 var VALID_VID = 'valid-vid';
 var IMPERIAL_ODOMETER_READING = 3.14;
 var METRIC_ODOMETER_READING = 2.71;
@@ -20,21 +20,21 @@ suite('Vehicle', function() {
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .delete('/vehicles/' + VALID_VID + '/application')
+    .delete(`/vehicles/${VALID_VID}/application`)
     .reply(200, {
       status: 'success',
     });
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .get('/vehicles/' + VALID_VID + '/permissions')
+    .get(`/vehicles/${VALID_VID}/permissions`)
     .reply(200, {
       permissions: ['permission1', 'permission2', 'permission3'],
     });
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
-    .get('/vehicles/' + VALID_VID + '/permissions')
+    .get(`/vehicles/${VALID_VID}/permissions`)
     .query({
       limit: 1,
     })
@@ -43,22 +43,22 @@ suite('Vehicle', function() {
     });
 
     apiNock
-      .get('/vehicles/' + VALID_VID + '/odometer')
+      .get(`/vehicles/${VALID_VID}/odometer`)
       .matchHeader('sc-unit-system', 'metric')
       .reply(200, {distance: METRIC_ODOMETER_READING});
 
     apiNock
-      .get('/vehicles/' + VALID_VID + '/odometer').times(2)
+      .get(`/vehicles/${VALID_VID}/odometer`).times(2)
       .matchHeader('sc-unit-system', 'imperial')
       .reply(200, {distance: IMPERIAL_ODOMETER_READING});
 
     apiNock
-      .post('/vehicles/' + VALID_VID + '/panic', {action: 'START'})
+      .post(`/vehicles/${VALID_VID}/panic`, {action: 'START'})
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, SUCCESS);
 
     apiNock
-      .post('/vehicles/' + VALID_VID + '/sunroof', {
+      .post(`/vehicles/${VALID_VID}/sunroof`, {
         action: 'OPEN',
         percentOpen: 0.5,
       })
@@ -67,7 +67,7 @@ suite('Vehicle', function() {
 
     // test that we can send multiple args, sunroof does not actually take both
     apiNock
-      .post('/vehicles/' + VALID_VID + '/sunroof', {
+      .post(`/vehicles/${VALID_VID}/sunroof`, {
         action: 'OPEN',
         percentOpen: 0.5,
         percentClosed: 0.5,
@@ -76,7 +76,7 @@ suite('Vehicle', function() {
       .reply(200, SUCCESS);
 
     apiNock
-      .post('/vehicles/' + VALID_VID + '/lights/headlights')
+      .post(`/vehicles/${VALID_VID}/lights/headlights`)
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, SUCCESS);
 
@@ -105,7 +105,7 @@ suite('Vehicle', function() {
     try {
       var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
     } catch (e) {
-      expect(badUnitVehicle).to.not.exist; // eslint-disable-line
+      expect(badUnitVehicle).to.not.exist();
       expect(e.message).to.contain('unit');
     }
 
@@ -116,10 +116,8 @@ suite('Vehicle', function() {
       var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
       badUnitVehicle.setUnitSystem('big');
     } catch (e) {
-      expect(badUnitVehicle).to.not.exist; // eslint-disable-line
       expect(e.message).to.contain('unit');
     }
-
   });
 
   test('vehicle initialized to metric fetches metric', function() {
@@ -173,7 +171,7 @@ suite('Vehicle', function() {
     });
   });
 
-  test('action with empirical car', function() {
+  test('action with imperial car', function() {
     var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
 
     return imperialVehicle.flashHeadlights()
