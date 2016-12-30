@@ -45,8 +45,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('accelerometer no args', function() {
     return vehicle.accelerometer()
     .then(function(response) {
@@ -54,8 +52,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('airbags no args', function() {
     return vehicle.airbags()
@@ -65,8 +61,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('barometer no args', function() {
     return vehicle.barometer()
     .then(function(response) {
@@ -74,8 +68,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('battery no args', function() {
     return vehicle.battery()
@@ -85,8 +77,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('charge no args', function() {
     return vehicle.charge()
     .then(function(response) {
@@ -94,8 +84,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('chargeLimit no args', function() {
     return vehicle.chargeLimit()
@@ -105,8 +93,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('chargeSchedule no args', function() {
     return vehicle.chargeSchedule()
     .then(function(response) {
@@ -114,8 +100,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('climate no args', function() {
     return vehicle.climate()
@@ -125,8 +109,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('collisionSensor no args', function() {
     return vehicle.collisionSensor()
     .then(function(response) {
@@ -134,8 +116,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('compass no args', function() {
     return vehicle.compass()
@@ -145,8 +125,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('cruiseControl no args', function() {
     return vehicle.cruiseControl()
     .then(function(response) {
@@ -154,8 +132,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('dimensions no args', function() {
     return vehicle.dimensions()
@@ -165,8 +141,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('doors no args', function() {
     return vehicle.doors()
     .then(function(response) {
@@ -174,8 +148,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('childSafetyLocks no args', function() {
     return vehicle.childSafetyLocks()
@@ -185,8 +157,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('driveMode no args', function() {
     return vehicle.driveMode()
     .then(function(response) {
@@ -194,8 +164,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('engine no args', function() {
     return vehicle.engine()
@@ -205,8 +173,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('engineCoolant no args', function() {
     return vehicle.engineCoolant()
     .then(function(response) {
@@ -214,8 +180,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('engineHood no args', function() {
     return vehicle.engineHood()
@@ -225,8 +189,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('engineOil no args', function() {
     return vehicle.engineOil()
     .then(function(response) {
@@ -234,8 +196,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('engineThrottle no args', function() {
     return vehicle.engineThrottle()
@@ -245,8 +205,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('fuel no args', function() {
     return vehicle.fuel()
     .then(function(response) {
@@ -254,8 +212,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('gyroscope no args', function() {
     return vehicle.gyroscope()
@@ -265,8 +221,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('ignition no args', function() {
     return vehicle.ignition()
     .then(function(response) {
@@ -274,8 +228,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('hazardLights no args', function() {
     return vehicle.hazardLights()
@@ -285,8 +237,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('headlights no args', function() {
     return vehicle.headlights()
     .then(function(response) {
@@ -294,8 +244,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('interiorLights no args', function() {
     return vehicle.interiorLights()
@@ -305,8 +253,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('turnIndicator no args', function() {
     return vehicle.turnIndicator()
     .then(function(response) {
@@ -314,8 +260,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('location no args', function() {
     return vehicle.location()
@@ -325,8 +269,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('sideviewMirrors no args', function() {
     return vehicle.sideviewMirrors()
     .then(function(response) {
@@ -334,8 +276,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('odometer no args', function() {
     return vehicle.odometer()
@@ -345,8 +285,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('tripOdometers no args', function() {
     return vehicle.tripOdometers()
     .then(function(response) {
@@ -354,8 +292,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('acceleratorPedal no args', function() {
     return vehicle.acceleratorPedal()
@@ -365,8 +301,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('brakePedal no args', function() {
     return vehicle.brakePedal()
     .then(function(response) {
@@ -374,8 +308,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('rainSensor no args', function() {
     return vehicle.rainSensor()
@@ -385,8 +317,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('seats no args', function() {
     return vehicle.seats()
     .then(function(response) {
@@ -394,8 +324,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('security no args', function() {
     return vehicle.security()
@@ -405,8 +333,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('sliBattery no args', function() {
     return vehicle.sliBattery()
     .then(function(response) {
@@ -414,8 +340,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('speedometer no args', function() {
     return vehicle.speedometer()
@@ -425,8 +349,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('steeringWheel no args', function() {
     return vehicle.steeringWheel()
     .then(function(response) {
@@ -434,8 +356,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('sunroof no args', function() {
     return vehicle.sunroof()
@@ -445,8 +365,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('tachometer no args', function() {
     return vehicle.tachometer()
     .then(function(response) {
@@ -454,8 +372,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('interiorThermistor no args', function() {
     return vehicle.interiorThermistor()
@@ -465,8 +381,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('exteriorThermistor no args', function() {
     return vehicle.exteriorThermistor()
     .then(function(response) {
@@ -474,8 +388,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('tires no args', function() {
     return vehicle.tires()
@@ -485,8 +397,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('transmission no args', function() {
     return vehicle.transmission()
     .then(function(response) {
@@ -494,8 +404,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('transmissionFluid no args', function() {
     return vehicle.transmissionFluid()
@@ -505,8 +413,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('frontTrunk no args', function() {
     return vehicle.frontTrunk()
     .then(function(response) {
@@ -514,8 +420,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('rearTrunk no args', function() {
     return vehicle.rearTrunk()
@@ -525,8 +429,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('vin no args', function() {
     return vehicle.vin()
     .then(function(response) {
@@ -534,8 +436,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('washerFluid no args', function() {
     return vehicle.washerFluid()
@@ -545,8 +445,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('wheels no args', function() {
     return vehicle.wheels()
     .then(function(response) {
@@ -554,8 +452,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('wheelSpeeds no args', function() {
     return vehicle.wheelSpeeds()
@@ -565,8 +461,6 @@ suite('Vehicle', function() {
     });
   });
 
-
-
   test('windows no args', function() {
     return vehicle.windows()
     .then(function(response) {
@@ -574,8 +468,6 @@ suite('Vehicle', function() {
       expect(response.status).to.equal('success');
     });
   });
-
-
 
   test('startCharging no args', function() {
     return vehicle.startCharging()

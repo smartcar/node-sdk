@@ -7,13 +7,26 @@ stream.once('open', function() {
   Object.keys(methods).forEach(function(method) {
     var config = methods[method];
     var httpMethod = determineHTTPMethod(config);
+    var paramDocs = '*';
+    var returnDocs = '';
+    if (config.key) {
+      paramDocs = `*
+      * @param {Object} data See the API Docs for what keys can be in this object
+      *`;
+    }
 
+    if (httpMethod === 'GET') {
+      returnDocs = `* @return {Promise} A promise for info on the vehicle's ${method}`;
+    } else {
+      returnDocs = '* @return {Promise} A success or failure response';
+    }
     /* write the documentation string to file when documentation format known */
-    // var documentation = `/*
-    //   * Vehicle.${method}()
-    //   * api-endpoint: ${httpMethod} ${config.endpoint}
-    //   * parameters: ${config.key ? `Object: {${config.key}: __}` : 'N/A'}
-    //   */`
+    var documentation = `
+     /*
+      * ${httpMethod} Vehicle.${method}
+      ${paramDocs}
+      ${returnDocs}
+      */`;
 
     var str = `Vehicle.prototype.${method} = function(data) {
       data = data || {};
@@ -27,9 +40,9 @@ stream.once('open', function() {
         method: '${httpMethod}',
       });
     };`;
+    stream.write(documentation);
+    stream.write('\n');
     stream.write(str);
-    stream.write('\n');
-    stream.write('\n');
     stream.write('\n');
   });
 });

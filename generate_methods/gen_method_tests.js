@@ -28,9 +28,7 @@ stream.once('open', function() {
 
     stream.write(testNoArgs);
     stream.write('\n');
-    stream.write('\n');
     stream.write(testArgs);
-    stream.write('\n');
     stream.write('\n');
   });
 });

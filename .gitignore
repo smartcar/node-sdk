@@ -1,3 +1,7 @@
+# repo specific
+temp_methods_file.js
+temp_methods_test_file.js
+
 # System generated files
 *.log
 *.lnk
@@ -50,7 +54,3 @@ Package Control.cache/
 Package Control.ca-certs/
 bh_unicode_properties.cache
 GitHub.sublime-settings
-
-# temporary file for generating vehicle methods file
-temp_methods_file.js
-temp_methods_test_file.js
