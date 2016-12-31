@@ -1,0 +1,29 @@
+{
+  "flashHeadlights": {
+    "arg":"LOW_BEAM"
+  },
+  "activateChildSafetyLocks": {
+    "arg": ["BACK_LEFT"]
+  },
+  "disableChildSafetyLocks": {
+    "arg": ["BACK_LEFT"]
+  },
+  "tiltSideviewMirrors" : {
+    "arg": ["RIGHT"]
+  },
+  "openWindows" : {
+    "arg": ["BACK_LEFT"]
+  },
+  "closeWindows" : {
+    "arg": ["BACK_LEFT"]
+  },
+  "lockWindows" : {
+    "arg": ["BACK_LEFT"]
+  },
+  "unlockWindows" : {
+    "arg": ["BACK_LEFT"]
+  },
+  "setUnitSystem": {
+    "arg":"metric"
+  }
+}
