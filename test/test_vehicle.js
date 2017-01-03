@@ -53,7 +53,7 @@ suite('Vehicle', function() {
       .reply(200, {distance: IMPERIAL_ODOMETER_READING});
 
     apiNock
-      .post(`/vehicles/${VALID_VID}/panic`, {action: 'START'})
+      .post(`/vehicles/${VALID_VID}/panic`, {action: 'START'}).times(2)
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .reply(200, SUCCESS);
 
@@ -174,7 +174,7 @@ suite('Vehicle', function() {
   test('action with imperial car', function() {
     var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
 
-    return imperialVehicle.flashHeadlights()
+    return imperialVehicle.startPanic()
       .then(function(response) {
         expect(response).to.have.all.keys('status');
         expect(response.status).to.equal('success');
