@@ -137,7 +137,8 @@ Client.prototype.getVehicles = Promise.method(function(token, paging) {
 var smartcar = {};
 
 smartcar.errors = errors;
-smartcar.methods = require('./lib/vehicle_methods');
+// smartcar.methods = require('./lib/vehicle_methods');
+// TODO: what to set smartcar.methods to now? prototype?
 smartcar.Vehicle = Vehicle;
 smartcar.Client = Client;
 
