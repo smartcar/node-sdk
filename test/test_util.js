@@ -17,7 +17,7 @@ suite('Util', function() {
 
     expect(access.expiration).to.be.a('string');
     const actual = Date.parse(access.expiration);
-    expect(actual).to.be.within(expected - 10, expected + 10);
+    expect(actual).to.be.within(expected - 100, expected + 100);
   });
 
   test('getUrl with id and endpoint', function() {

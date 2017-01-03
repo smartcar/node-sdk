@@ -2,6 +2,7 @@
 var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var Vehicle = require('../lib/vehicle');
+var config = require('../lib/config');
 
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
@@ -9,6 +10,7 @@ var VALID_VID = 'valid-vid';
 var IMPERIAL_ODOMETER_READING = 3.14;
 var METRIC_ODOMETER_READING = 2.71;
 var SUCCESS = {status: 'success'};
+var VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
 
 suite('Vehicle', function() {
 
@@ -20,6 +22,7 @@ suite('Vehicle', function() {
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
+    .matchHeader('User-Agent', VALID_USER_AGENT)
     .delete(`/vehicles/${VALID_VID}/application`)
     .reply(200, {
       status: 'success',
@@ -27,6 +30,7 @@ suite('Vehicle', function() {
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
+    .matchHeader('User-Agent', VALID_USER_AGENT)
     .get(`/vehicles/${VALID_VID}/permissions`)
     .reply(200, {
       permissions: ['permission1', 'permission2', 'permission3'],
@@ -34,6 +38,7 @@ suite('Vehicle', function() {
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
+    .matchHeader('User-Agent', VALID_USER_AGENT)
     .get(`/vehicles/${VALID_VID}/permissions`)
     .query({
       limit: 1,
@@ -44,17 +49,20 @@ suite('Vehicle', function() {
 
     apiNock
       .get(`/vehicles/${VALID_VID}/odometer`)
+      .matchHeader('User-Agent', VALID_USER_AGENT)
       .matchHeader('sc-unit-system', 'metric')
       .reply(200, {distance: METRIC_ODOMETER_READING});
 
     apiNock
       .get(`/vehicles/${VALID_VID}/odometer`).times(2)
       .matchHeader('sc-unit-system', 'imperial')
+      .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, {distance: IMPERIAL_ODOMETER_READING});
 
     apiNock
       .post(`/vehicles/${VALID_VID}/panic`, {action: 'START'}).times(2)
       .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, SUCCESS);
 
     apiNock
@@ -63,6 +71,7 @@ suite('Vehicle', function() {
         percentOpen: 0.5,
       })
       .matchHeader('Authorization', VALID_AUTHORIZATION)
+      .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, SUCCESS);
 
     // test that we can send multiple args, sunroof does not actually take both
