@@ -3,6 +3,7 @@ var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var Vehicle = require('../lib/vehicle');
 
+
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 var VALID_VID = 'valid-vid';
@@ -46,13 +47,18 @@ suite('Vehicle', function() {
   });
 
   test('vehicle constructor called without new', function() {
-    try {
+    var badConstruct = function() {
       var vehicle = Vehicle(VALID_VID, VALID_TOKEN);
-    } catch (e) {
-      expect(e.message).to.contain('new Vehicle');
-    } finally {
-      expect(vehicle).to.not.exist();
-    }
+      return vehicle;
+    };
+    expect(badConstruct).to.throw(Error, /new Vehicle/);
+    // try {
+    //   var vehicle = Vehicle(VALID_VID, VALID_TOKEN);
+    // } catch (e) {
+    //   expect(e.message).to.contain('new Vehicle');
+    // } finally {
+    //   expect(vehicle).to.not.exist();
+    // }
   });
 
   test('disconnect', function() {
