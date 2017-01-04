@@ -48,17 +48,9 @@ suite('Vehicle', function() {
 
   test('vehicle constructor called without new', function() {
     var badConstruct = function() {
-      var vehicle = Vehicle(VALID_VID, VALID_TOKEN);
-      return vehicle;
+      Vehicle(VALID_VID, VALID_TOKEN);
     };
     expect(badConstruct).to.throw(Error, /new Vehicle/);
-    // try {
-    //   var vehicle = Vehicle(VALID_VID, VALID_TOKEN);
-    // } catch (e) {
-    //   expect(e.message).to.contain('new Vehicle');
-    // } finally {
-    //   expect(vehicle).to.not.exist();
-    // }
   });
 
   test('disconnect', function() {
