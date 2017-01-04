@@ -4,6 +4,7 @@ var nock = require('nock');
 var Vehicle = require('../lib/vehicle');
 var config = require('../lib/config');
 
+
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
 var VALID_VID = 'valid-vid';
@@ -185,6 +186,13 @@ suite('Vehicle', function() {
         expect(response).to.have.all.keys('status');
         expect(response.status).to.equal('success');
       });
+  });
+
+  test('vehicle constructor called without new', function() {
+    var badConstruct = function() {
+      Vehicle(VALID_VID, VALID_TOKEN);
+    };
+    expect(badConstruct).to.throw(Error, /new Vehicle/);
   });
 
   test('disconnect', function() {
