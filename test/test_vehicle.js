@@ -111,22 +111,19 @@ suite('Vehicle', function() {
   });
 
   test('vehicle constructor throws error on bad unit param', function() {
-    try {
-      var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
-    } catch (e) {
-      expect(badUnitVehicle).to.not.exist();
-      expect(e.message).to.contain('unit');
-    }
-
+    var badUnitConstructor = function() {
+      // eslint-disable-next-line no-new
+      new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
+    };
+    expect(badUnitConstructor).to.throw(TypeError, /unit/);
   });
 
   test('setUnitSystem throws error on bad unit param', function() {
-    try {
+    var badUnitSet = function() {
       var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
       badUnitVehicle.setUnitSystem('big');
-    } catch (e) {
-      expect(e.message).to.contain('unit');
-    }
+    };
+    expect(badUnitSet).to.throw(TypeError, /unit/);
   });
 
   test('vehicle initialized to metric fetches metric', function() {
