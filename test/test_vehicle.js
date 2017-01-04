@@ -3,6 +3,7 @@ var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var Vehicle = require('../lib/vehicle');
 
+
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
 var VALID_VID = 'valid-vid';
@@ -43,6 +44,13 @@ suite('Vehicle', function() {
 
   suiteTeardown(function() {
     nock.cleanAll();
+  });
+
+  test('vehicle constructor called without new', function() {
+    var badConstruct = function() {
+      Vehicle(VALID_VID, VALID_TOKEN);
+    };
+    expect(badConstruct).to.throw(Error, /new Vehicle/);
   });
 
   test('disconnect', function() {
