@@ -153,6 +153,20 @@ suite('Vehicle prototype', function() {
     });
   });
 
+  test('all methods requiring parameters throw error on bad input', function() {
+    return Promise.each(methodsRequiringParams, function(method) {
+      return Promise.try(function() {
+        return vehicle[method]({});
+      })
+      .then(function() {
+        throw new Error(`expected ${method} to throw error on bad params`);
+      })
+      .catch(function(err) {
+        expect(err).to.be.an.instanceOf(TypeError);
+      });
+    });
+  });
+
   /* TESTS OF VEHICLE METHODS REQUIRING PARAMETERS */
 
   test('flashHeadlights', function() {
