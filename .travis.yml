@@ -12,6 +12,18 @@ cache:
     - node_modules
     - .eslintcache
 
+branches:
+  except:
+    # Don't run on tag pushes
+    - /^v\d+\.\d+\.\d+$/
+
+notifications:
+  slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
+
+before_install:
+  - git clone git@github.com:smartcar/build.git $HOME/smartcar-build
+  - cp $HOME/smartcar-build/resources/Makefile .
+
 install:
   - npm update
   - npm prune
@@ -20,10 +32,19 @@ script:
   - npm test
   - npm run cover
 
+after_success:
+  - make create-tag
+
 deploy:
-  on:
-    branch: master
-    node: 6
-  provider: npm
-  email: hello@smartcar.com
-  api_key: $NPM_API_TOKEN
+  - provider: npm
+    email: hello@smartcar.com
+    api_key: $NPM_API_TOKEN
+    on:
+      branch: master
+      node: 6
+  - provider: script
+    skip_cleanup: true
+    script: make push-tag
+    on:
+      branch: master
+      node: 6
