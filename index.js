@@ -63,6 +63,9 @@ Client.prototype.exchangeCode = function(code) {
     uri: config.auth,
     method: 'POST',
     auth: this.auth,
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
+    },
     form: {
       /* eslint-disable camelcase */
       grant_type: 'authorization_code',
@@ -84,6 +87,9 @@ Client.prototype.exchangeToken = function(token) {
     uri: config.auth,
     method: 'POST',
     auth: this.auth,
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
+    },
     form: {
       /* eslint-disable camelcase */
       grant_type: 'refresh_token',
@@ -126,6 +132,9 @@ Client.prototype.getVehicles = Promise.method(function(token, paging) {
     method: 'GET',
     auth: {
       bearer: token,
+    },
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
     },
   };
   if (paging) {

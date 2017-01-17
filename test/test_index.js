@@ -3,9 +3,11 @@ var expect = require('chai').use(require('dirty-chai')).expect;
 var nock = require('nock');
 var smartcar = require('../index');
 var Vehicle = require('../lib/vehicle');
+var config = require('../lib/config');
 
 var VALID_TOKEN = 'valid-token';
 var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
+var VALID_USER_AGENT_HEADER = `smartcar-node-sdk:${config.version}`;
 
 suite('Index', function() {
 
@@ -22,6 +24,7 @@ suite('Index', function() {
     var authNock = nock('https://auth.smartcar.com').persist();
 
     authNock.post('/oauth/token')
+    .matchHeader('User-Agent', VALID_USER_AGENT_HEADER)
     .reply(200, {
       /* eslint-disable camelcase */
       access_token: VALID_TOKEN,
@@ -35,6 +38,7 @@ suite('Index', function() {
 
     apiNock.get('/vehicles')
     .matchHeader('Authorization', VALID_AUTHORIZATION)
+    .matchHeader('User-Agent', VALID_USER_AGENT_HEADER)
     .reply(200, {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
     });
@@ -44,6 +48,7 @@ suite('Index', function() {
       limit: 1,
     })
     .matchHeader('Authorization', VALID_AUTHORIZATION)
+    .matchHeader('User-Agent', VALID_USER_AGENT_HEADER)
     .reply(200, {
       vehicles: ['vehicle1'],
     });
