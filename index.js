@@ -43,7 +43,7 @@ Client.prototype.getAuthUrl = function(oem, options) {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
-    scope: this.scope.join(' '),
+    scope: this.scope ? this.scope.join(' ') : null,
   };
   /* eslint-enable camelcase */
 
