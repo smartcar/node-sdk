@@ -49,7 +49,7 @@
     "mercedes-benz": "https://mercedes.smartcar.com",
     "mini": "https://mini.smartcar.com",
     "mitsubishi": "https://mitsubishi.smartcar.com",
-    "mock": "http://mock.smartcar.com:4004",
+    "mock": "https://mock.smartcar.com",
     "nissan": "https://nissan.smartcar.com",
     "onstar": "https://onstar.smartcar.com",
     "opel": "https://opel.smartcar.com",
