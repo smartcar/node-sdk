@@ -79,6 +79,24 @@ suite('Index', function() {
     expect(url).to.equal(expected);
   });
 
+  test('getAuthUrl with no scope', function() {
+    var noScopeClient = new smartcar.Client({
+      clientId: 'fakeid',
+      clientSecret: 'fakesecret',
+      redirectUri: 'fakeuri',
+    });
+
+    var url = noScopeClient.getAuthUrl('ford', {
+      state: 'fakestate',
+      approval_prompt: 'force', // eslint-disable-line camelcase
+    });
+    var expected = 'https://ford.smartcar.com/oauth/authorize?' +
+    'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
+    '&scope=' +
+    '&state=fakestate&approval_prompt=force';
+    expect(url).to.equal(expected);
+  });
+
   test('exchangeCode', function() {
     return client.exchangeCode('fakecode')
     .then(function(response) {
