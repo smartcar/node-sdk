@@ -31,8 +31,6 @@ install:
 script:
   - npm test
   - npm run cover
-
-after_success:
   - make create-tag
 
 deploy:
