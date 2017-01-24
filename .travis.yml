@@ -47,4 +47,4 @@ deploy:
     script: make push-tag
     on:
       branch: master
-      node: 6pi_key: $NPM_API_TOKEN
+      node: 6
