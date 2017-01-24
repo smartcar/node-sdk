@@ -92,7 +92,6 @@ suite('Index', function() {
     });
     var expected = 'https://ford.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
-    '&scope=' +
     '&state=fakestate&approval_prompt=force';
     expect(url).to.equal(expected);
   });

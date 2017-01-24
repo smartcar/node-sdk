@@ -43,9 +43,12 @@ Client.prototype.getAuthUrl = function(oem, options) {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
-    scope: this.scope ? this.scope.join(' ') : null,
   };
   /* eslint-enable camelcase */
+
+  if (this.scope) {
+    parameters.scope = this.scope.join(' ');
+  }
 
   _.defaults(parameters, options);
   var query = querystring.stringify(parameters);
