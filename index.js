@@ -43,9 +43,12 @@ Client.prototype.getAuthUrl = function(oem, options) {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
-    scope: this.scope.join(' '),
   };
   /* eslint-enable camelcase */
+
+  if (this.scope) {
+    parameters.scope = this.scope.join(' ');
+  }
 
   _.defaults(parameters, options);
   var query = querystring.stringify(parameters);
@@ -63,6 +66,9 @@ Client.prototype.exchangeCode = function(code) {
     uri: config.auth,
     method: 'POST',
     auth: this.auth,
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
+    },
     form: {
       /* eslint-disable camelcase */
       grant_type: 'authorization_code',
@@ -84,6 +90,9 @@ Client.prototype.exchangeToken = function(token) {
     uri: config.auth,
     method: 'POST',
     auth: this.auth,
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
+    },
     form: {
       /* eslint-disable camelcase */
       grant_type: 'refresh_token',
@@ -126,6 +135,9 @@ Client.prototype.getVehicles = Promise.method(function(token, paging) {
     method: 'GET',
     auth: {
       bearer: token,
+    },
+    headers: {
+      'User-Agent': `smartcar-node-sdk:${config.version}`,
     },
   };
   if (paging) {
