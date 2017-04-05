@@ -52,7 +52,7 @@ loadAccessFromSafePlace = function(access){
 handleAuthCode = function(req, res, next){
   if (req.query.error) {
     // the user denied your requested permissions
-    next();
+    next(new Error(req.query.error));
   } else {
     client.exchangeCode(req.query.code)
     .then(saveAccess)
