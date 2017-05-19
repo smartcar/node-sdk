@@ -115,7 +115,7 @@ suite('Vehicle prototype', function() {
       .reply(200, SUCCESS);
 
     apiNock
-      .post(`/vehicles/${VALID_VID}/charge/limit`, SET_CHARGE_LIMIT_DATA)
+      .post(`/vehicles/${VALID_VID}/charge/limit`, ENABLE_CHARGE_LIMIT_DATA)
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, SUCCESS);
