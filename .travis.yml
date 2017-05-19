@@ -2,7 +2,7 @@ language:
   - node_js
 
 node_js:
-  - node
+  - 7
   - 6
   - 4
 
@@ -14,7 +14,6 @@ cache:
 
 branches:
   except:
-    # Don't run on tag pushes
     - /^v\d+\.\d+\.\d+$/
 
 notifications:

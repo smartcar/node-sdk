@@ -45,7 +45,7 @@ var LOCK_WINDOWS_DATA = {
   action: 'LOCK',
   windows: [{location: 'BACK_LEFT'}],
 };
-var SET_CHARGE_LIMIT_DATA = {
+var ENABLE_CHARGE_LIMIT_DATA = {
   limit: 0.5,
 };
 var ENABLE_CHARGE_SCHEDULE_DATA = {
@@ -115,7 +115,7 @@ suite('Vehicle prototype', function() {
       .reply(200, SUCCESS);
 
     apiNock
-      .post(`/vehicles/${VALID_VID}/charge/limit`, SET_CHARGE_LIMIT_DATA)
+      .post(`/vehicles/${VALID_VID}/charge/limit`, ENABLE_CHARGE_LIMIT_DATA)
       .matchHeader('Authorization', VALID_AUTHORIZATION)
       .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, SUCCESS);
@@ -229,8 +229,8 @@ suite('Vehicle prototype', function() {
   });
 
   /* TEST OF VEHICLE METHODS WITH OPTIONAL PARAMETERS */
-  test('setChargeLimit with arg', function() {
-    return vehicle.setChargeLimit(SET_CHARGE_LIMIT_DATA.limit);
+  test('enableChargeLimit with arg', function() {
+    return vehicle.enableChargeLimit(ENABLE_CHARGE_LIMIT_DATA.limit);
   });
   test('enableChargeSchedule with arg', function() {
     return vehicle.enableChargeSchedule(ENABLE_CHARGE_SCHEDULE_DATA.startTime);
