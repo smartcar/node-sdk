@@ -9,13 +9,33 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 
 /**
- * Initializes Client object
+ * @type {Object}
+ * @typedef Access
+ * @property {String} tokenType - Always set to `Bearer`
+ * @property {Number} expiresIn - Number of seconds the access token is valid for, always set to 7200 (2 hours)
+ * @property {String} expiration - ISO 8601 Datetime string which represents when the token expires
+ * @property {String} accessToken - A token to be used for requests to the Smartcar API
+ * @property {String} refreshToken - A token which is used to renew access when the current access token expires, expires in 60 days
+ *
+ * @example
+ * {
+ *   "tokenType": "example",
+ *   "expiresIn": 3600,
+ *   "expiration": "2017-05-26T01:21:27.070Z",
+ *   "accessToken": "88704225-9f6c-4919-93e7-e0cec71317ce",
+ *   "refreshToken": "60a9e801-6d26-4d88-926e-5c7f9fc13486",
+ * }
+ */
+
+/**
+ * Create a Smartcar API client for your application.
+ *
  * @constructor
- * @param options sdk configuration object
- * @param {String} options.clientId application client identifier
- * @param {String} options.clientSecret application secret
- * @param {String} options.redirectUri redirect here after OEM authorization
- * @param {String[]} options.scope list of application's permissions
+ * @param {Object} options
+ * @param {String} options.clientId - The application's client id
+ * @param {String} options.clientSecret - The application's client secret
+ * @param {String} options.redirectUri - One of the application's preregistered redirect URIs
+ * @param {String[]} options.scope - list of permissions to request from user
  */
 function Client(options) {
   this.clientId = options.clientId;
@@ -29,14 +49,20 @@ function Client(options) {
 }
 
 /**
- * return oem authorization URI
- * @param  {String} oem oem url
- * @param  {String} [options.state] oauth application state
- * @param  {String} [options.approval_prompt=auto] force permission
- * dialog by setting options.approval_prompt=force
- * @return {String} oauth authorize URI
+ * Generate the OAuth authorization URL for a given vehicle make.
+ *
+ * By default users are not shown the permission dialog if they have already
+ * approved the set of scopes for this application. The application can elect
+ * to always display the permissions dialog to the user by setting
+ * approval_prompt to `force`.
+ *
+ * @param {String} make - the vehicle make to generate the URL for
+ * @param {Object} [options]
+ * @param {String} [options.state] - extra application state to pass along
+ * @param {Boolean} [options.approval_prompt=auto] - see 2nd paragraph above
+ * @return {String} OAuth authorization URL to redirect user to
  */
-Client.prototype.getAuthUrl = function(oem, options) {
+Client.prototype.getAuthUrl = function(make, options) {
 
   /* eslint-disable camelcase */
   var parameters = {
@@ -52,14 +78,15 @@ Client.prototype.getAuthUrl = function(oem, options) {
 
   _.defaults(parameters, options);
   var query = querystring.stringify(parameters);
-  return config.oems[oem] + '/oauth/authorize?' + query;
+  return config.oems[make] + '/oauth/authorize?' + query;
 };
 
 
 /**
- * exchange a code for an access object
- * @param  {String} code code to exchange
- * @return {Promise} promise containing access object
+ * Exchange an authorization code for an access object.
+ *
+ * @param {String} code - authorization code to exchange
+ * @return {Promise<Access>}
  */
 Client.prototype.exchangeCode = function(code) {
   return util.request({
@@ -81,9 +108,10 @@ Client.prototype.exchangeCode = function(code) {
 };
 
 /**
- * exchange a refresh token for a new access object
- * @param  {String} token refresh token to exchange
- * @return {Promise} promise containing a new access object
+ * Exchange a refresh token for a new access object
+ *
+ * @param {String} token - refresh token to exchange
+ * @return {Promise<Access>}
  */
 Client.prototype.exchangeToken = function(token) {
   return util.request({
@@ -104,8 +132,9 @@ Client.prototype.exchangeToken = function(token) {
 };
 
 /**
- * check if an access object's access token is expired
- * @param  {Access} access access object to be checked
+ * Check if an access object's access token is expired
+ *
+ * @param {Access} access - access object to be checked
  * @return {Boolean} true if expired, false if not expired
  */
 Client.prototype.expired = function(access) {
@@ -119,11 +148,12 @@ Client.prototype.expired = function(access) {
 };
 
 /**
- * return list of the user's vehicles
- * @param  {String} token access token
- * @param  {Paging} [paging] Paging object
- * @param  {number} [paging.limit] number of vehicles to return
- * @param  {number} [paging.offset] index to start vehicle list
+ * Return list of the user's vehicles
+ *
+ * @param {String} token - access token
+ * @param {Object} [paging]
+ * @param {Number} [paging.limit] - number of vehicles to return
+ * @param {Number} [paging.offset] - index to start vehicle list
  * @return {Promise}
  */
 Client.prototype.getVehicles = Promise.method(function(token, paging) {
