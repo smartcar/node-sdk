@@ -1,25 +1,26 @@
 'use strict';
-var expect = require('chai').use(require('dirty-chai')).expect;
-var nock = require('nock');
-var Vehicle = require('../lib/vehicle');
-var config = require('../lib/config');
 
+const nock = require('nock');
+const expect = require('chai').use(require('dirty-chai')).expect;
 
-var VALID_TOKEN = 'valid-token';
-var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
-var VALID_VID = 'valid-vid';
-var IMPERIAL_ODOMETER_READING = 3.14;
-var METRIC_ODOMETER_READING = 2.71;
-var SUCCESS = {status: 'success'};
-var VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
+const Vehicle = require('../lib/vehicle');
+const config = require('../lib/config');
+
+const VALID_TOKEN = 'valid-token';
+const VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
+const VALID_VID = 'valid-vid';
+const IMPERIAL_ODOMETER_READING = 3.14;
+const METRIC_ODOMETER_READING = 2.71;
+const SUCCESS = {status: 'success'};
+const VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
 
 suite('Vehicle', function() {
 
-  var vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+  const vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
 
   suiteSetup(function() {
 
-    var apiNock = nock('https://api.smartcar.com/v1.0');
+    const apiNock = nock('https://api.smartcar.com/v1.0');
 
     apiNock
     .matchHeader('Authorization', VALID_AUTHORIZATION)
@@ -97,12 +98,12 @@ suite('Vehicle', function() {
   });
 
   test('vehicle constructor defaults to metric unit', function() {
-    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+    const metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
     expect(metricVehicle.unitSystem).to.equal('metric');
   });
 
   test('vehicle constructor throws error on bad unit param', function() {
-    var badUnitConstructor = function() {
+    const badUnitConstructor = function() {
       // eslint-disable-next-line no-new
       new Vehicle(VALID_VID, VALID_TOKEN, 'not a unit');
     };
@@ -110,15 +111,15 @@ suite('Vehicle', function() {
   });
 
   test('setUnitSystem throws error on bad unit param', function() {
-    var badUnitSet = function() {
-      var badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+    const badUnitSet = function() {
+      const badUnitVehicle = new Vehicle(VALID_VID, VALID_TOKEN);
       badUnitVehicle.setUnitSystem('big');
     };
     expect(badUnitSet).to.throw(TypeError, /unit/);
   });
 
   test('vehicle initialized to metric fetches metric', function() {
-    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
+    const metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
 
     return metricVehicle.odometer()
       .then(function(result) {
@@ -127,7 +128,7 @@ suite('Vehicle', function() {
   });
 
   test('vehicle initialized to imperial fetches imperial', function() {
-    var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
+    const imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
 
     return imperialVehicle.odometer()
       .then(function(result) {
@@ -136,7 +137,7 @@ suite('Vehicle', function() {
   });
 
   test('metric vehicle switched to imperial fetches imperial', function() {
-    var metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
+    const metricVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'metric');
     metricVehicle.setUnitSystem('imperial');
     return metricVehicle.odometer()
       .then(function(result) {
@@ -161,7 +162,7 @@ suite('Vehicle', function() {
   });
 
   test('action with imperial car', function() {
-    var imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
+    const imperialVehicle = new Vehicle(VALID_VID, VALID_TOKEN, 'imperial');
 
     return imperialVehicle.startPanic()
       .then(function(response) {
@@ -171,7 +172,7 @@ suite('Vehicle', function() {
   });
 
   test('vehicle constructor called without new', function() {
-    var badConstruct = function() {
+    const badConstruct = function() {
       Vehicle(VALID_VID, VALID_TOKEN);
     };
     expect(badConstruct).to.throw(Error, /new Vehicle/);
