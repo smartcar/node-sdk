@@ -192,13 +192,4 @@ suite('Vehicle', function() {
     });
   });
 
-  test('permissions with paging', function() {
-    return vehicle.permissions({
-      limit: 1,
-    })
-    .then(function(response) {
-      expect(response).to.have.all.keys('permissions');
-      expect(response.permissions).to.have.lengthOf(1);
-    });
-  });
 });
