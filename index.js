@@ -1,12 +1,13 @@
 'use strict';
 
-var querystring = require('querystring');
-var Vehicle = require('./lib/vehicle');
-var util = require('./lib/util');
-var config = require('./lib/config');
-var errors = require('./lib/errors');
-var _ = require('lodash');
-var Promise = require('bluebird');
+const _ = require('lodash');
+const qs = require('querystring');
+const Promise = require('bluebird');
+
+const util = require('./lib/util');
+const errors = require('./lib/errors');
+const config = require('./lib/config');
+const Vehicle = require('./lib/vehicle');
 
 /**
  * @type {Object}
@@ -65,7 +66,7 @@ function Client(options) {
 Client.prototype.getAuthUrl = function(make, options) {
 
   /* eslint-disable camelcase */
-  var parameters = {
+  const parameters = {
     response_type: 'code',
     client_id: this.clientId,
     redirect_uri: this.redirectUri,
@@ -77,8 +78,9 @@ Client.prototype.getAuthUrl = function(make, options) {
   }
 
   _.defaults(parameters, options);
-  var query = querystring.stringify(parameters);
-  return config.oems[make] + '/oauth/authorize?' + query;
+  const query = qs.stringify(parameters);
+
+  return `${config.oems[make]}/oauth/authorize?${query}`;
 };
 
 
@@ -98,8 +100,8 @@ Client.prototype.exchangeCode = function(code) {
     },
     form: {
       /* eslint-disable camelcase */
-      grant_type: 'authorization_code',
       code,
+      grant_type: 'authorization_code',
       redirect_uri: this.redirectUri,
       /* eslint-enable camelcase */
     },
@@ -160,7 +162,7 @@ Client.prototype.getVehicles = Promise.method(function(token, paging) {
   if (typeof token !== 'string') {
     throw new TypeError('"token" argument must be a string');
   }
-  var options = {
+  const options = {
     uri: util.getUrl(),
     method: 'GET',
     auth: {
@@ -176,7 +178,7 @@ Client.prototype.getVehicles = Promise.method(function(token, paging) {
   return util.request(options);
 });
 
-var smartcar = {};
+const smartcar = {};
 
 smartcar.errors = errors;
 smartcar.Vehicle = Vehicle;
