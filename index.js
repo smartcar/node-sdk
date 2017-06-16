@@ -108,7 +108,7 @@ Client.prototype.exchangeCode = function(code) {
 };
 
 /**
- * Exchange a refresh token for a new access object
+ * Exchange a refresh token for a new access object.
  *
  * @param {String} token - refresh token to exchange
  * @return {Promise<Access>}
@@ -132,7 +132,7 @@ Client.prototype.exchangeToken = function(token) {
 };
 
 /**
- * Check if an access object's access token is expired
+ * Check if an access object's access token is expired.
  *
  * @param {Access} access - access object to be checked
  * @return {Boolean} true if expired, false if not expired
@@ -148,7 +148,7 @@ Client.prototype.expired = function(access) {
 };
 
 /**
- * Return list of the user's vehicles
+ * Return list of the user's vehicles.
  *
  * @param {String} token - access token
  * @param {Object} [paging]
