@@ -1,69 +1,71 @@
 'use strict';
-var expect = require('chai').use(require('dirty-chai')).expect;
-var nock = require('nock');
-var Promise = require('bluebird');
-var Vehicle = require('../lib/vehicle');
-var methodsRequiringParams = require('./vehicle_methods_requiring_params');
-var config = require('../lib/config');
 
-var VALID_TOKEN = 'valid-token';
-var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
-var VALID_VID = 'valid-vid';
-var SUCCESS = {status: 'success'};
-var VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
+const Promise = require('bluebird');
+const expect = require('chai').use(require('dirty-chai')).expect;
+const nock = require('nock');
+
+const Vehicle = require('../lib/vehicle');
+const config = require('../lib/config');
+const methodsRequiringParams = require('./vehicle_methods_requiring_params');
+
+const VALID_TOKEN = 'valid-token';
+const VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
+const VALID_VID = 'valid-vid';
+const SUCCESS = {status: 'success'};
+const VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
 
 /* body objects of methods taking params */
-var FLASH_HEADLIGHTS_DATA = {
+const FLASH_HEADLIGHTS_DATA = {
   action: 'FLASH',
   type: 'HIGH_BEAM',
 };
-var ACTIVATE_CHILD_SAFETY_LOCKS_DATA = {
+const ACTIVATE_CHILD_SAFETY_LOCKS_DATA = {
   action: 'LOCK',
   childSafetyLocks: [{location: 'BACK_LEFT'}],
 };
-var DISABLE_CHILD_SAFETY_LOCKS_DATA = {
+const DISABLE_CHILD_SAFETY_LOCKS_DATA = {
   action: 'UNLOCK',
   childSafetyLocks: [{location: 'BACK_LEFT'}],
 };
-var TILT_SIDEVIEW_MIRRORS_DATA = {
+const TILT_SIDEVIEW_MIRRORS_DATA = {
   action: 'TILT',
   mirrors: [{location: 'LEFT'}],
 };
-var OPEN_WINDOWS_DATA = {
+const OPEN_WINDOWS_DATA = {
   action: 'OPEN',
   windows: [{location: 'BACK_LEFT'}],
 };
-var CLOSE_WINDOWS_DATA = {
+const CLOSE_WINDOWS_DATA = {
   action: 'CLOSE',
   windows: [{location: 'BACK_LEFT'}],
 };
-var UNLOCK_WINDOWS_DATA = {
+const UNLOCK_WINDOWS_DATA = {
   action: 'UNLOCK',
   windows: [{location: 'BACK_LEFT'}],
 };
-var LOCK_WINDOWS_DATA = {
+const LOCK_WINDOWS_DATA = {
   action: 'LOCK',
   windows: [{location: 'BACK_LEFT'}],
 };
-var ENABLE_CHARGE_LIMIT_DATA = {
+const ENABLE_CHARGE_LIMIT_DATA = {
   limit: 0.5,
 };
-var ENABLE_CHARGE_SCHEDULE_DATA = {
+const ENABLE_CHARGE_SCHEDULE_DATA = {
   action: 'ENABLE',
   startTime: '11:11',
 };
-var START_CLIMATE_DATA = {
+const START_CLIMATE_DATA = {
   action: 'START',
   temperature: 32.5,
 };
 
 suite('Vehicle prototype', function() {
 
-  var vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+  const vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
 
   suiteSetup(function() {
 
-    var apiNock = nock('https://api.smartcar.com/v1.0').persist();
+    const apiNock = nock('https://api.smartcar.com/v1.0').persist();
 
     /* eslint-disable max-len */
     apiNock

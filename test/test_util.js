@@ -1,11 +1,12 @@
 'use strict';
 
-var expect = require('chai').use(require('dirty-chai')).expect;
-var util = require('../lib/util');
-var config = require('../lib/config');
+const expect = require('chai').use(require('dirty-chai')).expect;
 
-var VALID_VID = 'valid-vid';
-var API_URL = config.api + '/v' + config.version;
+const config = require('../lib/config');
+const util = require('../lib/util');
+
+const VALID_VID = 'valid-vid';
+const API_URL = config.api + '/v' + config.version;
 
 suite('Util', function() {
 
@@ -21,13 +22,13 @@ suite('Util', function() {
   });
 
   test('getUrl with id and endpoint', function() {
-    var url = util.getUrl(VALID_VID, 'odometer');
+    const url = util.getUrl(VALID_VID, 'odometer');
     expect(url).to
     .equal(API_URL + '/vehicles/' + VALID_VID + '/odometer');
   });
 
   test('getUrl with no id or endpoint', function() {
-    var url = util.getUrl();
+    const url = util.getUrl();
     expect(url).to.equal(API_URL + '/vehicles');
   });
 

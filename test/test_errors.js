@@ -1,29 +1,30 @@
 'use strict';
 
-var expect = require('chai').use(require('dirty-chai')).expect;
-var nock = require('nock');
-var util = require('../lib/util');
-var config = require('../lib/config');
-var errors = require('../lib/errors');
+const expect = require('chai').use(require('dirty-chai')).expect;
+const nock = require('nock');
 
-var VALID_TOKEN = 'valid-token';
-var VALID_AUTH = 'Bearer ' + VALID_TOKEN;
-var INVALID_TOKEN = 'invalid-token';
-var INVALID_AUTH = 'Bearer ' + INVALID_TOKEN;
-var VALID_ENDPOINT = 'valid-endpoint';
-var INVALID_ENDPOINT = 'invalid-endpoint';
-var NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
-var INVALID_REQUEST_BODY = {invalidkey: 'invalidvalue'};
-var API_URL = config.api + '/v' + config.version;
-var REALLY_BAD_ENDPOINT = 'really-bad-endpoint';
-var INSUFFICIENT_PERMISSION_ENDPOINT = 'godmode-endpoint';
-var INVALID_STATE_ENDPOINT = 'invalid-state';
-var MONTHLY_LIMIT_ENDPOINT = 'monthly-endpoint';
-var RATE_LIMIT_ENDPOINT = 'rate-endpoint';
+const config = require('../lib/config');
+const errors = require('../lib/errors');
+const util = require('../lib/util');
+
+const VALID_TOKEN = 'valid-token';
+const VALID_AUTH = 'Bearer ' + VALID_TOKEN;
+const INVALID_TOKEN = 'invalid-token';
+const INVALID_AUTH = 'Bearer ' + INVALID_TOKEN;
+const VALID_ENDPOINT = 'valid-endpoint';
+const INVALID_ENDPOINT = 'invalid-endpoint';
+const NOT_CAPABLE_ENDPOINT = 'not-capable-endpoint';
+const INVALID_REQUEST_BODY = {invalidkey: 'invalidvalue'};
+const API_URL = config.api + '/v' + config.version;
+const REALLY_BAD_ENDPOINT = 'really-bad-endpoint';
+const INSUFFICIENT_PERMISSION_ENDPOINT = 'godmode-endpoint';
+const INVALID_STATE_ENDPOINT = 'invalid-state';
+const MONTHLY_LIMIT_ENDPOINT = 'monthly-endpoint';
+const RATE_LIMIT_ENDPOINT = 'rate-endpoint';
 
 suite('Errors', function() {
   suiteSetup(function() {
-    var apiNock = nock(`${config.api}/v${config.version}`).persist();
+    const apiNock = nock(`${config.api}/v${config.version}`).persist();
     apiNock
       .get(VALID_ENDPOINT)
       .matchHeader('Authorization', VALID_AUTH)

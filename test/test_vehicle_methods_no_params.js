@@ -1,26 +1,28 @@
 'use strict';
-var expect = require('chai').use(require('dirty-chai')).expect;
-var nock = require('nock');
-var Promise = require('bluebird');
-var Vehicle = require('../lib/vehicle');
-var methodsRequiringParams = require('./vehicle_methods_requiring_params');
-var config = require('../lib/config');
 
-var VALID_TOKEN = 'valid-token';
-var VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
-var VALID_VID = 'valid-vid';
-var SUCCESS = {status: 'success'};
-var VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
+const Promise = require('bluebird');
+const expect = require('chai').use(require('dirty-chai')).expect;
+const nock = require('nock');
+
+const Vehicle = require('../lib/vehicle');
+const config = require('../lib/config');
+const methodsRequiringParams = require('./vehicle_methods_requiring_params');
+
+const VALID_TOKEN = 'valid-token';
+const VALID_AUTHORIZATION = `Bearer ${VALID_TOKEN}`;
+const VALID_VID = 'valid-vid';
+const SUCCESS = {status: 'success'};
+const VALID_USER_AGENT = `smartcar-node-sdk:${config.version}`;
 
 suite('Vehicle prototype', function() {
 
-  var vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
+  const vehicle = new Vehicle(VALID_VID, VALID_TOKEN);
 
-  var methodsNotRequiringParams = [];
+  const methodsNotRequiringParams = [];
 
   suiteSetup(function() {
 
-    var apiNock = nock('https://api.smartcar.com/v1.0').persist();
+    const apiNock = nock('https://api.smartcar.com/v1.0').persist();
 
     apiNock
       .get(/.*/)
@@ -40,7 +42,7 @@ suite('Vehicle prototype', function() {
       .matchHeader('User-Agent', VALID_USER_AGENT)
       .reply(200, SUCCESS);
 
-    for (var method in Vehicle.prototype) {
+    for (const method in Vehicle.prototype) {
       if (Vehicle.prototype.hasOwnProperty(method)
        && methodsRequiringParams.indexOf(method) < 0) {
         methodsNotRequiringParams.push(method);

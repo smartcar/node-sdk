@@ -1,27 +1,27 @@
 'use strict';
-var expect = require('chai').use(require('dirty-chai')).expect;
-var nock = require('nock');
-var smartcar = require('../index');
-var Vehicle = require('../lib/vehicle');
-var config = require('../lib/config');
 
-var VALID_TOKEN = 'valid-token';
-var VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
-var VALID_USER_AGENT_HEADER = `smartcar-node-sdk:${config.version}`;
+const expect = require('chai').use(require('dirty-chai')).expect;
+const nock = require('nock');
+
+const Vehicle = require('../lib/vehicle');
+const config = require('../lib/config');
+const smartcar = require('../index');
+
+const VALID_TOKEN = 'valid-token';
+const VALID_AUTHORIZATION = 'Bearer ' + VALID_TOKEN;
+const VALID_USER_AGENT_HEADER = `smartcar-node-sdk:${config.version}`;
 
 suite('Index', function() {
 
-  var client;
-
   suiteSetup(function() {
-    client = new smartcar.Client({
+    this.client = new smartcar.Client({
       clientId: 'fakeid',
       clientSecret: 'fakesecret',
       redirectUri: 'fakeuri',
       scope: ['control_smell_sensor', 'control_seat_freezer'],
     });
 
-    var authNock = nock('https://auth.smartcar.com').persist();
+    const authNock = nock('https://auth.smartcar.com').persist();
 
     authNock.post('/oauth/token')
     .matchHeader('User-Agent', VALID_USER_AGENT_HEADER)
@@ -34,7 +34,7 @@ suite('Index', function() {
       /* eslint-enable camelcase */
     });
 
-    var apiNock = nock('https://api.smartcar.com/v1.0');
+    const apiNock = nock('https://api.smartcar.com/v1.0');
 
     apiNock.get('/vehicles')
     .matchHeader('Authorization', VALID_AUTHORIZATION)
@@ -60,19 +60,19 @@ suite('Index', function() {
   });
 
   test('getAuthUrl', function() {
-    var url = client.getAuthUrl('ford');
-    var expected = 'https://ford.smartcar.com/oauth/authorize?' +
+    const url = this.client.getAuthUrl('ford');
+    const expected = 'https://ford.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
     '&scope=control_smell_sensor%20control_seat_freezer';
     expect(url).to.equal(expected);
   });
 
   test('getAuthUrl with options', function() {
-    var url = client.getAuthUrl('ford', {
+    const url = this.client.getAuthUrl('ford', {
       state: 'fakestate',
       approval_prompt: 'force', // eslint-disable-line camelcase
     });
-    var expected = 'https://ford.smartcar.com/oauth/authorize?' +
+    const expected = 'https://ford.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
     '&scope=control_smell_sensor%20control_seat_freezer' +
     '&state=fakestate&approval_prompt=force';
@@ -80,24 +80,24 @@ suite('Index', function() {
   });
 
   test('getAuthUrl with no scope', function() {
-    var noScopeClient = new smartcar.Client({
+    const noScopeClient = new smartcar.Client({
       clientId: 'fakeid',
       clientSecret: 'fakesecret',
       redirectUri: 'fakeuri',
     });
 
-    var url = noScopeClient.getAuthUrl('ford', {
+    const url = noScopeClient.getAuthUrl('ford', {
       state: 'fakestate',
       approval_prompt: 'force', // eslint-disable-line camelcase
     });
-    var expected = 'https://ford.smartcar.com/oauth/authorize?' +
+    const expected = 'https://ford.smartcar.com/oauth/authorize?' +
     'response_type=code&client_id=fakeid&redirect_uri=fakeuri' +
     '&state=fakestate&approval_prompt=force';
     expect(url).to.equal(expected);
   });
 
   test('exchangeCode', function() {
-    return client.exchangeCode('fakecode')
+    return this.client.exchangeCode('fakecode')
     .then(function(response) {
       expect(response).to.have.all.keys(
         'access_token',
@@ -110,7 +110,7 @@ suite('Index', function() {
   });
 
   test('exchangeToken', function() {
-    return client.exchangeToken(VALID_TOKEN)
+    return this.client.exchangeToken(VALID_TOKEN)
     .then(function(response) {
       expect(response).to.have.all.keys(
         'access_token',
@@ -125,7 +125,7 @@ suite('Index', function() {
   test('expiration - bad arg', function() {
     const access = {expiration: 'pizza'};
     expect(function() {
-      client.expired(access);
+      this.client.expired(access);
     }).to.throw(TypeError);
   });
 
@@ -133,19 +133,19 @@ suite('Index', function() {
     const access = {
       expiration: new Date(Date.now() - (60 * 1000)).toISOString(),
     };
-    expect(client.expired(access)).to.be.true();
+    expect(this.client.expired(access)).to.be.true();
   });
 
   test('expired - false', function() {
     const access = {
       expiration: new Date(Date.now() + (60 * 1000)).toISOString(),
     };
-    expect(client.expired(access)).to.be.false();
+    expect(this.client.expired(access)).to.be.false();
   });
 
   test('getVehicles', function() {
 
-    return client.getVehicles(VALID_TOKEN)
+    return this.client.getVehicles(VALID_TOKEN)
       .then(function(response) {
         expect(response.vehicles).to.have.lengthOf(3);
       });
@@ -154,7 +154,7 @@ suite('Index', function() {
 
   test('getVehicles with undefined token', function() {
 
-    return client.getVehicles(null)
+    return this.client.getVehicles(null)
       .thenThrow(new Error('TypeError should have been thrown'))
       .catch(TypeError, function(e) {
         expect(e.message).to.equal('"token" argument must be a string');
@@ -164,7 +164,7 @@ suite('Index', function() {
 
   test('getVehicles with paging', function() {
 
-    return client.getVehicles(VALID_TOKEN, {
+    return this.client.getVehicles(VALID_TOKEN, {
       limit: 1,
     })
       .then(function(response) {
@@ -175,7 +175,7 @@ suite('Index', function() {
 
   test('Vehicle instantiation', function() {
 
-    var vehicle = new smartcar.Vehicle('fakevehicleid', VALID_TOKEN);
+    const vehicle = new smartcar.Vehicle('fakevehicleid', VALID_TOKEN);
     expect(vehicle).to.be.instanceof(Vehicle);
 
   });
