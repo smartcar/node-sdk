@@ -44,7 +44,8 @@ suite('Vehicle prototype', function() {
 
     for (const method in Vehicle.prototype) {
       if (Vehicle.prototype.hasOwnProperty(method)
-       && methodsRequiringParams.indexOf(method) < 0) {
+        && methodsRequiringParams.indexOf(method) < 0
+        && method !== 'updateRequest') {
         methodsNotRequiringParams.push(method);
       }
     }

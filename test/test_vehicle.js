@@ -175,7 +175,7 @@ suite('Vehicle', function() {
     const badConstruct = function() {
       Vehicle(VALID_VID, VALID_TOKEN);
     };
-    expect(badConstruct).to.throw(Error, /new Vehicle/);
+    expect(badConstruct).to.throw(Error, /cannot be invoked without 'new'/);
   });
 
   test('disconnect', function() {
