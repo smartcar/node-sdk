@@ -35,18 +35,27 @@ const util = require('./lib/util');
  * @param {Object} options
  * @param {String} options.clientId - The application's client id
  * @param {String} options.clientSecret - The application's client secret
- * @param {String} options.redirectUri - One of the application's preregistered redirect URIs
- * @param {String[]} options.scope - list of permissions to request from user
+ * @param {String} options.redirectUri - one of the application's preregistered redirect URIs
+ * @param {String[]} [options.scope] - list of permissions to request from user
  */
 function Client(options) {
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
-  this.auth = {
-    user: this.clientId,
-    pass: this.clientSecret,
-  };
   this.redirectUri = options.redirectUri;
   this.scope = options.scope;
+
+  this.request = util.request.defaults({
+    baseUrl: config.auth,
+    auth: {
+      user: this.clientId,
+      pass: this.clientSecret,
+    },
+    transform: function(body, res, full) {
+      res.body = util.setExpiration(res.body);
+      return full ? res : res.body;
+    },
+  });
+
 }
 
 /**
@@ -91,22 +100,16 @@ Client.prototype.getAuthUrl = function(make, options) {
  * @return {Promise<Access>}
  */
 Client.prototype.exchangeCode = function(code) {
-  return util.request({
-    uri: config.auth,
-    method: 'POST',
-    auth: this.auth,
-    headers: {
-      'User-Agent': `smartcar-node-sdk:${config.version}`,
-    },
-    form: {
-      /* eslint-disable camelcase */
-      code,
-      grant_type: 'authorization_code',
-      redirect_uri: this.redirectUri,
-      /* eslint-enable camelcase */
-    },
-  })
-  .then(util.setExpiration);
+
+  /* eslint-disable camelcase */
+  const form = {
+    code,
+    grant_type: 'authorization_code',
+    redirect_uri: this.redirectUri,
+  };
+  /* eslint-enable camelcase */
+
+  return util.wrap(this.request.post('/oauth/token', {form}));
 };
 
 /**
@@ -116,21 +119,16 @@ Client.prototype.exchangeCode = function(code) {
  * @return {Promise<Access>}
  */
 Client.prototype.exchangeToken = function(token) {
-  return util.request({
-    uri: config.auth,
-    method: 'POST',
-    auth: this.auth,
-    headers: {
-      'User-Agent': `smartcar-node-sdk:${config.version}`,
-    },
-    form: {
-      /* eslint-disable camelcase */
-      grant_type: 'refresh_token',
-      refresh_token: token,
-      /* eslint-enable camelcase */
-    },
-  })
-  .then(util.setExpiration);
+
+  /* eslint-disable camelcase */
+  const form = {
+    grant_type: 'refresh_token',
+    refresh_token: token,
+  };
+  /* eslint-enable camelcase */
+
+  return util.wrap(this.request.post('/oauth/token', {form}));
+
 };
 
 /**
@@ -142,7 +140,7 @@ Client.prototype.exchangeToken = function(token) {
 Client.prototype.expired = function(access) {
   const expiration = Date.parse(access.expiration);
 
-  if (isNaN(expiration)) { // eslint-disable-next-line max-len
+  if (!Number.isFinite(expiration)) { // eslint-disable-next-line max-len
     throw new TypeError('"access.expiration" argument must be a valid ISO date string');
   }
 
@@ -159,23 +157,18 @@ Client.prototype.expired = function(access) {
  * @return {Promise}
  */
 Client.prototype.getVehicles = Promise.method(function(token, paging) {
+
   if (typeof token !== 'string') {
     throw new TypeError('"token" argument must be a string');
   }
-  const options = {
-    uri: util.getUrl(),
-    method: 'GET',
+
+  return util.request.get(util.getUrl(), {
     auth: {
       bearer: token,
     },
-    headers: {
-      'User-Agent': `smartcar-node-sdk:${config.version}`,
-    },
-  };
-  if (paging) {
-    options.form = paging;
-  }
-  return util.request(options);
+    form: paging,
+  });
+
 });
 
 const smartcar = {};

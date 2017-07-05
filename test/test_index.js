@@ -29,7 +29,7 @@ suite('Index', function() {
       /* eslint-disable camelcase */
       access_token: VALID_TOKEN,
       token_type: 'Bearer',
-      expires_in: '1234',
+      expires_in: 1234,
       refresh_token: VALID_TOKEN,
       /* eslint-enable camelcase */
     });

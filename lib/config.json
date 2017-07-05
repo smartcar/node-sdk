@@ -1,5 +1,5 @@
 {
-  "auth": "https://auth.smartcar.com/oauth/token",
+  "auth": "https://auth.smartcar.com",
   "api": "https://api.smartcar.com",
   "version": "1.0",
   "oems": {
