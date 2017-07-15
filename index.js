@@ -41,7 +41,7 @@ smartcar.expired = function(access) {
  */
 smartcar.getVehicles = Promise.method(function(token, paging) {
 
-  if (typeof token !== 'string') {
+  if (!_.isString(token)) {
     throw new TypeError('"token" argument must be a string');
   }
 
