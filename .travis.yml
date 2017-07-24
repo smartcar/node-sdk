@@ -2,7 +2,7 @@ language:
   - node_js
 
 node_js:
-  - node
+  - 7
   - 6
   - 4
 
@@ -31,7 +31,7 @@ install:
 script:
   - npm test
   - npm run cover
-  - make create-tag
+  - if [ $TRAVIS_NODE_VERSION = 6 ]; then make create-tag; fi
 
 deploy:
   - provider: npm
