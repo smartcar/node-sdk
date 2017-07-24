@@ -30,11 +30,11 @@ the `access_token`
 
 ### Example
 ```javascript
-var smartcar = require('smartcar-sdk');
-var express = require('express');
+const smartcar = require('smartcar');
+const express = require('express');
 
-var app = express();
-var client = new smartcar.Client({
+const app = express();
+const client = new smartcar.Client({
   clientId: '...',
   clientSecret: '...',
   redirectUri: '...',
@@ -78,7 +78,7 @@ getAccess = function(){
 // Redirect to OEM login page
 app.get('/oemlogin', function(req, res, next){
   // get a link to the 'MOCK' oem login page
-  var auth = client.getAuthUrl('mock')
+  const auth = client.getAuthUrl('mock')
   // redirect to the link
   res.redirect(auth);
 });
@@ -103,7 +103,7 @@ app.get('/data', function(req, res, next){
   })
   .then(function(res){
     // get the first vehicle
-    var vehicle = new smartcar.Vehicle(res.vehicles[0], this.access.access_token);
+    const vehicle = new smartcar.Vehicle(res.vehicles[0], this.access.access_token);
     return vehicle.info();
   })
   .then(function(data){
