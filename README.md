@@ -1,6 +1,7 @@
-### Smartcar SDK [![Build Status][ci-image]][ci-url]
+[![Build Status][ci-image]][ci-url]
 
-Node.js client SDK for the Smartcar API.
+<h1 align="center">Smartcar SDK</h1>
+<p align="center">Node.js client SDK for the Smartcar API.<p>
 
 ### Overall Flow
 
@@ -30,86 +31,80 @@ the `access_token`
 
 ### Example
 ```javascript
+'use strict';
+
 const smartcar = require('smartcar');
 const express = require('express');
 
 const app = express();
-const client = new smartcar.Client({
+
+const client = new smartcar.AuthClient({
   clientId: '...',
   clientSecret: '...',
   redirectUri: '...',
-  scope: [ 'read_vehicle_info' ]
+  scope: ['read_vehicle_info'],
 });
-
-saveAccess = function(access){
-  // put your access somewhere safe!
-}
-
-loadAccessFromSafePlace = function(access){
-  // Return the saved access
-}
-
-handleAuthCode = function(req, res, next){
-  if (req.query.error) {
-    // the user denied your requested permissions
-    next(new Error(req.query.error));
-  } else {
-    client.exchangeCode(req.query.code)
-    .then(saveAccess)
-    .then(next);
-  }
-}
-
-getAccess = function(){
-  return loadAccessFromSafePlace()
-  .then(function(access){
-    if(client.expired(access)){
-      client.exchangeToken(access.refresh_token)
-      .tap(saveAccess)
-      .then(function(access){
-        return access;
-      });
-    } else {
-      return access;
-    }
-  });
-}
 
 // Redirect to OEM login page
 app.get('/oemlogin', function(req, res, next){
+
   // get a link to the 'MOCK' oem login page
-  const auth = client.getAuthUrl('mock')
+  const link = client.getAuthUrl('mock', {state: 'TODO define better'})
+
   // redirect to the link
   res.redirect(auth);
 });
 
 // Handle the redirectUri
-app.get('/home',
-  handleAuthCode,
-  function(req, res, next){
-    res.redirect('/data');
+app.get('/home', handleAuthCode, function(req, res, next) {
+  res.redirect('/data');
+});
+
+const handleAuthCode = function(req, res, next) {
+
+  if (req.query.error) {
+    // the user denied your requested permissions
+    return next(new Error(req.query.error));
   }
-);
+
+  client.exchangeCode(req.query.code)
+    .then(/* save tokens to database */)
+    .then(next);
+}
 
 // Main app endpoint
 app.get('/data', function(req, res, next){
+
+  let access ;
+
   // load a fresh access
   getAccess()
-  .bind({})
-  .then(function(newAccess){
-    this.access = newAccess;
+  .then(function(_access){
+    access = _access;
     // get the user's vehicles
-    return client.getVehicles(newAccess.access_token);
+    return smartcar.getVehicles(newAccess.access_token);
   })
   .then(function(res){
     // get the first vehicle
-    const vehicle = new smartcar.Vehicle(res.vehicles[0], this.access.access_token);
+    const vehicle = new smartcar.Vehicle(res.vehicles[0], access.access_token);
     return vehicle.info();
   })
   .then(function(data){
     // do something with the data!
   });
 });
+
+const getAccess = function() {
+  return loadAccessFromSafePlace().then(function(access){
+
+    if (smartcar.expired(access)) {
+      return client.exchangeToken(access.refresh_token).tap(saveAccess);
+    } else {
+      return access;
+    }
+
+  });
+}
 
 app.listen(4000);
 ```
