@@ -1,6 +1,6 @@
 {
   "name": "smartcar",
-  "version": "1.0.1",
+  "version": "0.0.0-semantic-release",
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
@@ -30,7 +30,8 @@
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
     "cover:integration": "nyc npm test:integration -s",
-    "jsdoc": "jsdoc -c .jsdocrc ."
+    "jsdoc": "jsdoc -c .jsdocrc .",
+    "release": "semantic-release"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -44,6 +45,7 @@
     "eslint": "^4.18.1",
     "eslint-config-smartcar": "^2.0.0",
     "nock": "^9.1.9",
-    "nyc": "^11.4.1"
+    "nyc": "^11.4.1",
+    "semantic-release": "^12.4.1"
   }
 }
