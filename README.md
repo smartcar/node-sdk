@@ -82,7 +82,7 @@ app.get('/data', function(req, res, next){
   .then(function(_access){
     access = _access;
     // get the user's vehicles
-    return smartcar.getVehicles(newAccess.access_token);
+    return smartcar.getVehicles(access.access_token);
   })
   .then(function(res){
     // get the first vehicle
