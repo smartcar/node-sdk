@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
-  "private": true,
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
   "repository": {
     "type": "git",
