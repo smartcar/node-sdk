@@ -30,8 +30,9 @@
     "lint": "eslint . --cache",
     "cover": "nyc npm test -s",
     "cover:integration": "nyc npm test:integration -s",
-    "jsdoc": "jsdoc -c .jsdocrc .",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "jsdoc": "jsdoc -c .jsdoc.json .",
+    "docs": "mkdir -p doc && jsdoc2md --example-lang js --template readme.hbs --files .docs.js index.js lib/* | sed 's/[ \t]*$//' > doc/index.md"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -44,6 +45,7 @@
     "cross-env": "^5.1.3",
     "eslint": "^4.18.1",
     "eslint-config-smartcar": "^2.0.0",
+    "jsdoc-to-markdown": "^3.0.0",
     "nock": "^9.1.9",
     "nyc": "^11.4.1",
     "semantic-release": "^12.4.1"
