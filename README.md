@@ -38,75 +38,65 @@ const express = require('express');
 
 const app = express();
 
+const port = 4000;
+
 const client = new smartcar.AuthClient({
-  clientId: '...',
-  clientSecret: '...',
-  redirectUri: '...',
+  clientId: 'SMARTCAR_CLIENT_ID',
+  clientSecret: 'SMARTCAR_SECRET',
+  redirectUri: 'YOUR_CALLBACK_URI',
   scope: ['read_vehicle_info'],
 });
 
 // Redirect to OEM login page
-app.get('/oemlogin', function(req, res, next){
+app.get('/mock/login', function(req, res) {
 
   // get a link to the 'MOCK' oem login page
-  const link = client.getAuthUrl('mock', {state: 'TODO define better'})
+  const link = client.getAuthUrl('mock', {state: 'MY_STATE_PARAM'});
 
   // redirect to the link
-  res.redirect(auth);
+  res.redirect(link);
 });
 
-// Handle the redirectUri
-app.get('/home', handleAuthCode, function(req, res, next) {
-  res.redirect('/data');
-});
-
-const handleAuthCode = function(req, res, next) {
+// Handle Smartcar callback with auth code
+app.get('/callback', function(req, res, next) {
+  let access;
 
   if (req.query.error) {
     // the user denied your requested permissions
     return next(new Error(req.query.error));
   }
 
-  client.exchangeCode(req.query.code)
-    .then(/* save tokens to database */)
-    .then(next);
-}
+  // exchange auth code for access token
+  return client.exchangeCode(req.query.code)
+    .then(function(_access) {
+      // in a production app you'll want to store this in some kind of persistent storage
+      access = _access;
+      // get the user's vehicles
+      return smartcar.getVehicles(access.access_token);
+    })
+    .then(function(res) {
+      // instantiate frist vehicle in vehicle list
+      const vehicle = new smartcar.Vehicle(res.vehicles[0], access.access_token);
+      // get identifying information about a vehicle
+      return vehicle.info();
+    })
+    .then(function(data) {
+      /* Example:
+       * {
+       *   "id": "36ab27d0-fd9d-4455-823a-ce30af709ffc",
+       *   "make": "TESLA",
+       *   "model": "Model S",
+       *   "year": 2014
+       * }
+       */
+      console.log(data);
 
-// Main app endpoint
-app.get('/data', function(req, res, next){
-
-  let access ;
-
-  // load a fresh access
-  getAccess()
-  .then(function(_access){
-    access = _access;
-    // get the user's vehicles
-    return smartcar.getVehicles(access.access_token);
-  })
-  .then(function(res){
-    // get the first vehicle
-    const vehicle = new smartcar.Vehicle(res.vehicles[0], access.access_token);
-    return vehicle.info();
-  })
-  .then(function(data){
-    // do something with the data!
-  });
+      // json response will be sent to the user
+      res.json(data);
+    });
 });
 
-const getAccess = function() {
-  return loadAccessFromSafePlace().then(function(access){
-
-    if (smartcar.expired(access)) {
-      return client.exchangeToken(access.refresh_token).tap(saveAccess);
-    } else {
-      return access;
-    }
-
-  });
-}
-
-app.listen(4000);
+app.listen(port, () => console.log(`Listening on port ${port}`));
 ```
 
 [ci-url]: https://travis-ci.com/smartcar/node-sdk
