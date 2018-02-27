@@ -12,7 +12,6 @@ bower_components
 
 # Testing/Coverage/Lint
 out
-doc
 dist
 coverage
 .dockerignore
