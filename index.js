@@ -6,9 +6,13 @@ const _ = require('lodash');
 const util = require('./lib/util');
 
 /* eslint-disable global-require */
+/** @exports smartcar */
 const smartcar = {
+  /** @see modules */
   errors: require('./lib/errors'),
+  /** @see Vehicle */
   Vehicle: require('./lib/vehicle'),
+  /** @see AuthClient*/
   AuthClient: require('./lib/auth-client'),
 };
 /* eslint-enable global-require */
