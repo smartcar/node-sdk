@@ -31,6 +31,9 @@ test('expired - string', function(t) {
   expiration = new Date(Date.now() - (60 * 1000)).toISOString();
   t.true(smartcar.expired(expiration));
 
+  expiration = new Date(Date.now()).toISOString();
+  t.true(smartcar.expired(expiration));
+
   expiration = new Date(Date.now() + (60 * 1000)).toISOString();
   t.false(smartcar.expired(expiration));
 

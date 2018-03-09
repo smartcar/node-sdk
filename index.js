@@ -4,6 +4,8 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 
 const util = require('./lib/util');
+// Tolerance for expiration measured in milliseconds
+const TOLERANCE = 10 * 1000;
 
 /* eslint-disable global-require */
 /** @exports smartcar */
@@ -31,7 +33,7 @@ smartcar.expired = function(access) {
     throw new TypeError('"access.expiration" argument must be a valid ISO date string');
   }
 
-  return Date.now() > expiration;
+  return Date.now() > expiration - TOLERANCE;
 };
 
 /**
