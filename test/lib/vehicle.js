@@ -135,24 +135,10 @@ test('permissions', async function(t) {
 test('action with no argument', async function(t) {
 
   t.context.nock = nocks.base()
-    .post('/panic', {action: 'START'})
+    .post('/security', {action: 'LOCK'})
     .reply(200, {status: 'success'});
 
-  const response = await vehicle.startPanic();
-  t.is(response.status, 'success');
-
-});
-
-test('action with a key and argument', async function(t) {
-
-  t.context.n = nocks.base()
-    .post('/sunroof', {
-      action: 'OPEN',
-      percentOpen: 0.5,
-    })
-    .reply(200, {status: 'success'});
-
-  const response = await vehicle.openSunroof(0.5);
+  const response = await vehicle.lock();
   t.is(response.status, 'success');
 
 });
