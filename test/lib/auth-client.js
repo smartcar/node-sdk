@@ -66,10 +66,11 @@ test('getAuthUrl - simple', function(t) {
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
-  const actual = client.getAuthUrl('mock');
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  const actual = client.getAuthUrl();
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
   expected += '&scope=read_odometer%20read_vehicle_info';
 
   t.is(actual, expected);
@@ -83,16 +84,17 @@ test('getAuthUrl - no scope', function(t) {
     redirectUri: 'https://insurance.co/callback',
   });
 
-  const actual = client.getAuthUrl('mock', {
+  const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
-    approvalPrompt: 'force',
+    forcePrompt: true,
   });
 
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
-  expected += '&state=fakestate&approval_prompt=force';
+  expected += '&approval_prompt=force';
+  expected += '&state=fakestate';
 
   t.is(actual, expected);
 
@@ -106,17 +108,18 @@ test('getAuthUrl - state & approval prompt', function(t) {
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
-  const actual = client.getAuthUrl('mock', {
+  const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
-    approvalPrompt: 'force',
+    forcePrompt: true,
   });
 
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
-  expected += '&state=fakestate&approval_prompt=force';
+  expected += '&state=fakestate';
 
   t.is(actual, expected);
 
