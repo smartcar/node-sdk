@@ -244,7 +244,7 @@ Error thrown when gateway to Smartcar times out
 
 * [AuthClient](#AuthClient)
     * [new AuthClient(options)](#new_AuthClient_new)
-    * [.getAuthUrl(make, [options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
+    * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
     * [.exchangeToken(token)](#AuthClient+exchangeToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 
@@ -264,8 +264,8 @@ Create a Smartcar OAuth client for your application.
 
 <a name="AuthClient+getAuthUrl"></a>
 
-### authClient.getAuthUrl(make, [options]) ⇒ <code>String</code>
-Generate the OAuth authorization URL for a given vehicle make.
+### authClient.getAuthUrl([options]) ⇒ <code>String</code>
+Generate the OAuth authorization URL.
 
 By default users are not shown the permission dialog if they have already
 approved the set of scopes for this application. The application can elect
@@ -277,10 +277,9 @@ approval_prompt to `force`.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| make | <code>String</code> |  | the vehicle make to generate the URL for |
 | [options] | <code>Object</code> |  |  |
 | [options.state] | <code>String</code> |  | extra application state to pass along |
-| [options.approvalPrompt] | <code>Boolean</code> | <code>auto</code> | see 2nd paragraph above |
+| [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 
 <a name="AuthClient+exchangeCode"></a>
 
