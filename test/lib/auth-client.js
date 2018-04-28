@@ -20,6 +20,26 @@ test('constructor', function(t) {
   t.is(client.clientSecret, 'CLIENT_SECRET');
   t.is(client.redirectUri, 'https://insurance.co/callback');
   t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
+  t.is(client.development, false);
+  t.true('request' in client);
+
+});
+
+test('constructor - development', function(t) {
+
+  const client = new AuthClient({
+    clientId: 'CLIENT_ID',
+    clientSecret: 'CLIENT_SECRET',
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    development: true,
+  });
+
+  t.is(client.clientId, 'CLIENT_ID');
+  t.is(client.clientSecret, 'CLIENT_SECRET');
+  t.is(client.redirectUri, 'https://insurance.co/callback');
+  t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
+  t.is(client.development, true);
   t.true('request' in client);
 
 });
@@ -131,13 +151,13 @@ test('getAuthUrl - development mode', function(t) {
     clientId: 'CLIENT_ID',
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
+    development: true,
   });
 
   const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
     forcePrompt: true,
-    development: true,
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
@@ -158,13 +178,13 @@ test('getAuthUrl - development mode false', function(t) {
     clientId: 'CLIENT_ID',
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
+    development: false,
   });
 
   const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
     forcePrompt: true,
-    development: false,
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
