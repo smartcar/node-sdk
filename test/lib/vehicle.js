@@ -164,7 +164,9 @@ test('location', async function(t) {
 
   const response = await vehicle.location();
   t.deepEqual(response.data, body);
-  t.is(response.age, headers['sc-data-age']);
+  t.true(response.age instanceof Date);
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
 
 });
 
@@ -183,7 +185,9 @@ test('odometer', async function(t) {
 
   const response = await vehicle.odometer();
   t.deepEqual(response.data, body);
-  t.is(response.age, headers['sc-data-age']);
+  t.true(response.age instanceof Date);
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
   t.is(response.unitSystem, headers['sc-unit-system']);
 
 });
