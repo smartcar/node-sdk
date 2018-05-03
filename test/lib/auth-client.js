@@ -237,7 +237,7 @@ test('exchangeCode', async function(t) {
 
 });
 
-test('exchangeToken', async function(t) {
+test('exchangeRefreshToken', async function(t) {
 
   const client = new AuthClient({
     clientId: 'CLIENT_ID',
@@ -263,7 +263,7 @@ test('exchangeToken', async function(t) {
     });
   /* eslint-enable camelcase */
 
-  const response = await client.exchangeToken('TOKEN');
+  const response = await client.exchangeRefreshToken('TOKEN');
 
   t.is(response.access_token, 'access');
   t.is(response.token_type, 'Bearer');
