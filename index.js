@@ -20,7 +20,7 @@ const smartcar = {
 /* eslint-enable global-require */
 
 /**
- * Check if an token is expired.
+ * Check if a token has expired.
  *
  * @param {Date|String} expiration - token expiration timestamp
  * @return {Boolean} true if expired, false if not expired

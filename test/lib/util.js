@@ -26,8 +26,8 @@ test('setExpiration', function(t) {
 
   const actual = access.expiration.getTime();
   const rActual = access.refreshExpiration.getTime();
-  t.true(expected - 100 <= actual && actual <= expected + 100);
-  t.true(rExpected - 100 <= rActual && rActual <= rExpected + 100);
+  t.true(expected - 1000 <= actual && actual <= expected + 1000);
+  t.true(rExpected - 1000 <= rActual && rActual <= rExpected + 1000);
 
 });
 
