@@ -5,37 +5,37 @@ const nock = require('nock');
 
 const smartcar = require('../');
 
-test('expired - error', function(t) {
+test('isExpired - error', function(t) {
 
-  t.throws(() => smartcar.expired(1000), TypeError);
-  t.throws(() => smartcar.expired({}), TypeError);
-
-});
-
-test('expired - object', function(t) {
-
-  const access = {};
-
-  access.expiration = new Date(Date.now() - (60 * 1000)).toISOString();
-  t.true(smartcar.expired(access));
-
-  access.expiration = new Date(Date.now() + (60 * 1000)).toISOString();
-  t.false(smartcar.expired(access));
+  t.throws(() => smartcar.isExpired(1000), TypeError);
+  t.throws(() => smartcar.isExpired({}), TypeError);
 
 });
 
-test('expired - string', function(t) {
+test('isExpired - date', function(t) {
+
+  let expiration;
+
+  expiration = new Date(Date.now() - (60 * 1000));
+  t.true(smartcar.isExpired(expiration));
+
+  expiration = new Date(Date.now() + (60 * 1000));
+  t.false(smartcar.isExpired(expiration));
+
+});
+
+test('isExpired - string', function(t) {
 
   let expiration;
 
   expiration = new Date(Date.now() - (60 * 1000)).toISOString();
-  t.true(smartcar.expired(expiration));
+  t.true(smartcar.isExpired(expiration));
 
   expiration = new Date(Date.now()).toISOString();
-  t.true(smartcar.expired(expiration));
+  t.true(smartcar.isExpired(expiration));
 
   expiration = new Date(Date.now() + (60 * 1000)).toISOString();
-  t.false(smartcar.expired(expiration));
+  t.false(smartcar.isExpired(expiration));
 
 });
 

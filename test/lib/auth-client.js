@@ -1,11 +1,10 @@
 'use strict';
 
+const _ = require('lodash');
 const test = require('ava');
 const nock = require('nock');
 
 const AuthClient = require('../../lib/auth-client');
-
-const ISO_REGEX = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
 
 test('constructor', function(t) {
 
@@ -65,7 +64,7 @@ test('request', async function(t) {
   const body = await client.request('client');
 
   t.is(body.expires_in, 1800);
-  t.regex(body.expiration, ISO_REGEX);
+  t.true(_.isDate(body.expiration));
 
   const full = await client.request('client', {
     resolveWithFullResponse: true,
@@ -73,7 +72,7 @@ test('request', async function(t) {
 
   t.is(full.statusCode, 200);
   t.is(full.body.expires_in, 1800);
-  t.regex(full.body.expiration, ISO_REGEX);
+  t.true(_.isDate(full.body.expiration));
   t.true(n.isDone());
 
 });
@@ -232,7 +231,7 @@ test('exchangeCode', async function(t) {
   t.is(response.expires_in, 1800);
   t.is(response.refresh_token, 'refresh');
 
-  t.regex(response.expiration, ISO_REGEX);
+  t.true(_.isDate(response.expiration));
   t.true(n.isDone());
 
 });
@@ -270,7 +269,7 @@ test('exchangeRefreshToken', async function(t) {
   t.is(response.expires_in, 1800);
   t.is(response.refresh_token, 'refresh');
 
-  t.regex(response.expiration, ISO_REGEX);
+  t.true(_.isDate(response.expiration));
   t.true(n.isDone());
 
 });

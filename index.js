@@ -21,20 +21,27 @@ const smartcar = {
 /* eslint-enable global-require */
 
 /**
- * Check if an access object's access token is expired.
+ * Check if an token is expired.
  *
- * @param {Access|String} access - access object or expiration to be checked
+ * @param {Date|String} expiration - token expiration timestamp
  * @return {Boolean} true if expired, false if not expired
  */
-smartcar.expired = function(access) {
-  let expiration = _.isString(access) ? access : access.expiration;
-  expiration = Date.parse(expiration);
-
-  if (!Number.isFinite(expiration)) { // eslint-disable-next-line max-len
-    throw new TypeError('"access.expiration" argument must be a valid ISO date string');
+smartcar.isExpired = function(expiration) {
+  const msg = '"expiration" argument must be a Date object or ISO date string';
+  let epoch;
+  if (_.isDate(expiration)) {
+    epoch = expiration.getTime();
+  } else if (_.isString(expiration)) {
+    epoch = Date.parse(expiration);
+  } else {
+    throw new TypeError(msg);
   }
 
-  return Date.now() > expiration - TOLERANCE;
+  if (!Number.isFinite(epoch)) { // eslint-disable-next-line max-len
+    throw new TypeError(msg);
+  }
+
+  return Date.now() > epoch - TOLERANCE;
 };
 
 /**
