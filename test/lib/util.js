@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const test = require('ava');
 const nock = require('nock');
 const Promise = require('bluebird');
@@ -16,13 +17,17 @@ test('setExpiration', function(t) {
   // eslint-disable-next-line camelcase
   const access = {expires_in: 7200};
   const expected = Date.now() + (7200 * 1000);
+  const rExpected = Date.now() + (60 * 24 * 60 * 60 * 1000);
 
   util.setExpiration(access);
 
-  t.is(typeof access.expiration, 'string');
+  t.true(_.isDate(access.expiration));
+  t.true(_.isDate(access.refreshExpiration));
 
-  const actual = Date.parse(access.expiration);
+  const actual = access.expiration.getTime();
+  const rActual = access.refreshExpiration.getTime();
   t.true(expected - 100 <= actual && actual <= expected + 100);
+  t.true(rExpected - 100 <= rActual && rActual <= rExpected + 100);
 
 });
 
