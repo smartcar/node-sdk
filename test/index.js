@@ -9,6 +9,7 @@ test('isExpired - error', function(t) {
 
   t.throws(() => smartcar.isExpired(1000), TypeError);
   t.throws(() => smartcar.isExpired({}), TypeError);
+  t.throws(() => smartcar.isExpired('not a date'), TypeError);
 
 });
 
