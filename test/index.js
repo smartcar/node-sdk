@@ -78,6 +78,21 @@ test('getVehicleIds - paging', async function(t) {
 
 });
 
+test('getUser', async function(t) {
+
+  const n = nock('https://api.smartcar.com/v1.0/')
+    .get('/user')
+    .matchHeader('Authorization', 'Bearer token')
+    .reply(200, {
+      id: 'userid',
+    });
+
+  const id = await smartcar.getUserId('token');
+  t.is(id, 'userid');
+  t.true(n.isDone());
+
+});
+
 test('exports', function(t) {
   t.true('errors' in smartcar);
   t.true('Vehicle' in smartcar);
