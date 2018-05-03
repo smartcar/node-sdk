@@ -127,18 +127,99 @@ test('permissions', async function(t) {
       permissions: ['permission1', 'permission2', 'permission3'],
     });
 
-  const response = await vehicle.permissions();
-  t.is(response.permissions.length, 3);
+  const permissions = await vehicle.permissions();
+  t.is(permissions.length, 3);
 
 });
 
-test('action with no argument', async function(t) {
+test('info', async function(t) {
+
+  const body = {
+    id: 'id',
+    make: 'make',
+    model: 'model',
+    year: 1234,
+  };
+  t.context.n = nocks.base()
+    .get('/')
+    .reply(200, body);
+
+  const response = await vehicle.info();
+  t.deepEqual(response, body);
+
+});
+
+test('location', async function(t) {
+
+  const body = {
+    latitude: 1234,
+    longitude: 1234,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+  };
+  t.context.n = nocks.base()
+    .get('/location')
+    .reply(200, body, headers);
+
+  const response = await vehicle.location();
+  t.deepEqual(response.data, body);
+  t.is(response.age, headers['sc-data-age']);
+
+});
+
+test('odometer', async function(t) {
+
+  const body = {
+    distance: 1234,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/odometer')
+    .reply(200, body, headers);
+
+  const response = await vehicle.odometer();
+  t.deepEqual(response.data, body);
+  t.is(response.age, headers['sc-data-age']);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('vin', async function(t) {
+
+  const body = {
+    vin: '4JGBB8GB2AA537355',
+  };
+  t.context.n = nocks.base()
+    .get('/vin')
+    .reply(200, body);
+
+  const vin = await vehicle.vin();
+  t.is(vin, body.vin);
+
+});
+
+test('lock', async function(t) {
 
   t.context.nock = nocks.base()
     .post('/security', {action: 'LOCK'})
     .reply(200, {status: 'success'});
 
   const response = await vehicle.lock();
-  t.is(response.status, 'success');
+  t.is(response, undefined);
+
+});
+
+test('unlock', async function(t) {
+
+  t.context.nock = nocks.base()
+    .post('/security', {action: 'UNLOCK'})
+    .reply(200, {status: 'success'});
+
+  const response = await vehicle.unlock();
+  t.is(response, undefined);
 
 });
