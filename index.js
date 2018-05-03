@@ -37,7 +37,7 @@ smartcar.expired = function(access) {
 };
 
 /**
- * Return list of the user's vehicles.
+ * Return list of the user's vehicles ids.
  *
  * @param {String} token - access token
  * @param {Object} [paging]
@@ -45,7 +45,7 @@ smartcar.expired = function(access) {
  * @param {Number} [paging.offset] - index to start vehicle list
  * @return {Promise}
  */
-smartcar.getVehicles = Promise.method(function(token, paging) {
+smartcar.getVehicleIds = Promise.method(function(token, paging) {
 
   if (!_.isString(token)) {
     throw new TypeError('"token" argument must be a string');

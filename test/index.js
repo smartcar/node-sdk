@@ -39,14 +39,14 @@ test('expired - string', function(t) {
 
 });
 
-test('getVehicles - missing token', async function(t) {
+test('getVehicleIds - missing token', async function(t) {
 
-  const err = await t.throws(smartcar.getVehicles(), TypeError);
+  const err = await t.throws(smartcar.getVehicleIds(), TypeError);
   t.is(err.message, '"token" argument must be a string');
 
 });
 
-test('getVehicles - simple', async function(t) {
+test('getVehicleIds - simple', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
     .get('/vehicles')
@@ -55,13 +55,13 @@ test('getVehicles - simple', async function(t) {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
     });
 
-  const res = await smartcar.getVehicles('simple');
+  const res = await smartcar.getVehicleIds('simple');
   t.is(res.vehicles.length, 3);
   t.true(n.isDone());
 
 });
 
-test('getVehicles - paging', async function(t) {
+test('getVehicleIds - paging', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
     .get('/vehicles', {
@@ -72,7 +72,7 @@ test('getVehicles - paging', async function(t) {
       vehicles: ['vehicle1'],
     });
 
-  const res = await smartcar.getVehicles('paging', {limit: 1});
+  const res = await smartcar.getVehicleIds('paging', {limit: 1});
   t.is(res.vehicles.length, 1);
   t.true(n.isDone());
 
