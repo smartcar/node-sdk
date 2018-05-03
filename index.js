@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 
 const util = require('./lib/util');
+const config = require('./lib/config');
 // Tolerance for expiration measured in milliseconds
 const TOLERANCE = 10 * 1000;
 
@@ -56,6 +57,28 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
       bearer: token,
     },
     form: paging,
+  });
+
+});
+
+/**
+ * Return the user's id.
+ *
+ * @param {String} token - access token
+ * @return {Promise.<String>} the user id
+ */
+smartcar.getUserId = Promise.method(function(token) {
+
+  if (!_.isString(token)) {
+    throw new TypeError('"token" argument must be a string');
+  }
+
+  return util.request.get(`${config.api}/v${config.version}/user`, {
+    auth: {
+      bearer: token,
+    },
+  }).then(function(response) {
+    return response.id;
   });
 
 });
