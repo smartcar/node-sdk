@@ -23,6 +23,7 @@ const smartcar = {
 /**
  * Check if a token has expired.
  *
+ * @method
  * @param {Date|String} expiration - token expiration timestamp
  * @return {Boolean} true if expired, false if not expired
  */
@@ -47,11 +48,12 @@ smartcar.isExpired = function(expiration) {
 /**
  * Return list of the user's vehicles ids.
  *
+ * @method
  * @param {String} token - access token
  * @param {Object} [paging]
  * @param {Number} [paging.limit] - number of vehicles to return
  * @param {Number} [paging.offset] - index to start vehicle list
- * @return {Promise}
+ * @return {Promise.<String[]>} array of vehicle ids
  */
 smartcar.getVehicleIds = Promise.method(function(token, paging) {
 
@@ -71,6 +73,7 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
 /**
  * Return the user's id.
  *
+ * @method
  * @param {String} token - access token
  * @return {Promise.<String>} the user id
  */

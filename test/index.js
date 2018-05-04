@@ -79,7 +79,7 @@ test('getVehicleIds - paging', async function(t) {
 
 });
 
-test('getUser', async function(t) {
+test('getUserId', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
     .get('/user')

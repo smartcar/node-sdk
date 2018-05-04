@@ -28,6 +28,12 @@ Smartcar Node SDK documentation.
 <dl>
 <dt><a href="#Access">Access</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#Info">Info</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Location">Location</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
+<dd></dd>
 </dl>
 
 <a name="module_smartcar"></a>
@@ -38,8 +44,9 @@ Smartcar Node SDK documentation.
     * [.errors](#module_smartcar.errors)
     * [.Vehicle](#module_smartcar.Vehicle)
     * [.AuthClient](#module_smartcar.AuthClient)
-    * [.getVehicles](#module_smartcar.getVehicles) ⇒ [<code>Promise</code>](#Promise)
-    * [.expired(access)](#module_smartcar.expired) ⇒ <code>Boolean</code>
+    * [.isExpired(expiration)](#module_smartcar.isExpired) ⇒ <code>Boolean</code>
+    * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+    * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>Promise.&lt;String&gt;</code>
 
 <a name="module_smartcar.errors"></a>
 
@@ -56,12 +63,25 @@ Smartcar Node SDK documentation.
 ### smartcar.AuthClient
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
 **See**: AuthClient
-<a name="module_smartcar.getVehicles"></a>
+<a name="module_smartcar.isExpired"></a>
 
-### smartcar.getVehicles ⇒ [<code>Promise</code>](#Promise)
-Return list of the user's vehicles.
+### smartcar.isExpired(expiration) ⇒ <code>Boolean</code>
+Check if a token has expired.
 
-**Kind**: static property of [<code>smartcar</code>](#module_smartcar)
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Returns**: <code>Boolean</code> - true if expired, false if not expired
+
+| Param | Type | Description |
+| --- | --- | --- |
+| expiration | <code>Date</code> \| <code>String</code> | token expiration timestamp |
+
+<a name="module_smartcar.getVehicleIds"></a>
+
+### smartcar.getVehicleIds(token, [paging]) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+Return list of the user's vehicles ids.
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - array of vehicle ids
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -70,17 +90,17 @@ Return list of the user's vehicles.
 | [paging.limit] | <code>Number</code> | number of vehicles to return |
 | [paging.offset] | <code>Number</code> | index to start vehicle list |
 
-<a name="module_smartcar.expired"></a>
+<a name="module_smartcar.getUserId"></a>
 
-### smartcar.expired(access) ⇒ <code>Boolean</code>
-Check if an access object's access token is expired.
+### smartcar.getUserId(token) ⇒ <code>Promise.&lt;String&gt;</code>
+Return the user's id.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: <code>Boolean</code> - true if expired, false if not expired
+**Returns**: <code>Promise.&lt;String&gt;</code> - the user id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| access | [<code>Access</code>](#Access) \| <code>String</code> | access object or expiration to be checked |
+| token | <code>String</code> | access token |
 
 <a name="module_errors"></a>
 
@@ -246,7 +266,7 @@ Error thrown when gateway to Smartcar times out
     * [new AuthClient(options)](#new_AuthClient_new)
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.exchangeToken(token)](#AuthClient+exchangeToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 
 <a name="new_AuthClient_new"></a>
 
@@ -254,13 +274,14 @@ Error thrown when gateway to Smartcar times out
 Create a Smartcar OAuth client for your application.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| options | <code>Object</code> |  |
-| options.clientId | <code>String</code> | The application's client id |
-| options.clientSecret | <code>String</code> | The application's client secret |
-| options.redirectUri | <code>String</code> | one of the application's preregistered redirect URIs |
-| [options.scope] | <code>Array.&lt;String&gt;</code> | list of permissions to request from user |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>Object</code> |  |  |
+| options.clientId | <code>String</code> |  | The application's client id |
+| options.clientSecret | <code>String</code> |  | The application's client secret |
+| options.redirectUri | <code>String</code> |  | one of the application's preregistered redirect URIs |
+| [options.scope] | <code>Array.&lt;String&gt;</code> |  | list of permissions to request from user |
+| [options.development] | <code>Boolean</code> | <code>false</code> | launch Smartcar auth in development mode to enable the mock vehicle brand |
 
 <a name="AuthClient+getAuthUrl"></a>
 
@@ -292,9 +313,9 @@ Exchange an authorization code for an access object.
 | --- | --- | --- |
 | code | <code>String</code> | authorization code to exchange |
 
-<a name="AuthClient+exchangeToken"></a>
+<a name="AuthClient+exchangeRefreshToken"></a>
 
-### authClient.exchangeToken(token) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+### authClient.exchangeRefreshToken(token) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
@@ -312,11 +333,11 @@ Exchange a refresh token for a new access object.
     * [new Vehicle(id, token, [unitSystem])](#new_Vehicle_new)
     * [.setUnitSystem(unitSystem)](#Vehicle+setUnitSystem)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>Promise</code>](#Promise)
-    * [.permissions()](#Vehicle+permissions) ⇒ [<code>Promise</code>](#Promise)
-    * [.info()](#Vehicle+info) ⇒ [<code>Promise</code>](#Promise)
-    * [.location()](#Vehicle+location) ⇒ [<code>Promise</code>](#Promise)
-    * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise</code>](#Promise)
-    * [.vin()](#Vehicle+vin) ⇒ [<code>Promise</code>](#Promise)
+    * [.permissions()](#Vehicle+permissions) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+    * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
+    * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
+    * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
+    * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise</code>](#Promise)
     * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise</code>](#Promise)
 
@@ -353,43 +374,47 @@ have to have the user reauthorize the vehicle to your application if
 you wish to make requests to it
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - // TODO document return type more throughly
+**Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect
 <a name="Vehicle+permissions"></a>
 
-### vehicle.permissions() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.permissions() ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
 Fetch the list of permissions that this application has been granted for
 this vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - // TODO document return type more throughly
+**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - an array of permissions names
+**Example**
+```js
+['read_vehicle_info', 'read_odometer', 'control_security']
+```
 <a name="Vehicle+info"></a>
 
-### vehicle.info() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.info() ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
 GET Vehicle.info
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise for info on the vehicle's info
+**Returns**: [<code>Promise.&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
 <a name="Vehicle+location"></a>
 
-### vehicle.location() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.location() ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
 GET Vehicle.location
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise for info on the vehicle's location
+**Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location
 <a name="Vehicle+odometer"></a>
 
-### vehicle.odometer() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.odometer() ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
 GET Vehicle.odometer
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise for info on the vehicle's odometer
+**Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer
 <a name="Vehicle+vin"></a>
 
-### vehicle.vin() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
 GET Vehicle.vin
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise for info on the vehicle's vin
+**Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin
 <a name="Vehicle+lock"></a>
 
 ### vehicle.lock() ⇒ [<code>Promise</code>](#Promise)
@@ -426,5 +451,73 @@ POST Vehicle.unlock
   "expiration": "2017-05-26T01:21:27.070Z",
   "accessToken": "88704225-9f6c-4919-93e7-e0cec71317ce",
   "refreshToken": "60a9e801-6d26-4d88-926e-5c7f9fc13486",
+}
+```
+<a name="Info"></a>
+
+## Info : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>String</code> | The vehicle's unique Smartcar identifier |
+| make | <code>String</code> | The brand of the vehicle |
+| model | <code>String</code> | The specific model of the vehicle |
+| year | <code>Number</code> | The model year of the vehicle |
+
+**Example**
+```js
+{
+  id: '19c0cc8c-80e0-4182-9372-6ef903c7599c',
+  make: 'TESLA',
+  model: 'S',
+  year: 2017,
+}
+```
+<a name="Location"></a>
+
+## Location : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data |
+| data.latitude | <code>Number</code> | The vehicle latitude (in degrees) |
+| data.longitude | <code>Number</code> | The vehicle longitude (in degrees) |
+| age | <code>Date</code> | The timestamp of when the data was recorded |
+
+**Example**
+```js
+{
+  data: {
+    latitude: 37.400880,
+    longitude: -122.057804,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+}
+```
+<a name="Odometer"></a>
+
+## Odometer : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data |
+| data.distance | <code>Number</code> | The reading of the vehicle's odometer |
+| age | <code>Date</code> | The timestamp of when the data was recorded |
+| unitSystem | <code>String</code> | The unit system of the returned odometer reading. `metric` signifies kilometers, `imperial` signifies miles. |
+
+**Example**
+```js
+{
+  data: {
+    distance: 1234.12,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial',
 }
 ```
