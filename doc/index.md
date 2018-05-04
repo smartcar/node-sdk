@@ -277,7 +277,7 @@ Create a Smartcar OAuth client for your application.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  |  |
-| options.clientId | <code>String</code> |  | The application's client id |
+| options.clientId | <code>String</code> |  | Application clientId obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe) |
 | options.clientSecret | <code>String</code> |  | The application's client secret |
 | options.redirectUri | <code>String</code> |  | one of the application's preregistered redirect URIs |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | list of permissions to request from user |
