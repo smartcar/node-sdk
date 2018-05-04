@@ -52,17 +52,17 @@ Smartcar Node SDK documentation.
 
 ### smartcar.errors
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
-**See**: modules
+**See**: [errors](#module_errors)
 <a name="module_smartcar.Vehicle"></a>
 
 ### smartcar.Vehicle
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
-**See**: Vehicle
+**See**: [Vehicle](#Vehicle)
 <a name="module_smartcar.AuthClient"></a>
 
 ### smartcar.AuthClient
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
-**See**: AuthClient
+**See**: [AuthClient](#AuthClient)
 <a name="module_smartcar.isExpired"></a>
 
 ### smartcar.isExpired(expiration) ⇒ <code>Boolean</code>

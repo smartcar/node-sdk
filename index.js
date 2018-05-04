@@ -11,11 +11,11 @@ const TOLERANCE = 10 * 1000;
 /* eslint-disable global-require */
 /** @exports smartcar */
 const smartcar = {
-  /** @see modules */
+  /** @see {@link module:errors} */
   errors: require('./lib/errors'),
-  /** @see Vehicle */
+  /** @see {@link Vehicle} */
   Vehicle: require('./lib/vehicle'),
-  /** @see AuthClient*/
+  /** @see {@link AuthClient}*/
   AuthClient: require('./lib/auth-client'),
 };
 /* eslint-enable global-require */
