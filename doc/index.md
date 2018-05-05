@@ -41,12 +41,15 @@ Smartcar Node SDK documentation.
 ## smartcar
 
 * [smartcar](#module_smartcar)
-    * [.errors](#module_smartcar.errors)
-    * [.Vehicle](#module_smartcar.Vehicle)
-    * [.AuthClient](#module_smartcar.AuthClient)
-    * [.isExpired(expiration)](#module_smartcar.isExpired) ⇒ <code>Boolean</code>
-    * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
-    * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>Promise.&lt;String&gt;</code>
+    * _static_
+        * [.errors](#module_smartcar.errors)
+        * [.Vehicle](#module_smartcar.Vehicle)
+        * [.AuthClient](#module_smartcar.AuthClient)
+        * [.isExpired(expiration)](#module_smartcar.isExpired) ⇒ <code>Boolean</code>
+        * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
+        * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>Promise.&lt;String&gt;</code>
+    * _inner_
+        * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
 
 <a name="module_smartcar.errors"></a>
 
@@ -77,11 +80,11 @@ Check if a token has expired.
 
 <a name="module_smartcar.getVehicleIds"></a>
 
-### smartcar.getVehicleIds(token, [paging]) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+### smartcar.getVehicleIds(token, [paging]) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
 Return list of the user's vehicles ids.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - array of vehicle ids
+**Returns**: [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -102,6 +105,32 @@ Return the user's id.
 | --- | --- | --- |
 | token | <code>String</code> | access token |
 
+<a name="module_smartcar..VehicleIds"></a>
+
+### smartcar~VehicleIds : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| vehicles | <code>Array.&lt;String&gt;</code> | A list of the user's authorized vehicle ids. |
+| paging | <code>Object</code> |  |
+| paging.count- | <code>Number</code> | The total number of vehicles. |
+| paging.offset | <code>Number</code> | The current start index of returned vehicle ids. |
+
+**Example**
+```js
+{
+  vehicles: [
+    '36ab27d0-fd9d-4455-823a-ce30af709ffc',
+    '770bdda4-2429-4b20-87fd-6af475c4365e',
+  ],
+  paging: {
+    count: 2,
+    offset: 0,
+  }
+}
+```
 <a name="module_errors"></a>
 
 ## errors

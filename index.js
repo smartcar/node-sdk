@@ -46,6 +46,28 @@ smartcar.isExpired = function(expiration) {
 };
 
 /**
+ * @type {Object}
+ * @typedef VehicleIds
+ * @property {String[]} vehicles - A list of the user's authorized vehicle ids.
+ * @property {Object} paging
+ * @property {Number} paging.count- The total number of vehicles.
+ * @property {Number} paging.offset - The current start index of returned
+ * vehicle ids.
+ *
+ * @example
+ * {
+ *   vehicles: [
+ *     '36ab27d0-fd9d-4455-823a-ce30af709ffc',
+ *     '770bdda4-2429-4b20-87fd-6af475c4365e',
+ *   ],
+ *   paging: {
+ *     count: 2,
+ *     offset: 0,
+ *   }
+ * }
+ */
+
+/**
  * Return list of the user's vehicles ids.
  *
  * @method
@@ -53,7 +75,7 @@ smartcar.isExpired = function(expiration) {
  * @param {Object} [paging]
  * @param {Number} [paging.limit] - number of vehicles to return
  * @param {Number} [paging.offset] - index to start vehicle list
- * @return {Promise.<String[]>} array of vehicle ids
+ * @return {Promise.<module:smartcar~VehicleIds>} A promise with the vehicle ids.
  */
 smartcar.getVehicleIds = Promise.method(function(token, paging) {
 
@@ -65,7 +87,7 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
     auth: {
       bearer: token,
     },
-    form: paging,
+    qs: paging,
   });
 
 });

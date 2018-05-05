@@ -54,6 +54,7 @@ test('getVehicleIds - simple', async function(t) {
     .matchHeader('Authorization', 'Bearer simple')
     .reply(200, {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
+      paging: {count: 3, offset: 0},
     });
 
   const res = await smartcar.getVehicleIds('simple');
@@ -65,15 +66,15 @@ test('getVehicleIds - simple', async function(t) {
 test('getVehicleIds - paging', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
-    .get('/vehicles', {
-      limit: '1',
-    })
-    .matchHeader('Authorization', 'Bearer paging')
+    .get('/vehicles')
+    .query({limit: '1'})
+    .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
       vehicles: ['vehicle1'],
+      paging: {count: 1, offset: 0},
     });
 
-  const res = await smartcar.getVehicleIds('paging', {limit: 1});
+  const res = await smartcar.getVehicleIds('token', {limit: 1});
   t.is(res.vehicles.length, 1);
   t.true(n.isDone());
 
