@@ -277,11 +277,11 @@ Create a Smartcar OAuth client for your application.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  |  |
-| options.clientId | <code>String</code> |  | Application clientId obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe) |
-| options.clientSecret | <code>String</code> |  | The application's client secret |
-| options.redirectUri | <code>String</code> |  | one of the application's preregistered redirect URIs |
-| [options.scope] | <code>Array.&lt;String&gt;</code> |  | list of permissions to request from user |
-| [options.development] | <code>Boolean</code> | <code>false</code> | launch Smartcar auth in development mode to enable the mock vehicle brand |
+| options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
+| options.clientSecret | <code>String</code> |  | The application's client secret. |
+| options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
+| [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
+| [options.development] | <code>Boolean</code> | <code>false</code> | Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
@@ -294,24 +294,34 @@ to always display the permissions dialog to the user by setting
 approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>String</code> - OAuth authorization URL to redirect user to
+**Returns**: <code>String</code> - OAuth authorization URL to direct user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> |  |  |
-| [options.state] | <code>String</code> |  | extra application state to pass along |
-| [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
+| [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
+**Example**
+```js
+https://connect.smartcar.com/oauth/authorize?
+response_type=code
+&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+&scope=read_odometer read_vehicle_info
+&redirect_uri=https://example.com/home
+&state=0facda3319
+```
 <a name="AuthClient+exchangeCode"></a>
 
 ### authClient.exchangeCode(code) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 Exchange an authorization code for an access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
+**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| code | <code>String</code> | authorization code to exchange |
+| code | <code>String</code> | Authorization code to exchange for a Smartcar access token and refresh token. |
 
 <a name="AuthClient+exchangeRefreshToken"></a>
 
@@ -319,10 +329,11 @@ Exchange an authorization code for an access object.
 Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
+**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| token | <code>String</code> | refresh token to exchange |
+| token | <code>String</code> | Refresh token to exchange for a new set of Access and Refresh tokens. |
 
 <a name="Vehicle"></a>
 
@@ -349,9 +360,9 @@ Initializes a new Vehicle to use for making requests to the Smartcar API.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| id | <code>String</code> |  | the vehicle's unique identifier |
-| token | <code>String</code> |  | a valid access token |
-| [unitSystem] | <code>String</code> | <code>metric</code> | the unit system to use for vehicle data (metric/imperial) |
+| id | <code>String</code> |  | The vehicle's unique identifier. Retrieve a user's vehicle id using [getVehicleIds](#module_smartcar.getVehicleIds). |
+| token | <code>String</code> |  | A valid access token |
+| [unitSystem] | <code>String</code> | <code>metric</code> | The unit system to use for vehicle data , must be either `metric` or `imperial`. |
 
 <a name="Vehicle+setUnitSystem"></a>
 
@@ -362,19 +373,19 @@ Update the unit system to use in requests to the Smartcar API.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| unitSystem | <code>String</code> | the unit system to use (metric/imperial) |
+| unitSystem | <code>String</code> | The unit system to use, must be either `metric` or `imperial`. |
 
 <a name="Vehicle+disconnect"></a>
 
 ### vehicle.disconnect() ⇒ [<code>Promise</code>](#Promise)
 Disconnect this vehicle from the connected application.
 
-Note: Calling this method will invalidate your access token and you will
-have to have the user reauthorize the vehicle to your application if
-you wish to make requests to it
+Note: Calling this method will invalidate your token's access to the vehicle.
+You will have to reauthorize the user to your application again if you wish
+to make requests to it again.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect
+**Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect.
 <a name="Vehicle+permissions"></a>
 
 ### vehicle.permissions() ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
@@ -382,7 +393,7 @@ Fetch the list of permissions that this application has been granted for
 this vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - an array of permissions names
+**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
 **Example**
 ```js
 ['read_vehicle_info', 'read_odometer', 'control_security']
@@ -400,35 +411,35 @@ GET Vehicle.info
 GET Vehicle.location
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location
+**Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
 <a name="Vehicle+odometer"></a>
 
 ### vehicle.odometer() ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
 GET Vehicle.odometer
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer
+**Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
 <a name="Vehicle+vin"></a>
 
 ### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
 GET Vehicle.vin
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin
+**Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
 <a name="Vehicle+lock"></a>
 
 ### vehicle.lock() ⇒ [<code>Promise</code>](#Promise)
 POST Vehicle.lock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A success or failure response
+**Returns**: [<code>Promise</code>](#Promise) - A success or failure response.
 <a name="Vehicle+unlock"></a>
 
 ### vehicle.unlock() ⇒ [<code>Promise</code>](#Promise)
 POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A success or failure response
+**Returns**: [<code>Promise</code>](#Promise) - A success or failure response.
 <a name="Access"></a>
 
 ## Access : <code>Object</code>
@@ -437,20 +448,18 @@ POST Vehicle.unlock
 
 | Name | Type | Description |
 | --- | --- | --- |
-| tokenType | <code>String</code> | Always set to `Bearer` |
-| expiresIn | <code>Number</code> | Number of seconds the access token is valid |
-| expiration | <code>String</code> | ISO 8601 Datetime string which represents when the token expires |
+| expiration | <code>Date</code> | Date object which represents when the access token expires. |
 | accessToken | <code>String</code> | A token to be used for requests to the Smartcar API |
 | refreshToken | <code>String</code> | A token which is used to renew access when the current access token expires, expires in 60 days |
+| refreshExpiration | <code>Date</code> | Date object which represents when the access token expires. |
 
 **Example**
 ```js
 {
-  "tokenType": "Bearer",
-  "expiresIn": 3600,
-  "expiration": "2017-05-26T01:21:27.070Z",
-  "accessToken": "88704225-9f6c-4919-93e7-e0cec71317ce",
-  "refreshToken": "60a9e801-6d26-4d88-926e-5c7f9fc13486",
+  expiration: new Date('2017-05-26T01:21:27.070Z'),
+  accessToken: '88704225-9f6c-4919-93e7-e0cec71317ce',
+  refreshToken: '60a9e801-6d26-4d88-926e-5c7f9fc13486',
+  refreshExpiration: new Date('2017-05-26T01:21:27.070Z'),
 }
 ```
 <a name="Info"></a>
@@ -461,10 +470,10 @@ POST Vehicle.unlock
 
 | Name | Type | Description |
 | --- | --- | --- |
-| id | <code>String</code> | The vehicle's unique Smartcar identifier |
-| make | <code>String</code> | The brand of the vehicle |
-| model | <code>String</code> | The specific model of the vehicle |
-| year | <code>Number</code> | The model year of the vehicle |
+| id | <code>String</code> | The vehicle's unique Smartcar identifier. |
+| make | <code>String</code> | The brand of the vehicle. |
+| model | <code>String</code> | The specific model of the vehicle. |
+| year | <code>Number</code> | The model year of the vehicle. |
 
 **Example**
 ```js
@@ -483,10 +492,10 @@ POST Vehicle.unlock
 
 | Name | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data |
-| data.latitude | <code>Number</code> | The vehicle latitude (in degrees) |
-| data.longitude | <code>Number</code> | The vehicle longitude (in degrees) |
-| age | <code>Date</code> | The timestamp of when the data was recorded |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.latitude | <code>Number</code> | The vehicle latitude (in degrees). |
+| data.longitude | <code>Number</code> | The vehicle longitude (in degrees). |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
 
 **Example**
 ```js
@@ -506,10 +515,10 @@ POST Vehicle.unlock
 
 | Name | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data |
-| data.distance | <code>Number</code> | The reading of the vehicle's odometer |
-| age | <code>Date</code> | The timestamp of when the data was recorded |
-| unitSystem | <code>String</code> | The unit system of the returned odometer reading. `metric` signifies kilometers, `imperial` signifies miles. |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.distance | <code>Number</code> | The reading of the vehicle's odometer. |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned odometer. reading. `metric` signifies kilometers, `imperial` signifies miles. |
 
 **Example**
 ```js

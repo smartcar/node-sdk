@@ -43,40 +43,6 @@ test('constructor - development', function(t) {
 
 });
 
-test('request', async function(t) {
-
-  const client = new AuthClient({
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
-  });
-
-  const n = nock('https://auth.smartcar.com')
-    .get('/client')
-    .basicAuth({
-      user: 'CLIENT_ID',
-      pass: 'CLIENT_SECRET',
-    })
-    .twice()
-    .reply(200, {
-      expires_in: 1800, // eslint-disable-line camelcase
-    });
-
-  const body = await client.request('client');
-
-  t.is(body.expires_in, 1800);
-  t.true(_.isDate(body.expiration));
-
-  const full = await client.request('client', {
-    resolveWithFullResponse: true,
-  });
-
-  t.is(full.statusCode, 200);
-  t.is(full.body.expires_in, 1800);
-  t.true(_.isDate(full.body.expiration));
-  t.true(n.isDone());
-
-});
-
 test('getAuthUrl - simple', function(t) {
 
   const client = new AuthClient({
@@ -226,12 +192,11 @@ test('exchangeCode', async function(t) {
 
   const response = await client.exchangeCode('AUTHCODE');
 
-  t.is(response.access_token, 'access');
-  t.is(response.token_type, 'Bearer');
-  t.is(response.expires_in, 1800);
-  t.is(response.refresh_token, 'refresh');
+  t.is(response.accessToken, 'access');
+  t.is(response.refreshToken, 'refresh');
 
   t.true(_.isDate(response.expiration));
+  t.true(_.isDate(response.refreshExpiration));
   t.true(n.isDone());
 
 });
@@ -264,12 +229,11 @@ test('exchangeRefreshToken', async function(t) {
 
   const response = await client.exchangeRefreshToken('TOKEN');
 
-  t.is(response.access_token, 'access');
-  t.is(response.token_type, 'Bearer');
-  t.is(response.expires_in, 1800);
-  t.is(response.refresh_token, 'refresh');
+  t.is(response.accessToken, 'access');
+  t.is(response.refreshToken, 'refresh');
 
   t.true(_.isDate(response.expiration));
+  t.true(_.isDate(response.refreshExpiration));
   t.true(n.isDone());
 
 });
