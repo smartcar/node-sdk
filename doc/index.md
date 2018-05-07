@@ -480,7 +480,7 @@ POST Vehicle.unlock
 | expiration | <code>Date</code> | Date object which represents when the access token expires. |
 | accessToken | <code>String</code> | A token to be used for requests to the Smartcar API |
 | refreshToken | <code>String</code> | A token which is used to renew access when the current access token expires, expires in 60 days |
-| refreshExpiration | <code>Date</code> | Date object which represents when the access token expires. |
+| refreshExpiration | <code>Date</code> | Date object which represents when the refresh token expires. |
 
 **Example**
 ```js
