@@ -32,4 +32,4 @@ jobs:
   include:
     - stage: publish
       node_js: 8
-      script: npm run release
+      script: echo -e "machine github.com\n  login $GH_TOKEN" >> ~/.netrc && npm run release
