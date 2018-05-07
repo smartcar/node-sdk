@@ -49,16 +49,6 @@ and the `access_token`.
 * Use `exchangeRefreshToken` on your saved `refreshToken` to retieve a new token
 when your `accessToken` expires.
 
-### Installation
-```shell
-npm install smartcar
-```
-
-To test:
-```shell
-npm run test
-```
-
 ### Example
 ```javascript
 'use strict';
@@ -131,6 +121,17 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 For detailed documentation on parameters and available methods, please refer to
 the [SDK Reference](doc/index.md).
+
+## Contributing
+### Installation
+```shell
+npm install smartcar
+```
+
+To test:
+```shell
+npm run test
+```
 
 [ci-url]: https://travis-ci.com/smartcar/node-sdk
 [ci-image]: https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
