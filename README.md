@@ -4,8 +4,7 @@ The official Smartcar Node SDK.
 
 ## Overview
 The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
-(location, odometer) and send commands to vehicles (lock, unlock) to connected
-vehicles using HTTP requests.
+(location, odometer) and send commands to vehicles (lock, unlock) using HTTP requests.
 
 To make requests to a vehicle from a web or mobile application, the end user
 must connect their vehicle using
@@ -46,7 +45,7 @@ of our frontend SDKs.
 * Create a new `Vehicle` object using a `vehicleId` from the previous response,
 and the `access_token`.
 * Make requests to the Smartcar API.
-* Use `exchangeRefreshToken` on your saved `refreshToken` to retieve a new token
+* Use `exchangeRefreshToken` on your saved `refreshToken` to retrieve a new token
 when your `accessToken` expires.
 
 ### Installation
@@ -131,7 +130,7 @@ the [SDK Reference](doc/index.md).
 To contribute, please:
 1. Open an issue for the feature (or bug) you would like to resolve.
 2. Resolve the issue and add tests in your feature branch.
-2. Open a PR from your feature branch into `master` that tags the issue.  
+3. Open a PR from your feature branch into `master` that tags the issue.  
 
 To test:
 ```shell
