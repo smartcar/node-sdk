@@ -49,6 +49,11 @@ and the `access_token`.
 * Use `exchangeRefreshToken` on your saved `refreshToken` to retieve a new token
 when your `accessToken` expires.
 
+### Installation
+```shell
+npm install smartcar --save
+```
+
 ### Example
 ```javascript
 'use strict';
@@ -123,10 +128,10 @@ For detailed documentation on parameters and available methods, please refer to
 the [SDK Reference](doc/index.md).
 
 ## Contributing
-### Installation
-```shell
-npm install smartcar
-```
+To contribute, please:
+1. Open an issue for the feature (or bug) you would like to resolve.
+2. Resolve the issue and add tests in your feature branch.
+2. Open a PR from your feature branch into `master` that tags the issue.  
 
 To test:
 ```shell
