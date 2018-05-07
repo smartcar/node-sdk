@@ -12,14 +12,31 @@ const errors = require('../../lib/errors');
 
 const API_URL = config.api + '/v' + config.version;
 
-test('setExpiration', function(t) {
+test('formatAccess', function(t) {
 
-  // eslint-disable-next-line camelcase
-  const access = {expires_in: 7200};
+  /* eslint-disable camelcase */
+  const response = {
+    token_type: 'Bearer',
+    expires_in: 7200,
+    access_token: 'df12ca11-36a7-4196-9c33-b9fa1f18dd14',
+    refresh_token: 'c569b7ed-6536-4d19-9790-61ba7a4389c6',
+  };
+  /* eslint-enable camelcase */
+  const access = util.formatAccess(response);
+  const expectedKeys = [
+    'accessToken',
+    'refreshToken',
+    'expiration',
+    'refreshExpiration',
+  ];
+
+  t.is(_.xor(Object.keys(access), expectedKeys).length, 0);
+
+  t.is(access.accessToken, response.access_token);
+  t.is(access.refreshToken, response.refresh_token);
+
   const expected = Date.now() + (7200 * 1000);
   const rExpected = Date.now() + (60 * 24 * 60 * 60 * 1000);
-
-  util.setExpiration(access);
 
   t.true(_.isDate(access.expiration));
   t.true(_.isDate(access.refreshExpiration));
