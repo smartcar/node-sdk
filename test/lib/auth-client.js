@@ -1,11 +1,10 @@
 'use strict';
 
+const _ = require('lodash');
 const test = require('ava');
 const nock = require('nock');
 
 const AuthClient = require('../../lib/auth-client');
-
-const ISO_REGEX = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
 
 test('constructor', function(t) {
 
@@ -20,41 +19,27 @@ test('constructor', function(t) {
   t.is(client.clientSecret, 'CLIENT_SECRET');
   t.is(client.redirectUri, 'https://insurance.co/callback');
   t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
+  t.is(client.development, false);
   t.true('request' in client);
 
 });
 
-test('request', async function(t) {
+test('constructor - development', function(t) {
 
   const client = new AuthClient({
     clientId: 'CLIENT_ID',
     clientSecret: 'CLIENT_SECRET',
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    development: true,
   });
 
-  const n = nock('https://auth.smartcar.com')
-    .get('/client')
-    .basicAuth({
-      user: 'CLIENT_ID',
-      pass: 'CLIENT_SECRET',
-    })
-    .twice()
-    .reply(200, {
-      expires_in: 1800, // eslint-disable-line camelcase
-    });
-
-  const body = await client.request('client');
-
-  t.is(body.expires_in, 1800);
-  t.regex(body.expiration, ISO_REGEX);
-
-  const full = await client.request('client', {
-    resolveWithFullResponse: true,
-  });
-
-  t.is(full.statusCode, 200);
-  t.is(full.body.expires_in, 1800);
-  t.regex(full.body.expiration, ISO_REGEX);
-  t.true(n.isDone());
+  t.is(client.clientId, 'CLIENT_ID');
+  t.is(client.clientSecret, 'CLIENT_SECRET');
+  t.is(client.redirectUri, 'https://insurance.co/callback');
+  t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
+  t.is(client.development, true);
+  t.true('request' in client);
 
 });
 
@@ -66,10 +51,11 @@ test('getAuthUrl - simple', function(t) {
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
-  const actual = client.getAuthUrl('mock');
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  const actual = client.getAuthUrl();
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
   expected += '&scope=read_odometer%20read_vehicle_info';
 
   t.is(actual, expected);
@@ -83,16 +69,17 @@ test('getAuthUrl - no scope', function(t) {
     redirectUri: 'https://insurance.co/callback',
   });
 
-  const actual = client.getAuthUrl('mock', {
+  const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
-    approvalPrompt: 'force',
+    forcePrompt: true,
   });
 
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
-  expected += '&state=fakestate&approval_prompt=force';
+  expected += '&approval_prompt=force';
+  expected += '&state=fakestate';
 
   t.is(actual, expected);
 
@@ -106,17 +93,71 @@ test('getAuthUrl - state & approval prompt', function(t) {
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
-  const actual = client.getAuthUrl('mock', {
+  const actual = client.getAuthUrl({
     scope: 'this should be ignored',
     state: 'fakestate',
-    approvalPrompt: 'force',
+    forcePrompt: true,
   });
 
-  let expected = 'https://mock.smartcar.com/oauth/authorize?';
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += 'response_type=code&client_id=CLIENT_ID';
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
-  expected += '&state=fakestate&approval_prompt=force';
+  expected += '&state=fakestate';
+
+  t.is(actual, expected);
+
+});
+
+test('getAuthUrl - development mode', function(t) {
+
+  const client = new AuthClient({
+    clientId: 'CLIENT_ID',
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    development: true,
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&mock=true';
+
+  t.is(actual, expected);
+
+});
+
+test('getAuthUrl - development mode false', function(t) {
+
+  const client = new AuthClient({
+    clientId: 'CLIENT_ID',
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    development: false,
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
 
   t.is(actual, expected);
 
@@ -151,17 +192,16 @@ test('exchangeCode', async function(t) {
 
   const response = await client.exchangeCode('AUTHCODE');
 
-  t.is(response.access_token, 'access');
-  t.is(response.token_type, 'Bearer');
-  t.is(response.expires_in, 1800);
-  t.is(response.refresh_token, 'refresh');
+  t.is(response.accessToken, 'access');
+  t.is(response.refreshToken, 'refresh');
 
-  t.regex(response.expiration, ISO_REGEX);
+  t.true(_.isDate(response.expiration));
+  t.true(_.isDate(response.refreshExpiration));
   t.true(n.isDone());
 
 });
 
-test('exchangeToken', async function(t) {
+test('exchangeRefreshToken', async function(t) {
 
   const client = new AuthClient({
     clientId: 'CLIENT_ID',
@@ -187,14 +227,13 @@ test('exchangeToken', async function(t) {
     });
   /* eslint-enable camelcase */
 
-  const response = await client.exchangeToken('TOKEN');
+  const response = await client.exchangeRefreshToken('TOKEN');
 
-  t.is(response.access_token, 'access');
-  t.is(response.token_type, 'Bearer');
-  t.is(response.expires_in, 1800);
-  t.is(response.refresh_token, 'refresh');
+  t.is(response.accessToken, 'access');
+  t.is(response.refreshToken, 'refresh');
 
-  t.regex(response.expiration, ISO_REGEX);
+  t.true(_.isDate(response.expiration));
+  t.true(_.isDate(response.refreshExpiration));
   t.true(n.isDone());
 
 });

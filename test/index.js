@@ -5,75 +5,92 @@ const nock = require('nock');
 
 const smartcar = require('../');
 
-test('expired - error', function(t) {
+test('isExpired - error', function(t) {
 
-  t.throws(() => smartcar.expired(1000), TypeError);
-  t.throws(() => smartcar.expired({}), TypeError);
-
-});
-
-test('expired - object', function(t) {
-
-  const access = {};
-
-  access.expiration = new Date(Date.now() - (60 * 1000)).toISOString();
-  t.true(smartcar.expired(access));
-
-  access.expiration = new Date(Date.now() + (60 * 1000)).toISOString();
-  t.false(smartcar.expired(access));
+  t.throws(() => smartcar.isExpired(1000), TypeError);
+  t.throws(() => smartcar.isExpired({}), TypeError);
+  t.throws(() => smartcar.isExpired('not a date'), TypeError);
 
 });
 
-test('expired - string', function(t) {
+test('isExpired - date', function(t) {
+
+  let expiration;
+
+  expiration = new Date(Date.now() - (60 * 1000));
+  t.true(smartcar.isExpired(expiration));
+
+  expiration = new Date(Date.now() + (60 * 1000));
+  t.false(smartcar.isExpired(expiration));
+
+});
+
+test('isExpired - string', function(t) {
 
   let expiration;
 
   expiration = new Date(Date.now() - (60 * 1000)).toISOString();
-  t.true(smartcar.expired(expiration));
+  t.true(smartcar.isExpired(expiration));
 
   expiration = new Date(Date.now()).toISOString();
-  t.true(smartcar.expired(expiration));
+  t.true(smartcar.isExpired(expiration));
 
   expiration = new Date(Date.now() + (60 * 1000)).toISOString();
-  t.false(smartcar.expired(expiration));
+  t.false(smartcar.isExpired(expiration));
 
 });
 
-test('getVehicles - missing token', async function(t) {
+test('getVehicleIds - missing token', async function(t) {
 
-  const err = await t.throws(smartcar.getVehicles(), TypeError);
+  const err = await t.throws(smartcar.getVehicleIds(), TypeError);
   t.is(err.message, '"token" argument must be a string');
 
 });
 
-test('getVehicles - simple', async function(t) {
+test('getVehicleIds - simple', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
     .get('/vehicles')
     .matchHeader('Authorization', 'Bearer simple')
     .reply(200, {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
+      paging: {count: 3, offset: 0},
     });
 
-  const res = await smartcar.getVehicles('simple');
+  const res = await smartcar.getVehicleIds('simple');
   t.is(res.vehicles.length, 3);
   t.true(n.isDone());
 
 });
 
-test('getVehicles - paging', async function(t) {
+test('getVehicleIds - paging', async function(t) {
 
   const n = nock('https://api.smartcar.com/v1.0/')
-    .get('/vehicles', {
-      limit: '1',
-    })
-    .matchHeader('Authorization', 'Bearer paging')
+    .get('/vehicles')
+    .query({limit: '1'})
+    .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
       vehicles: ['vehicle1'],
+      paging: {count: 1, offset: 0},
     });
 
-  const res = await smartcar.getVehicles('paging', {limit: 1});
+  const res = await smartcar.getVehicleIds('token', {limit: 1});
   t.is(res.vehicles.length, 1);
+  t.true(n.isDone());
+
+});
+
+test('getUserId', async function(t) {
+
+  const n = nock('https://api.smartcar.com/v1.0/')
+    .get('/user')
+    .matchHeader('Authorization', 'Bearer token')
+    .reply(200, {
+      id: 'userid',
+    });
+
+  const id = await smartcar.getUserId('token');
+  t.is(id, 'userid');
   t.true(n.isDone());
 
 });
