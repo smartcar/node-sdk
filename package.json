@@ -4,6 +4,7 @@
   "description": "nodejs sdk for the smartcar platform",
   "main": "index.js",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
+  "license" : "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smartcar/node-sdk.git"
