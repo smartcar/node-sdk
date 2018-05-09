@@ -1,4 +1,4 @@
-# Smartcar.js [![Build Status][ci-image]][ci-url]
+# Smartcar Node SDK [![Build Status][ci-image]][ci-url] [![npm version][npm-image]][npm-url]
 
 The official Smartcar Node SDK.
 
@@ -139,3 +139,5 @@ npm run test
 
 [ci-url]: https://travis-ci.com/smartcar/node-sdk
 [ci-image]: https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
+[npm-url]: https://badge.fury.io/js/smartcar
+[npm-image]: https://badge.fury.io/js/smartcar.svg
