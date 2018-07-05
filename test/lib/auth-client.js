@@ -5,18 +5,22 @@ const test = require('ava');
 const nock = require('nock');
 
 const AuthClient = require('../../lib/auth-client');
+const errors = require('../../lib/errors');
+
+const CLIENT_ID = '4cf82729-4275-46d9-9255-8437ba777151';
+const CLIENT_SECRET = '4cf82729-4275-46d9-9255-8437ba777151';
 
 test('constructor', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
-  t.is(client.clientId, 'CLIENT_ID');
-  t.is(client.clientSecret, 'CLIENT_SECRET');
+  t.is(client.clientId, CLIENT_ID);
+  t.is(client.clientSecret, CLIENT_SECRET);
   t.is(client.redirectUri, 'https://insurance.co/callback');
   t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
   t.is(client.development, false);
@@ -24,36 +28,28 @@ test('constructor', function(t) {
 
 });
 
-test('constructor - development', function(t) {
+test('constructor - validation error', function(t) {
 
-  const client = new AuthClient({
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
+  t.throws(() => new AuthClient({
+    clientId: 'f3266b17-961d-4295-8544-054c7bd94fbb',
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
-    development: true,
-  });
-
-  t.is(client.clientId, 'CLIENT_ID');
-  t.is(client.clientSecret, 'CLIENT_SECRET');
-  t.is(client.redirectUri, 'https://insurance.co/callback');
-  t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
-  t.is(client.development, true);
-  t.true('request' in client);
+  }), errors.ValidationError);
 
 });
 
 test('getAuthUrl - simple', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
   });
 
   const actual = client.getAuthUrl();
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
-  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=auto';
   expected += '&scope=read_odometer%20read_vehicle_info';
@@ -65,7 +61,8 @@ test('getAuthUrl - simple', function(t) {
 test('getAuthUrl - no scope', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
   });
 
@@ -76,7 +73,7 @@ test('getAuthUrl - no scope', function(t) {
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
-  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
   expected += '&state=fakestate';
@@ -88,7 +85,8 @@ test('getAuthUrl - no scope', function(t) {
 test('getAuthUrl - state & approval prompt', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
   });
@@ -100,7 +98,7 @@ test('getAuthUrl - state & approval prompt', function(t) {
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
-  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
@@ -113,7 +111,8 @@ test('getAuthUrl - state & approval prompt', function(t) {
 test('getAuthUrl - development mode', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
     development: true,
@@ -126,7 +125,7 @@ test('getAuthUrl - development mode', function(t) {
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
-  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
@@ -140,7 +139,8 @@ test('getAuthUrl - development mode', function(t) {
 test('getAuthUrl - development mode false', function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
     development: false,
@@ -153,7 +153,7 @@ test('getAuthUrl - development mode false', function(t) {
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
-  expected += 'response_type=code&client_id=CLIENT_ID';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
@@ -166,8 +166,8 @@ test('getAuthUrl - development mode false', function(t) {
 test('exchangeCode', async function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
   });
 
@@ -179,8 +179,8 @@ test('exchangeCode', async function(t) {
       redirect_uri: 'https://insurance.co/callback',
     })
     .basicAuth({
-      user: 'CLIENT_ID',
-      pass: 'CLIENT_SECRET',
+      user: CLIENT_ID,
+      pass: CLIENT_SECRET,
     })
     .reply(200, {
       access_token: 'access',
@@ -204,8 +204,8 @@ test('exchangeCode', async function(t) {
 test('exchangeRefreshToken', async function(t) {
 
   const client = new AuthClient({
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
   });
 
@@ -216,8 +216,8 @@ test('exchangeRefreshToken', async function(t) {
       grant_type: 'refresh_token',
     })
     .basicAuth({
-      user: 'CLIENT_ID',
-      pass: 'CLIENT_SECRET',
+      user: CLIENT_ID,
+      pass: CLIENT_SECRET,
     })
     .reply(200, {
       access_token: 'access',
