@@ -68,3 +68,15 @@ test('invalid development parameter', function(t) {
   t.throws(() =>
     validators.validateRequestData(requestData), errors.ValidationError);
 });
+
+test('iOS and Android redirect uri', function(t) {
+  const requestData = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'sc4a1b01e5-0497-417c-a30e-6df6ba33ba46://callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  };
+
+  t.notThrows(() =>
+    validators.validateRequestData(requestData), errors.ValidationError);
+});
