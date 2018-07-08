@@ -4,7 +4,7 @@ const _ = require('lodash');
 const test = require('ava');
 const nock = require('nock');
 const Promise = require('bluebird');
-const StatusCodeError = require('request-promise/errors').StatusCodeError;
+const {StatusCodeError} = require('request-promise/errors');
 
 const util = require('../../lib/util');
 const config = require('../../lib/config');
@@ -63,13 +63,14 @@ test('getUrl - id & endpoint', function(t) {
   t.is(url, API_URL + '/vehicles/VID/odometer');
 });
 
-
 test('request - default opts', async function(t) {
-
   const n = nock('https://mock.com')
     .get('/test')
     .matchHeader('accept', 'application/json')
-    .matchHeader('user-agent', /smartcar-node-sdk:.*/)
+    .matchHeader(
+      'user-agent',
+      /^Smartcar\/(\d+\.\d+\.\d+-[\w-]*) \((\w+); (\w+)\) Node.js v(\d+\.\d+\.\d+)$/
+    )
     .reply(200, {test: 'data'});
 
   const response = await util.request('https://mock.com/test');

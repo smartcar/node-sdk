@@ -5,11 +5,10 @@ const nock = require('nock');
 const test = require('ava');
 
 const Vehicle = require('../../lib/vehicle');
-const {version} = require('../../package.json');
+const {USER_AGENT} = require('../../lib/util');
 
 const VID = 'ada7207c-3c0a-4027-a47f-6215ce6f7b93';
 const TOKEN = '9ad942c6-32b8-4af2-ada6-5e8ecdbad9c2';
-const USER_AGENT = `smartcar-node-sdk:${version}`;
 
 const vehicle = new Vehicle(VID, TOKEN);
 
