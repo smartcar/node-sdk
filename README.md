@@ -124,7 +124,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 ## SDK Reference
 
 For detailed documentation on parameters and available methods, please refer to
-the [SDK Reference](doc/index.md).
+the [SDK Reference](doc/readme.md).
 
 ## Contributing
 To contribute, please:
