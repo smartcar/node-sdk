@@ -28,13 +28,13 @@ test('constructor', function(t) {
 
 });
 
-test('constructor - validation error', function(t) {
+test('constructor - missing required parameter', function(t) {
 
   t.throws(() => new AuthClient({
     clientId: 'f3266b17-961d-4295-8544-054c7bd94fbb',
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
-  }), Error);
+  }));
 
 });
 
@@ -45,7 +45,7 @@ test('constructor - invalid uuid parameter', function(t) {
     clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
-  }), Error);
+  }));
 
 });
 
@@ -56,7 +56,7 @@ test('constructor - invalid scope parameter', function(t) {
     clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
     scope: 'read_odometer',
-  }), Error);
+  }));
 
 });
 
@@ -68,7 +68,7 @@ test('constructor - invalid development parameter', function(t) {
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
     development: 'truthsies',
-  }), Error);
+  }));
 
 });
 
