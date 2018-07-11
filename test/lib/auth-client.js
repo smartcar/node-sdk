@@ -5,9 +5,9 @@ const test = require('ava');
 const nock = require('nock');
 
 const AuthClient = require('../../lib/auth-client');
-const errors = require('../../lib/errors');
 
 const CLIENT_ID = '4cf82729-4275-46d9-9255-8437ba777151';
+const INVALID_CLIENT_ID = '4cf82729-4275-46d9-9255-87ba151';
 const CLIENT_SECRET = '4cf82729-4275-46d9-9255-8437ba777151';
 
 test('constructor', function(t) {
@@ -34,7 +34,52 @@ test('constructor - validation error', function(t) {
     clientId: 'f3266b17-961d-4295-8544-054c7bd94fbb',
     redirectUri: 'https://insurance.co/callback',
     scope: ['read_odometer', 'read_vehicle_info'],
-  }), errors.ValidationError);
+  }), Error);
+
+});
+
+test('constructor - invalid uuid parameter', function(t) {
+
+  t.throws(() => new AuthClient({
+    clientId: INVALID_CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  }), Error);
+
+});
+
+test('constructor - invalid scope parameter', function(t) {
+
+  t.throws(() => new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: 'read_odometer',
+  }), Error);
+
+});
+
+test('constructor - invalid development parameter', function(t) {
+
+  t.throws(() => new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    development: 'truthsies',
+  }), Error);
+
+});
+
+test('iOS and Android redirect uri', function(t) {
+
+  t.notThrows(() => new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'sc4a1b01e5-0497-417c-a30e-6df6ba33ba46://callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  }));
 
 });
 
