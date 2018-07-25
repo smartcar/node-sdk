@@ -170,6 +170,23 @@ test('location', async function(t) {
 
 });
 
+test('location - no age', async function(t) {
+
+  const body = {
+    latitude: 1234,
+    longitude: 1234,
+  };
+  const headers = {};
+  t.context.n = nocks.base()
+    .get('/location')
+    .reply(200, body, headers);
+
+  const response = await vehicle.location();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
+
+});
+
 test('odometer', async function(t) {
 
   const body = {
@@ -188,6 +205,25 @@ test('odometer', async function(t) {
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('odometer - no age', async function(t) {
+
+  const body = {
+    distance: 1234,
+  };
+  const headers = {
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/odometer')
+    .reply(200, body, headers);
+
+  const response = await vehicle.odometer();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
   t.is(response.unitSystem, headers['sc-unit-system']);
 
 });
