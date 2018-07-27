@@ -1,0 +1,13 @@
+{
+  "nightwatch": {
+    "selenium_host": "localhost",
+    "desiredCapabilities": {
+      "browserName": "chrome",
+      "javascriptEnabled": true,
+      "acceptSslCerts": true,
+      "chromeOptions": {
+        "args": ["--no-sandbox"]
+      }
+    }
+  }
+}
