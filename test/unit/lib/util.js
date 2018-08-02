@@ -6,9 +6,9 @@ const nock = require('nock');
 const Promise = require('bluebird');
 const {StatusCodeError} = require('request-promise/errors');
 
-const util = require('../../lib/util');
-const config = require('../../lib/config');
-const errors = require('../../lib/errors');
+const util = require('../../../lib/util');
+const config = require('../../../lib/config');
+const errors = require('../../../lib/errors');
 
 const API_URL = config.api + '/v' + config.version;
 

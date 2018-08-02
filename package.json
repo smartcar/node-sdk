@@ -25,7 +25,8 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "test": "ava",
+    "test": "npm run test:unit",
+    "test:unit": "ava test/unit",
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",

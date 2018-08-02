@@ -2,7 +2,7 @@
 
 const test = require('ava');
 
-const errors = require('../../lib/errors');
+const errors = require('../../../lib/errors');
 
 test('inheritance check', function(t) {
 

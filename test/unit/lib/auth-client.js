@@ -4,7 +4,7 @@ const _ = require('lodash');
 const test = require('ava');
 const nock = require('nock');
 
-const AuthClient = require('../../lib/auth-client');
+const AuthClient = require('../../../lib/auth-client');
 
 const CLIENT_ID = '4cf82729-4275-46d9-9255-8437ba777151';
 const INVALID_CLIENT_ID = '4cf82729-4275-46d9-9255-87ba151';
