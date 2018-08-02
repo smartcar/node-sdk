@@ -3,7 +3,7 @@
 const test = require('ava');
 const nock = require('nock');
 
-const smartcar = require('../');
+const smartcar = require('../../');
 
 test('isExpired - error', function(t) {
 
