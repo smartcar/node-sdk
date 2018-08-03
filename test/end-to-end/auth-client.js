@@ -8,12 +8,12 @@ const test = require('ava');
 const smartcar = require('../../');
 
 const {getAuthClientParams, startBrowser} = require('./helpers');
-const config = require('./config');
+const config = require('../config');
 
 const context = {};
 
 test.before(() => {
-  context.client = nightwatch.initClient(config.nightwatch);
+  context.client = nightwatch.initClient(config.get('nightwatch'));
   context.browser = context.client.api();
 });
 

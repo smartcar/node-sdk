@@ -40,6 +40,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "chance": "^1.0.16",
+    "convict": "^4.3.2",
     "joi": "^13.4.0",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
