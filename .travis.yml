@@ -28,6 +28,9 @@ script:
   - npm test
   - npm run cover
 
+services:
+  - docker
+
 jobs:
   include:
     - stage: publish

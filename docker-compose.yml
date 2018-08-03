@@ -1,0 +1,11 @@
+selenium-hub:
+  image: selenium/hub
+  ports:
+  - 4444
+
+chrome:
+  image: selenium/node-chrome
+  links:
+  - selenium-hub:hub
+  volumes:
+  - /dev/shm:/dev/shm
