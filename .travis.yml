@@ -28,9 +28,9 @@ services:
   - docker
 
 script:
+  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
   - npm test
   - npm run cover
-  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
 
 jobs:
   include:
