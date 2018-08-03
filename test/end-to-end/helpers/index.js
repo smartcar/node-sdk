@@ -28,7 +28,7 @@ helpers.startBrowser = function(client, browser, authUrl, done) {
     .setValue('input[id=password]', 'password')
     .click('button[id=approval-button]')
     // grant dialog is rendered and submitted
-    .waitForElementVisible('div[class=permissions]', 3000)
+    .waitForElementVisible('div[class=permissions]', 4000)
     .click('button[id=approval-button]')
     .end();
 
