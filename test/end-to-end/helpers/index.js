@@ -17,6 +17,7 @@ helpers.getAuthClientParams = function() {
 
 helpers.startBrowser = function(client, browser, authUrl, done) {
   const email = chance.email({domain: 'smartcar.com'});
+  /* istanbul ignore next */
   browser
     .url(authUrl)
     .waitForElementVisible('div[class=content]', 1000)
@@ -28,7 +29,7 @@ helpers.startBrowser = function(client, browser, authUrl, done) {
     .setValue('input[id=password]', 'password')
     .click('button[id=approval-button]')
     // grant dialog is rendered and submitted
-    .waitForElementVisible('div[class=permissions]', 10000)
+    .waitForElementVisible('div[class=permissions]', 2000)
     .click('button[id=approval-button]')
     .end();
 
