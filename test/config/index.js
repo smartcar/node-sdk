@@ -30,7 +30,7 @@ const config = convict({
         format: Boolean,
         default: true,
       },
-      chromeOptions: {
+      firefoxOptions: {
         args: {
           doc: 'Args sent to nightwatch.',
           format: Array,

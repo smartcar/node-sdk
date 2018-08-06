@@ -2,10 +2,10 @@
   "nightwatch": {
     "selenium_host": "localhost",
     "desiredCapabilities": {
-      "browserName": "chrome",
+      "browserName": "firefox",
       "javascriptEnabled": true,
       "acceptSslCerts": true,
-      "chromeOptions": {
+      "firefoxOptions": {
         "args": ["--no-sandbox"]
       }
     }
