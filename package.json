@@ -31,7 +31,7 @@
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc npm test -s",
+    "cover": "nyc npm run test:unit -s",
     "cover:integration": "nyc npm test:integration -s",
     "release": "semantic-release",
     "jsdoc": "jsdoc -c .jsdoc.json .",
