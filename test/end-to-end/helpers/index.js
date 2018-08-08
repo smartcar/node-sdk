@@ -15,9 +15,27 @@ helpers.getAuthClientParams = function() {
   };
 };
 
-helpers.startBrowser = function(client, browser, authUrl, done) {
+const getCodeFromUrl = function(uri) {
+  // this helper functions assumes the structure of the uri
+  // is valid and contains the code required
+  const firstIndexOfParams = uri.indexOf('?') + 1;
+  const params = uri.substring(firstIndexOfParams);
+
+  for (const param of params.split('&')) {
+    const [code, value] = param.split('=');
+    if (code === 'code') {
+      return value;
+    }
+  }
+};
+
+helpers.runTest = function(client, browser, authUrl, test, done) {
   const email = chance.email({domain: 'smartcar.com'});
-  /* istanbul ignore next */
+  /*
+  * (todo Karthik) remove the pauses
+  * we will use pause here to allow for the callback to execute
+  * until we can neatly run an async nightwatch callback
+  **/
   browser
     .url(authUrl)
     .waitForElementVisible('div[class=content]', 1000)
@@ -28,10 +46,26 @@ helpers.startBrowser = function(client, browser, authUrl, done) {
     .setValue('input[id=username]', email)
     .setValue('input[id=password]', 'password')
     .click('button[id=approval-button]')
-    // grant dialog is rendered and submitted
-    .waitForElementVisible('div[class=permissions]', 20000)
-    .click('button[id=approval-button]')
-    .end();
+    .url((currentUrl) => {
+      if (currentUrl.value.startsWith('http://localhost:4040/callback')) {
+        // if we have skipped the permissions, we can extract the code
+        test(getCodeFromUrl(currentUrl.value));
+        browser
+          .pause(5000)
+          .end();
+      } else {
+        // we still have to wait for and accept the permissions before
+        // we can extract the code from the callback url
+        browser
+          .waitForElementVisible('div[class=permissions]', 5000)
+          .click('button[id=approval-button]')
+          .url((currentUrl) => {
+            test(getCodeFromUrl(currentUrl.value));
+          })
+          .pause(5000)
+          .end();
+      }
+    });
 
   client.start(done);
 };

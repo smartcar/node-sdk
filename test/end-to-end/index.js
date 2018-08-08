@@ -1,12 +1,11 @@
 'use strict';
 
-const express = require('express');
 const nightwatch = require('nightwatch');
 const test = require('ava');
 
 const smartcar = require('../../');
 
-const {getAuthClientParams, startBrowser} = require('./helpers');
+const {getAuthClientParams, runTest} = require('./helpers');
 const config = require('../config');
 
 const context = {};
@@ -17,23 +16,16 @@ test.before.cb((t) => {
 
   const client = new smartcar.AuthClient(getAuthClientParams());
 
-  const app = express();
-  const server = app.listen(4040);
-
-  app.get('/callback', async (req, res) => {
-    try {
-      const access = await client.exchangeCode(req.query.code);
+  const setup = (context) => {
+    return async (code) => {
+      const access = await client.exchangeCode(code);
       context.accessToken = access.accessToken;
-    } finally {
-      server.close();
-    }
-
-    res.status(200).send();
-  });
+    };
+  };
 
   const authUrl = client.getAuthUrl();
 
-  startBrowser(context.client, context.browser, authUrl, t.end);
+  runTest(context.client, context.browser, authUrl, setup(context), t.end);
 });
 
 test('getVehicleIds', async (t) => {
