@@ -12,7 +12,7 @@ helpers.getAuthClientParams = function() {
   return {
     clientId: 'e922556a-7d4f-4168-88cd-059276044798',
     clientSecret: '79c07401-d3b2-48c0-8407-dc19c4ece7ff',
-    redirectUri,
+    redirectUri: 'http://localhost:4040/callback',
     development: true,
   };
 };
@@ -44,7 +44,7 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
     .setValue('input[id=password]', 'password')
     .click('button[id=approval-button]')
     .url((currentUrl) => {
-      if (currentUrl.value.startsWith(redirectUri)) {
+      if (currentUrl.value.startsWith('localhost:4040/callback')) {
         // if we have skipped the permissions, we can extract the code
         test(getCodeFromUri(currentUrl.value));
         browser
