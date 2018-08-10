@@ -43,7 +43,7 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
     .setValue('input[id=password]', 'password')
     .click('button[id=approval-button]')
     .url((currentUrl) => {
-      if (currentUrl.value.startsWith('localhost:4040/callback')) {
+      if (currentUrl.value.includes('localhost:4040/callback')) {
         // if we have skipped the permissions, we can extract the code
         test(getCodeFromUri(currentUrl.value));
         browser
