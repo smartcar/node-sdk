@@ -4,7 +4,6 @@ const Chance = require('chance');
 const querystring = require('querystring');
 
 const chance = new Chance();
-const redirectUri = 'http://localhost:4040/callback';
 
 const helpers = {};
 
