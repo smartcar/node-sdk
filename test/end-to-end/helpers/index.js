@@ -18,7 +18,7 @@ helpers.getAuthClientParams = function() {
 
 const getCodeFromUri = function(uri) {
   // this helper functions assumes the structure of the uri
-  // is valid and contains the code required
+  // is valid and contains the required code
   const firstIndexOfParams = uri.indexOf('?') + 1;
   const params = uri.substring(firstIndexOfParams);
 
@@ -45,9 +45,11 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
     .url((currentUrl) => {
       if (currentUrl.value.includes('localhost:4040/callback')) {
         // if we have skipped the permissions, we can extract the code
-        test(getCodeFromUri(currentUrl.value));
         browser
-          .pause(5000)
+          .url((currentUrl) => {
+            test(getCodeFromUri(currentUrl.value));
+          })
+          .pause(7500)
           .end();
       } else {
         // we still have to wait for and accept the permissions before
@@ -58,7 +60,7 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
           .url((currentUrl) => {
             test(getCodeFromUri(currentUrl.value));
           })
-          .pause(5000)
+          .pause(7500)
           .end();
       }
     });
