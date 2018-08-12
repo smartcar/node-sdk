@@ -49,7 +49,7 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
           .url((currentUrl) => {
             test(getCodeFromUri(currentUrl.value));
           })
-          .pause(7500)
+          .pause(8500)
           .end();
       } else {
         // we still have to wait for and accept the permissions before
@@ -60,7 +60,7 @@ helpers.runTest = function(client, browser, authUrl, test, done) {
           .url((currentUrl) => {
             test(getCodeFromUri(currentUrl.value));
           })
-          .pause(7500)
+          .pause(8500)
           .end();
       }
     });
