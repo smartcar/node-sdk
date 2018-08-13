@@ -1,17 +1,18 @@
 'use strict';
 
-const Chance = require('chance');
+const Promise = require('bluebird');
 const querystring = require('querystring');
-
-const chance = new Chance();
+const uuid = require('uuid');
 
 const helpers = {};
 
 helpers.getAuthClientParams = function() {
   return {
-    clientId: 'e922556a-7d4f-4168-88cd-059276044798',
-    clientSecret: '79c07401-d3b2-48c0-8407-dc19c4ece7ff',
-    redirectUri: 'http://localhost:4040/callback',
+    // eslint-disable-next-line no-process-env
+    clientId: process.env.INTEGRATION_CLIENT_ID,
+    // eslint-disable-next-line no-process-env
+    clientSecret: process.env.INTEGRATION_CLIENT_SECRET,
+    redirectUri: 'https://example.com/auth',
     development: true,
   };
 };
@@ -25,47 +26,34 @@ const getCodeFromUri = function(uri) {
   return querystring.parse(params).code;
 };
 
-helpers.runTest = function(client, browser, authUrl, test, done) {
-  const email = chance.email({domain: 'smartcar.com'});
-  /*
-  * (todo Karthik) remove the pauses
-  * we will use pause here to give time for the callback to execute
-  * until we can neatly run an async nightwatch callback
-  **/
-  browser
-    .url(authUrl)
-    .waitForElementVisible('div[class=content]', 1000)
-    .click('a[href^="https://mock.smartcar.com"]')
-    // login dialog is rendered
-    .waitForElementVisible('input[id=username]', 1500)
-    // add username/password and submit
-    .setValue('input[id=username]', email)
-    .setValue('input[id=password]', 'password')
-    .click('button[id=approval-button]')
-    .url((currentUrl) => {
-      if (currentUrl.value.includes('localhost:4040/callback')) {
-        // if we have skipped the permissions, we can extract the code
-        browser
-          .url((currentUrl) => {
-            test(getCodeFromUri(currentUrl.value));
-          })
-          .pause(8500)
-          .end();
-      } else {
-        // we still have to wait for and accept the permissions before
-        // we can extract the code from the callback url
-        browser
-          .waitForElementVisible('div[class=permissions]', 5000)
-          .click('button[id=approval-button]')
-          .url((currentUrl) => {
-            test(getCodeFromUri(currentUrl.value));
-          })
-          .pause(8500)
-          .end();
-      }
-    });
+helpers.runAuthFlow = function(client, browser, authUrl) {
+  const email = `${uuid()}@email.com`;
 
-  client.start(done);
+  let code = '';
+  return new Promise((resolve) => {
+    browser
+      .url(authUrl)
+      .waitForElementVisible('div[class=content]', 3000)
+      .click('a[href^="https://mock.smartcar.com"]')
+      // login dialog is rendered
+      .waitForElementVisible('input[id=username]', 3500)
+      // add username/password and submit
+      .setValue('input[id=username]', email)
+      .setValue('input[id=password]', 'password')
+      .click('button[id=approval-button]')
+      // wait for permissions and approve
+      .waitForElementVisible('div[class=permissions]', 5000)
+      .click('button[id=approval-button]')
+      .url((currentUrl) => {
+        // extract code from callback url
+        code = getCodeFromUri(currentUrl.value);
+      })
+      .end();
+
+    client.start(() => {
+      resolve(code);
+    });
+  });
 };
 
 module.exports = helpers;

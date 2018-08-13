@@ -6,7 +6,7 @@ const test = require('ava');
 
 const smartcar = require('../../');
 
-const {getAuthClientParams, runTest} = require('./helpers');
+const {getAuthClientParams, runAuthFlow} = require('./helpers');
 const config = require('../config');
 
 const context = {};
@@ -16,13 +16,13 @@ test.before(() => {
   context.browser = context.client.api();
 });
 
-test.cb('exchangeCode', (t) => {
+test('exchangeCode', (t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const authUrl = client.getAuthUrl();
 
-  const testFn = (t, client) => {
-    return async (code) => {
+  return runAuthFlow(context.client, context.browser, authUrl)
+    .then(async (code) => {
       try {
         const access = await client.exchangeCode(code);
         const keys = Object.keys(access).sort();
@@ -40,19 +40,16 @@ test.cb('exchangeCode', (t) => {
       } catch (err) {
         t.fail();
       }
-    };
-  };
-
-  runTest(context.client, context.browser, authUrl, testFn(t, client), t.end);
+    });
 });
 
-test.cb('exchangeRefreshToken', (t) => {
+test('exchangeRefreshToken', (t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const authUrl = client.getAuthUrl();
 
-  const testFn = (t, client) => {
-    return async (code) => {
+  return runAuthFlow(context.client, context.browser, authUrl)
+    .then(async (code) => {
       try {
         const oldAccess = await client.exchangeCode(code);
 
@@ -75,8 +72,5 @@ test.cb('exchangeRefreshToken', (t) => {
       } catch (err) {
         t.fail();
       }
-    };
-  };
-
-  runTest(context.client, context.browser, authUrl, testFn(t, client), t.end);
+    });
 });
