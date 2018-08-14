@@ -16,61 +16,39 @@ test.before(() => {
   context.browser = context.client.api();
 });
 
-test('exchangeCode', (t) => {
+test('exchangeCode', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const authUrl = client.getAuthUrl();
 
-  return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async(code) => {
-      try {
-        const access = await client.exchangeCode(code);
-        const keys = Object.keys(access).sort();
-        const hasKeys = _.isEmpty(
-          _.xor(keys, [
-            'accessToken',
-            'expiration',
-            'refreshExpiration',
-            'refreshToken',
-          ])
-        );
-        t.true(hasKeys);
+  const code = await runAuthFlow(context.client, context.browser, authUrl);
 
-        t.pass();
-      } catch (err) {
-        t.fail();
-      }
-    });
+  const access = await client.exchangeCode(code);
+
+  t.deepEqual(_.xor(_.keys(access), [
+    'accessToken',
+    'expiration',
+    'refreshExpiration',
+    'refreshToken',
+  ]), []);
 });
 
-test('exchangeRefreshToken', (t) => {
+test('exchangeRefreshToken', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const authUrl = client.getAuthUrl();
 
-  return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async(code) => {
-      try {
-        const oldAccess = await client.exchangeCode(code);
+  const code = await runAuthFlow(context.client, context.browser, authUrl);
 
-        const newAccess = await client.exchangeRefreshToken(
-          oldAccess.refreshToken
-        );
+  const oldAccess = await client.exchangeCode(code);
+  const newAccess = await client.exchangeRefreshToken(
+    oldAccess.refreshToken
+  );
 
-        const keys = Object.keys(newAccess).sort();
-        const hasKeys = _.isEmpty(
-          _.xor(keys, [
-            'accessToken',
-            'expiration',
-            'refreshExpiration',
-            'refreshToken',
-          ])
-        );
-        t.true(hasKeys);
-
-        t.pass();
-      } catch (err) {
-        t.fail();
-      }
-    });
+  t.deepEqual(_.xor(_.keys(newAccess), [
+    'accessToken',
+    'expiration',
+    'refreshExpiration',
+    'refreshToken',
+  ]), []);
 });

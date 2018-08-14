@@ -1,8 +1,5 @@
 'use strict';
 
-/* eslint strict: ['error', 'global'] */
-/* global require, __dirname, module */
-
 const convict = require('convict');
 const path = require('path');
 

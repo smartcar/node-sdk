@@ -10,7 +10,7 @@ const config = require('../config');
 
 const context = {};
 
-test.before(() => {
+test.before(async() => {
   context.client = nightwatch.initClient(config.get('nightwatch'));
   context.browser = context.client.api();
 
@@ -18,14 +18,12 @@ test.before(() => {
 
   const authUrl = client.getAuthUrl();
 
-  return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async(code) => {
-      const access = await client.exchangeCode(code);
+  const code = await runAuthFlow(context.client, context.browser, authUrl);
 
-      const accessToken = access.accessToken;
-      const vehicleIds = await smartcar.getVehicleIds(accessToken);
-      context.vehicle = new smartcar.Vehicle(vehicleIds.vehicles[0], accessToken);
-    });
+  const access = await client.exchangeCode(code);
+  const accessToken = access.accessToken;
+  const vehicleIds = await smartcar.getVehicleIds(accessToken);
+  context.vehicle = new smartcar.Vehicle(vehicleIds.vehicles[0], accessToken);
 });
 
 test('vehicle info', async(t) => {

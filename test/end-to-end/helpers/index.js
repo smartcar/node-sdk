@@ -1,7 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
-const querystring = require('querystring');
+const {URL} = require('url');
 const uuid = require('uuid');
 
 const helpers = {};
@@ -18,12 +18,8 @@ helpers.getAuthClientParams = function() {
 };
 
 const getCodeFromUri = function(uri) {
-  // this helper functions assumes the structure of the uri
-  // is valid and contains the required code
-  const firstIndexOfParams = uri.indexOf('?') + 1;
-  const params = uri.substring(firstIndexOfParams);
-
-  return querystring.parse(params).code;
+  const uriObj = new URL(uri);
+  return uriObj.searchParams.get('code');
 };
 
 helpers.runAuthFlow = function(client, browser, authUrl) {
@@ -50,9 +46,7 @@ helpers.runAuthFlow = function(client, browser, authUrl) {
       })
       .end();
 
-    client.start(() => {
-      resolve(code);
-    });
+    client.start(() => resolve(code));
   });
 };
 
