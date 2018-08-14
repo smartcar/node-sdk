@@ -19,17 +19,17 @@ test.before(() => {
   const authUrl = client.getAuthUrl();
 
   return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async (code) => {
+    .then(async(code) => {
       const access = await client.exchangeCode(code);
 
       context.accessToken = access.accessToken;
     });
 });
 
-test('getVehicleIds', async (t) => {
-  t.notThrows(async () => await smartcar.getVehicleIds(context.accessToken));
+test('getVehicleIds', async(t) => {
+  t.notThrows(async() => await smartcar.getVehicleIds(context.accessToken));
 });
 
-test('getUserId', async (t) => {
-  t.notThrows(async () => await smartcar.getUserId(context.accessToken));
+test('getUserId', async(t) => {
+  t.notThrows(async() => await smartcar.getUserId(context.accessToken));
 });

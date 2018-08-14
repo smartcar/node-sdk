@@ -22,7 +22,7 @@ test('exchangeCode', (t) => {
   const authUrl = client.getAuthUrl();
 
   return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async (code) => {
+    .then(async(code) => {
       try {
         const access = await client.exchangeCode(code);
         const keys = Object.keys(access).sort();
@@ -49,7 +49,7 @@ test('exchangeRefreshToken', (t) => {
   const authUrl = client.getAuthUrl();
 
   return runAuthFlow(context.client, context.browser, authUrl)
-    .then(async (code) => {
+    .then(async(code) => {
       try {
         const oldAccess = await client.exchangeCode(code);
 
