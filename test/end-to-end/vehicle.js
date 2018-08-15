@@ -27,33 +27,33 @@ test.before(async() => {
 });
 
 test('vehicle info', async(t) => {
-  t.notThrows(async() => await context.vehicle.info());
+  await t.notThrows(context.vehicle.info());
 });
 
 test('vehicle location', async(t) => {
-  t.notThrows(async() => await context.vehicle.location());
+  await t.notThrows(context.vehicle.location());
 });
 
 test('vehicle odometer', async(t) => {
-  t.notThrows(async() => await context.vehicle.odometer());
+  await t.notThrows(context.vehicle.odometer());
 });
 
 test('vehicle vin', async(t) => {
-  t.notThrows(async() => await context.vehicle.vin());
+  await t.notThrows(context.vehicle.vin());
 });
 
 test('vehicle lock', async(t) => {
-  t.notThrows(async() => await context.vehicle.lock());
+  await t.notThrows(context.vehicle.lock());
 });
 
 test('vehicle unlock', async(t) => {
-  t.notThrows(async() => await context.vehicle.unlock());
+  await t.notThrows(context.vehicle.unlock());
 });
 
 test('vehicle permissions', async(t) => {
-  t.notThrows(async() => await context.vehicle.permissions());
+  await t.notThrows(context.vehicle.permissions());
 });
 
 test('vehicle disconnect', async(t) => {
-  t.notThrows(async() => await context.vehicle.disconnect());
+  await t.notThrows(context.vehicle.disconnect());
 });
