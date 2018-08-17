@@ -25,12 +25,13 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "test": "npm run test:unit",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ava test/unit",
+    "test:e2e": "ava --serial test/end-to-end",
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc npm test -s",
+    "cover": "nyc npm run test:unit -s",
     "cover:integration": "nyc npm test:integration -s",
     "release": "semantic-release",
     "jsdoc": "jsdoc -c .jsdoc.json .",
@@ -45,12 +46,15 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
+    "convict": "^4.3.2",
     "cross-env": "^5.1.3",
     "eslint": "^4.18.1",
     "eslint-config-smartcar": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
+    "nightwatch": "^0.9.21",
     "nock": "^9.1.9",
     "nyc": "^11.4.1",
-    "semantic-release": "^12.4.1"
+    "semantic-release": "^12.4.1",
+    "uuid": "^3.3.2"
   }
 }
