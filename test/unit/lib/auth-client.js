@@ -23,7 +23,7 @@ test('constructor', function(t) {
   t.is(client.clientSecret, CLIENT_SECRET);
   t.is(client.redirectUri, 'https://insurance.co/callback');
   t.deepEqual(client.scope, ['read_odometer', 'read_vehicle_info']);
-  t.is(client.development, false);
+  t.is(client.testMode, false);
   t.true('request' in client);
 
 });
@@ -98,6 +98,7 @@ test('getAuthUrl - simple', function(t) {
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=auto';
   expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&mode=live';
 
   t.is(actual, expected);
 
@@ -122,6 +123,7 @@ test('getAuthUrl - no scope', function(t) {
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
   expected += '&state=fakestate';
+  expected += '&mode=live';
 
   t.is(actual, expected);
 
@@ -148,12 +150,69 @@ test('getAuthUrl - state & approval prompt', function(t) {
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
+  expected += '&mode=live';
 
   t.is(actual, expected);
 
 });
 
-test('getAuthUrl - development mode', function(t) {
+test('getAuthUrl - test mode true', function(t) {
+
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    testMode: true,
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&mode=test';
+
+  t.is(actual, expected);
+
+});
+
+test('getAuthUrl - test mode false', function(t) {
+
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+    testMode: false,
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+
+});
+
+test('getAuthUrl - deprecated development mode', function(t) {
 
   const client = new AuthClient({
     clientId: CLIENT_ID,
@@ -175,13 +234,13 @@ test('getAuthUrl - development mode', function(t) {
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
-  expected += '&mock=true';
+  expected += '&mode=test';
 
   t.is(actual, expected);
 
 });
 
-test('getAuthUrl - development mode false', function(t) {
+test('getAuthUrl - deprecated development mode false', function(t) {
 
   const client = new AuthClient({
     clientId: CLIENT_ID,
@@ -203,6 +262,7 @@ test('getAuthUrl - development mode false', function(t) {
   expected += '&approval_prompt=force';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
+  expected += '&mode=live';
 
   t.is(actual, expected);
 
