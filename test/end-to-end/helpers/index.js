@@ -13,7 +13,7 @@ helpers.getAuthClientParams = function() {
     // eslint-disable-next-line no-process-env
     clientSecret: process.env.INTEGRATION_CLIENT_SECRET,
     redirectUri: 'https://example.com/auth',
-    development: true,
+    testMode: true,
   };
 };
 
