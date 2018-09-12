@@ -23,6 +23,13 @@ Smartcar Node SDK documentation.
 <dd></dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#parseAge">parseAge(response)</a> ⇒ <code>Date</code> | <code>null</code></dt>
+<dd></dd>
+</dl>
+
 ## Typedefs
 
 <dl>
@@ -310,7 +317,8 @@ Create a Smartcar OAuth client for your application.
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
 | [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
-| [options.development] | <code>Boolean</code> | <code>false</code> | Launch Smartcar auth in development mode to enable the mock vehicle brand. |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch the Smartcar auth flow in test mode. [API Reference](https://smartcar.com/docs#request-authorization). |
+| [options.development] | <code>Boolean</code> | <code>false</code> | DEPRECATED: Launch Smartcar auth in development mode to enable mock vehicle brands. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
@@ -469,6 +477,16 @@ POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise</code>](#Promise) - A success or failure response.
+<a name="parseAge"></a>
+
+## parseAge(response) ⇒ <code>Date</code> \| <code>null</code>
+**Kind**: global function
+**Returns**: <code>Date</code> \| <code>null</code> - A parsed age or null if no age exists
+
+| Param | Type |
+| --- | --- |
+| response | <code>Object</code> |
+
 <a name="Access"></a>
 
 ## Access : <code>Object</code>

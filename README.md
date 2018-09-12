@@ -69,7 +69,7 @@ const client = new smartcar.AuthClient({
   clientSecret: 'SMARTCAR_CLIENT_SECRET',
   redirectUri: 'YOUR_CALLBACK_URI',
   scope: ['read_vehicle_info'],
-  development: true, // include "mock" Smartcar brand in make selector for testing
+  testMode: true, // launch the Smartcar auth flow in test mode
 });
 
 // Redirect to Smartcar's authentication flow
