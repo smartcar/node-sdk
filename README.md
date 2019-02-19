@@ -130,7 +130,7 @@ the [SDK Reference](doc/readme.md).
 To contribute, please:
 1. Open an issue for the feature (or bug) you would like to resolve.
 2. Resolve the issue and add tests in your feature branch.
-3. Open a PR from your feature branch into `master` that tags the issue.  
+3. Open a PR from your feature branch into `develop` that tags the issue.  
 
 To test:
 ```shell
