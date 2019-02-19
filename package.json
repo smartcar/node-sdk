@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
-    "joi": "^14.1.0",
+    "joi": "^14.0.3",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
