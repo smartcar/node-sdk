@@ -365,6 +365,6 @@ test('compatibility', async function(t) {
 
   const response = await client.compatibility(vin);
 
-  t.is(response.compatibility, true);
+  t.is(response, true);
   t.true(n.isDone());
 });
