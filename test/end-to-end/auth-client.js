@@ -59,8 +59,8 @@ test('compatibility', async(t) => {
   const teslaVin = '5YJXCDE22HF068739';
   const royceVin = 'SCA665C59HUX86700';
 
-  const teslaComp = client.compatibility(teslaVin);
-  const royceComp = client.compatibility(royceVin);
+  const teslaComp = await client.compatibility(teslaVin);
+  const royceComp = await client.compatibility(royceVin);
 
   t.truthy(teslaComp);
   t.falsy(royceComp);
