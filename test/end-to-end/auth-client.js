@@ -56,7 +56,12 @@ test('exchangeRefreshToken', async(t) => {
 test('compatibility', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
-  const comp = client.compatibility('5YJXCDE22HF068739');
+  const teslaVin = '5YJXCDE22HF068739';
+  const royceVin = 'SCA665C59HUX86700';
 
-  t.equal(comp, true);
+  const teslaComp = client.compatibility(teslaVin);
+  const royceComp = client.compatibility(royceVin);
+
+  t.truthy(teslaComp);
+  t.falsy(royceComp);
 });
