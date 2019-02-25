@@ -52,3 +52,11 @@ test('exchangeRefreshToken', async(t) => {
     'refreshToken',
   ]), []);
 });
+
+test('compatibility', async(t) => {
+  const client = new smartcar.AuthClient(getAuthClientParams());
+
+  const comp = client.compatibility('5YJXCDE22HF068739');
+
+  t.equal(comp, true);
+});

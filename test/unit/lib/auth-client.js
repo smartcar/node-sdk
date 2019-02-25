@@ -353,7 +353,7 @@ test('compatibility', async function(t) {
   const vin = 'fake_vin';
 
   const n = nock('https://api.smartcar.com')
-    .get('/1.0/compatibility')
+    .get('/v1.0/compatibility')
     .query({vin})
     .basicAuth({
       user: CLIENT_ID,
