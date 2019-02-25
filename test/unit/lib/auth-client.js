@@ -360,7 +360,7 @@ test('compatibility', async function(t) {
       pass: CLIENT_SECRET,
     })
     .reply(200, {
-      compatibility: true,
+      compatible: true,
     });
 
   const response = await client.compatibility(vin);
