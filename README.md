@@ -75,7 +75,7 @@ const client = new smartcar.AuthClient({
 // Redirect to Smartcar's authentication flow
 app.get('/login', function(req, res) {
 
-  const link = client.getAuthUrl({state: 'MY_STATE_PARAM'});
+  const link = client.getAuthUrl();
 
   // redirect to the link
   res.redirect(link);
