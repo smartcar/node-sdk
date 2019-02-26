@@ -303,7 +303,7 @@ Error thrown when gateway to Smartcar times out
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
     * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.compatibility(vin)](#AuthClient+compatibility) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.isCompatible(vin)](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_AuthClient_new"></a>
 
@@ -373,9 +373,9 @@ Exchange a refresh token for a new access object.
 | --- | --- | --- |
 | token | <code>String</code> | Refresh token to exchange for a new set of Access and Refresh tokens. |
 
-<a name="AuthClient+compatibility"></a>
+<a name="AuthClient+isCompatible"></a>
 
-### authClient.compatibility(vin) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+### authClient.isCompatible(vin) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Determine whether a vehicle is compatible with Smartcar
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
