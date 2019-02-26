@@ -343,7 +343,7 @@ test('exchangeRefreshToken', async function(t) {
 
 });
 
-test('compatibility', async function(t) {
+test('isCompatible', async function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -363,7 +363,7 @@ test('compatibility', async function(t) {
       compatible: true,
     });
 
-  const response = await client.compatibility(vin);
+  const response = await client.isCompatible(vin);
 
   t.is(response, true);
   t.true(n.isDone());

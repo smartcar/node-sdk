@@ -53,14 +53,14 @@ test('exchangeRefreshToken', async(t) => {
   ]), []);
 });
 
-test('compatibility', async(t) => {
+test('isCompatible', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
   const royceVin = 'SCA665C59HUX86700';
 
-  const teslaComp = await client.compatibility(teslaVin);
-  const royceComp = await client.compatibility(royceVin);
+  const teslaComp = await client.isCompatible(teslaVin);
+  const royceComp = await client.isCompatible(royceVin);
 
   t.truthy(teslaComp);
   t.falsy(royceComp);
