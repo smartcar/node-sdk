@@ -53,7 +53,7 @@ test('exchangeRefreshToken', async(t) => {
   ]), []);
 });
 
-test('isCompatible', async(t) => {
+test('isCompatible - without scopes', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
@@ -64,4 +64,19 @@ test('isCompatible', async(t) => {
 
   t.truthy(teslaComp);
   t.falsy(royceComp);
+});
+
+test('isCompatible - with scopes', async(t) => {
+  const client = new smartcar.AuthClient(getAuthClientParams());
+
+  const teslaVin = '5YJXCDE22HF068739';
+  const bmwVin = 'WBA3B1G53FNT03555';
+
+  const scopes = ['read_odometer', 'read_location'];
+
+  const teslaComp = await client.isCompatible(teslaVin, scopes);
+  const bmwComp = await client.isCompatible(bmwVin, scopes);
+
+  t.truthy(teslaComp);
+  t.falsy(bmwComp);
 });
