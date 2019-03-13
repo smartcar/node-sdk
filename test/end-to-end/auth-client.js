@@ -25,12 +25,15 @@ test('exchangeCode', async(t) => {
 
   const access = await client.exchangeCode(code);
 
-  t.deepEqual(_.xor(_.keys(access), [
-    'accessToken',
-    'expiration',
-    'refreshExpiration',
-    'refreshToken',
-  ]), []);
+  t.deepEqual(
+    _.xor(_.keys(access), [
+      'accessToken',
+      'expiration',
+      'refreshExpiration',
+      'refreshToken',
+    ]),
+    []
+  );
 });
 
 test('exchangeRefreshToken', async(t) => {
@@ -41,16 +44,17 @@ test('exchangeRefreshToken', async(t) => {
   const code = await runAuthFlow(context.client, context.browser, authUrl);
 
   const oldAccess = await client.exchangeCode(code);
-  const newAccess = await client.exchangeRefreshToken(
-    oldAccess.refreshToken
-  );
+  const newAccess = await client.exchangeRefreshToken(oldAccess.refreshToken);
 
-  t.deepEqual(_.xor(_.keys(newAccess), [
-    'accessToken',
-    'expiration',
-    'refreshExpiration',
-    'refreshToken',
-  ]), []);
+  t.deepEqual(
+    _.xor(_.keys(newAccess), [
+      'accessToken',
+      'expiration',
+      'refreshExpiration',
+      'refreshToken',
+    ]),
+    []
+  );
 });
 
 test('isCompatible - without scopes', async(t) => {

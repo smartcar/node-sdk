@@ -33,7 +33,7 @@ test('constructor - missing required parameter', function(t) {
         clientId: 'f3266b17-961d-4295-8544-054c7bd94fbb',
         redirectUri: 'https://insurance.co/callback',
         scope: ['read_odometer', 'read_vehicle_info'],
-      }),
+      })
   );
 });
 
@@ -45,7 +45,7 @@ test('constructor - invalid uuid parameter', function(t) {
         clientSecret: CLIENT_SECRET,
         redirectUri: 'https://insurance.co/callback',
         scope: ['read_odometer', 'read_vehicle_info'],
-      }),
+      })
   );
 });
 
@@ -57,7 +57,7 @@ test('constructor - invalid scope parameter', function(t) {
         clientSecret: CLIENT_SECRET,
         redirectUri: 'https://insurance.co/callback',
         scope: 'read_odometer',
-      }),
+      })
   );
 });
 
@@ -70,7 +70,7 @@ test('constructor - invalid development parameter', function(t) {
         redirectUri: 'https://insurance.co/callback',
         scope: ['read_odometer', 'read_vehicle_info'],
         development: 'truthsies',
-      }),
+      })
   );
 });
 
@@ -82,7 +82,7 @@ test('iOS and Android redirect uri', function(t) {
         clientSecret: CLIENT_SECRET,
         redirectUri: 'sc4a1b01e5-0497-417c-a30e-6df6ba33ba46://callback',
         scope: ['read_odometer', 'read_vehicle_info'],
-      }),
+      })
   );
 });
 
