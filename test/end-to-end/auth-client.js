@@ -74,7 +74,7 @@ test('isCompatible - with scopes', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
-  const bmwVin = 'WBA3B1G53FNT03555';
+  const bmwVin = 'WBAFR7C51DC821948';
 
   const scopes = ['read_odometer', 'read_location'];
 
