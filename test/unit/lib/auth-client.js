@@ -104,6 +104,60 @@ test('getAuthUrl - simple', function(t) {
 
 });
 
+test('getAuthUrl - with vehicleInfo=VIN string', function(t) {
+
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const actual = client.getAuthUrl({vehicleInfo: 'vin_here'});
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&vin=vin_here';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+
+});
+
+test('getAuthUrl - with vehicleInfo={...}', function(t) {
+
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const vehicleInfo = {
+    vin: 'vin_here',
+    year: 2016,
+    make: 'TESLA',
+    model: 'Model S',
+  };
+
+  const actual = client.getAuthUrl({vehicleInfo});
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&vin=vin_here';
+  expected += '&year=2016';
+  expected += '&make=TESLA';
+  expected += '&model=Model%20S';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+
+});
+
 test('getAuthUrl - no scope', function(t) {
 
   const client = new AuthClient({
