@@ -74,13 +74,13 @@ test('isCompatible - with scopes', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
-  const bmwVin = 'WBAFR7C51DC821948';
+  const audiVin = 'WAUANAF40HN017169';
 
   const scopes = ['read_odometer', 'read_location'];
 
   const teslaComp = await client.isCompatible(teslaVin, scopes);
-  const bmwComp = await client.isCompatible(bmwVin, scopes);
+  const audiComp = await client.isCompatible(audiVin, scopes);
 
   t.truthy(teslaComp);
-  t.falsy(bmwComp);
+  t.falsy(audiComp);
 });
