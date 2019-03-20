@@ -339,6 +339,7 @@ approval_prompt to `force`.
 | [options] | <code>Object</code> |  |  |
 | [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
+| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. When included, the OEM selector  screen is bypassed, allowing the user to go directly to the vehicle  login screen. The following are valid makes supported by the Smartcar API:  `[Audi, BMW, Buick, Cadillac, Cheverolet, Chrysler, Dodge, GMC, Jeep, Lexus, Ram, Tesla, Volkswagen]`. Makes are case-insensitive. |
 
 **Example**
 ```js
@@ -348,6 +349,7 @@ response_type=code
 &scope=read_odometer read_vehicle_info
 &redirect_uri=https://example.com/home
 &state=0facda3319
+&make=TESLA
 ```
 <a name="AuthClient+exchangeCode"></a>
 
