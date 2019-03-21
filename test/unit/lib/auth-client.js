@@ -130,6 +130,26 @@ test('getAuthUrl - with vehicleInfo={...}', function(t) {
 
 });
 
+test('getAuthUrl - with incorrect vehicleInfo={...}', function(t) {
+
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const vehicleInfo = {
+    pizza: 'isGood',
+  };
+
+  const actual = client.getAuthUrl({vehicleInfo});
+
+  t.is(actual.includes('&pizza=isGood'), false);
+
+});
+
+
 test('getAuthUrl - no scope', function(t) {
 
   const client = new AuthClient({
