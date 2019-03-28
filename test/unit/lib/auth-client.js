@@ -374,32 +374,6 @@ test('exchangeRefreshToken', async function(t) {
   t.true(n.isDone());
 });
 
-test('isCompatible - without scope', async function(t) {
-  const client = new AuthClient({
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-    redirectUri: 'https://insurance.co/callback',
-  });
-
-  const vin = 'fake_vin';
-
-  const n = nock('https://api.smartcar.com')
-    .get('/v1.0/compatibility')
-    .query({vin})
-    .basicAuth({
-      user: CLIENT_ID,
-      pass: CLIENT_SECRET,
-    })
-    .reply(200, {
-      compatible: true,
-    });
-
-  const response = await client.isCompatible(vin);
-
-  t.is(response, true);
-  t.true(n.isDone());
-});
-
 test('isCompatible - with scope', async function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
