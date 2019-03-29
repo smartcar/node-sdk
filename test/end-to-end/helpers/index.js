@@ -30,7 +30,7 @@ helpers.runAuthFlow = function(client, browser, authUrl) {
     browser
       .url(authUrl)
       .waitForElementVisible('div[class=content]', 3000)
-      .click('a[data-make="TESLA"]')
+      .click('a[href^="https://tesla.smartcar.com"]')
       // login dialog is rendered
       .waitForElementVisible('input[id=username]', 3500)
       // add username/password and submit

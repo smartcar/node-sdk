@@ -69,7 +69,6 @@ test('request - default opts', async function(t) {
     .matchHeader('accept', 'application/json')
     .matchHeader(
       'user-agent',
-      /* eslint-disable-next-line max-len */
       /^Smartcar\/(\d+\.\d+\.\d+-[\w-]*) \((\w+); (\w+)\) Node.js v(\d+\.\d+\.\d+)$/
     )
     .reply(200, {test: 'data'});
