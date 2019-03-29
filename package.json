@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smartcar/node-sdk.git"
+    "url": "https://github.com/smartcar/node-sdk"
   },
   "bugs": {
     "url": "https://github.com/smartcar/node-sdk/issues"
