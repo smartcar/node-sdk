@@ -339,7 +339,7 @@ approval_prompt to `force`.
 | [options] | <code>Object</code> |  |  |
 | [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
-| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. When included, the OEM selector screen is bypassed, allowing the user to go directly to the vehicle login screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 
 **Example**
 ```js
