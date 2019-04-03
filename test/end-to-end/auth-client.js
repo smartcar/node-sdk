@@ -25,15 +25,12 @@ test('exchangeCode', async(t) => {
 
   const access = await client.exchangeCode(code);
 
-  t.deepEqual(
-    _.xor(_.keys(access), [
-      'accessToken',
-      'expiration',
-      'refreshExpiration',
-      'refreshToken',
-    ]),
-    []
-  );
+  t.deepEqual(_.xor(_.keys(access), [
+    'accessToken',
+    'expiration',
+    'refreshExpiration',
+    'refreshToken',
+  ]), []);
 });
 
 test('exchangeRefreshToken', async(t) => {
@@ -44,30 +41,27 @@ test('exchangeRefreshToken', async(t) => {
   const code = await runAuthFlow(context.client, context.browser, authUrl);
 
   const oldAccess = await client.exchangeCode(code);
-  const newAccess = await client.exchangeRefreshToken(oldAccess.refreshToken);
-
-  t.deepEqual(
-    _.xor(_.keys(newAccess), [
-      'accessToken',
-      'expiration',
-      'refreshExpiration',
-      'refreshToken',
-    ]),
-    []
+  const newAccess = await client.exchangeRefreshToken(
+    oldAccess.refreshToken
   );
+
+  t.deepEqual(_.xor(_.keys(newAccess), [
+    'accessToken',
+    'expiration',
+    'refreshExpiration',
+    'refreshToken',
+  ]), []);
 });
 
 test('isCompatible', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
-  const audiVin = 'WAUAFAFL1GN014882';
+  const royceVin = 'SCA665C59HUX86700';
 
-  const scopes = ['read_odometer', 'read_location'];
-
-  const teslaComp = await client.isCompatible(teslaVin, scopes);
-  const audiComp = await client.isCompatible(audiVin, scopes);
+  const teslaComp = await client.isCompatible(teslaVin);
+  const royceComp = await client.isCompatible(royceVin);
 
   t.truthy(teslaComp);
-  t.falsy(audiComp);
+  t.falsy(royceComp);
 });
