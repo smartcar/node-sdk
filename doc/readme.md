@@ -378,15 +378,24 @@ Exchange a refresh token for a new access object.
 <a name="AuthClient+isCompatible"></a>
 
 ### authClient.isCompatible(vin) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Determine whether a vehicle is compatible with Smartcar
+Determine vehicle compatibility with Smartcar.
+
+A compatible vehicle is a vehicle that:
+1. has the hardware required for internet connectivity,
+2. belongs to the makes and models Smartcar supports, and
+3. supports the permissions.
+
+_To use this function, please contact us!_
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - true if the vehicle is compatible
-with Smartcar
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - `false` if the vehicle is not compatible. `true` if the vehicle is _likely_ compatible*.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| vin | <code>String</code> | the VIN of the vehicle |
+| vin | <code>String</code> | The VIN of the vehicle |
+| scope | <code>Array.&lt;String&gt;</code> | The list of permissions to check compatibility for. Valid permission names are found in the [API Reference](https://smartcar.com/docs/api#get-all-vehicles). |
+
+**\*Note:** as we are only using the vin, we can only guarantee if a vehicle is NOT compatible with the platform.
 
 <a name="Vehicle"></a>
 
