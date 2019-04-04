@@ -303,7 +303,7 @@ Error thrown when gateway to Smartcar times out
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
     * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.isCompatible(vin)](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.isCompatible(vin, scope)](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_AuthClient_new"></a>
 
@@ -377,25 +377,24 @@ Exchange a refresh token for a new access object.
 
 <a name="AuthClient+isCompatible"></a>
 
-### authClient.isCompatible(vin) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Determine vehicle compatibility with Smartcar.
+### authClient.isCompatible(vin, scope) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
 1. has the hardware required for internet connectivity,
 2. belongs to the makes and models Smartcar supports, and
 3. supports the permissions.
 
-_To use this function, please contact us!_
+To use this function, please contact us!
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - `false` if the vehicle is not compatible. `true` if the vehicle is _likely_ compatible*.
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
+  vehicle is likely compatible.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| vin | <code>String</code> | The VIN of the vehicle |
-| scope | <code>Array.&lt;String&gt;</code> | The list of permissions to check compatibility for. Valid permission names are found in the [API Reference](https://smartcar.com/docs/api#get-all-vehicles). |
-
-**\*Note:** as we are only using the vin, we can only guarantee if a vehicle is NOT compatible with the platform.
+| vin | <code>String</code> | the VIN of the vehicle |
+| scope | <code>Array.&lt;String&gt;</code> | list of permissions to check compatibility for |
 
 <a name="Vehicle"></a>
 
