@@ -385,7 +385,7 @@ A compatible vehicle is a vehicle that:
 2. belongs to the makes and models Smartcar supports, and
 3. supports the permissions.
 
-To use this function, please contact us!
+_To use this function, please contact us!_
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: <code>Promise.&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
