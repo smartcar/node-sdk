@@ -495,14 +495,22 @@ GET Vehicle.vin
 POST Vehicle.lock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - A success or failure response.
+**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Throws**:
+
+- SmartcarError if request fails
+
 <a name="Vehicle+unlock"></a>
 
 ### vehicle.unlock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
 POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - A success or failure response.
+**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Throws**:
+
+- SmartcarError if request fails
+
 <a name="parseAge"></a>
 
 ## parseAge(response) ⇒ <code>Date</code> \| <code>null</code>
@@ -611,7 +619,7 @@ POST Vehicle.unlock
 
 | Name | Type | Description |
 | --- | --- | --- |
-| status | <code>String</code> | status of request, set to `success` on successful   request. |
+| status | <code>String</code> | set to `success` on successful request |
 
 **Example**
 ```js
