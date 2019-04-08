@@ -498,7 +498,7 @@ POST Vehicle.lock
 **Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
 **Throws**:
 
-- <code>SmartcarError</code> if request fails
+- <code>SmartcarError</code> on unsuccessful request
 
 <a name="Vehicle+unlock"></a>
 
@@ -509,7 +509,7 @@ POST Vehicle.unlock
 **Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
 **Throws**:
 
-- <code>SmartcarError</code> if request fails
+- <code>SmartcarError</code> on unsuccessful request
 
 <a name="parseAge"></a>
 
