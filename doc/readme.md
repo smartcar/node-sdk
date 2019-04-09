@@ -41,6 +41,8 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#Security">Security</a> : <code>Object</code></dt>
+<dd></dd>
 </dl>
 
 <a name="module_smartcar"></a>
@@ -410,8 +412,8 @@ _To use this function, please contact us!_
     * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
     * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
-    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise</code>](#Promise)
-    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise</code>](#Promise)
+    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
+    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
 
 <a name="new_Vehicle_new"></a>
 
@@ -489,18 +491,26 @@ GET Vehicle.vin
 **Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
 <a name="Vehicle+lock"></a>
 
-### vehicle.lock() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.lock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
 POST Vehicle.lock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A success or failure response.
+**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Throws**:
+
+- <code>SmartcarError</code> on unsuccessful request
+
 <a name="Vehicle+unlock"></a>
 
-### vehicle.unlock() ⇒ [<code>Promise</code>](#Promise)
+### vehicle.unlock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
 POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A success or failure response.
+**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Throws**:
+
+- <code>SmartcarError</code> on unsuccessful request
+
 <a name="parseAge"></a>
 
 ## parseAge(response) ⇒ <code>Date</code> \| <code>null</code>
@@ -599,5 +609,21 @@ POST Vehicle.unlock
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
   unitSystem: 'imperial',
+}
+```
+<a name="Security"></a>
+
+## Security : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| status | <code>String</code> | set to `success` on successful request |
+
+**Example**
+```js
+{
+  status: 'success',
 }
 ```

@@ -249,8 +249,14 @@ test('lock', async function(t) {
     .reply(200, {status: 'success'});
 
   const response = await vehicle.lock();
-  t.is(response, undefined);
 
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'status',
+    ]),
+    []
+  );
+  t.is(response.status, 'success');
 });
 
 test('unlock', async function(t) {
@@ -260,6 +266,12 @@ test('unlock', async function(t) {
     .reply(200, {status: 'success'});
 
   const response = await vehicle.unlock();
-  t.is(response, undefined);
 
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'status',
+    ]),
+    []
+  );
+  t.is(response.status, 'success');
 });
