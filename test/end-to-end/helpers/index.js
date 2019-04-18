@@ -36,7 +36,7 @@ helpers.runAuthFlow = function(client, browser, authUrl) {
       // add username/password and submit
       .setValue('input[id=username]', email)
       .setValue('input[id=password]', 'password')
-      .click('button[id=approval-button]')
+      .click('button[id=sign-in-button]')
       // wait for permissions and approve
       .waitForElementVisible('div[class=permissions]', 5000)
       .click('button[id=approval-button]')
