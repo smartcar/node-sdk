@@ -127,7 +127,7 @@ test('catch - AuthenticationError', async function(t) {
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.AuthenticationError);
-  t.regex(boxed.message, /pizza/);
+  t.true(boxed.message.includes('invalid bearer header'));
   t.true(n.isDone());
 
 });
