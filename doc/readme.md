@@ -184,7 +184,7 @@ Error thrown by request validation.
 <a name="module_errors.AuthenticationError"></a>
 
 ### errors.AuthenticationError(message) ⇐ <code>SmartcarError</code>
-Error thrown by an invalid or expired token.
+Error thrown by an invalid parameter when authenticating.
 
 **Kind**: static method of [<code>errors</code>](#module_errors)
 **Extends**: <code>SmartcarError</code>
