@@ -1,3 +1,11 @@
+dist: xenial
+
+services:
+  - xvfb
+
+addons:
+  firefox: latest
+
 language:
   - node_js
 
@@ -9,7 +17,6 @@ node_js:
 cache:
   directories:
     - $HOME/.npm
-    - node_modules
     - .eslintcache
 
 branches:
@@ -20,16 +27,17 @@ branches:
 notifications:
   slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
 
-install:
-  - npm update --save false
-  - npm prune
+before_install:
+  - dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
 
-services:
-  - docker
+install:
+  - npm ci
+  - firefox -headless &
 
 script:
-  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-firefox
-  - npm test
+  - npm run test:unit
+    # e2e tests use async/await
+  - if test "$TRAVIS_NODE_VERSION" -gt 6; then npm run test:e2e; fi
   - npm run cover
 
 jobs:

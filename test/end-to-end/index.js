@@ -1,33 +1,22 @@
 'use strict';
 
-const nightwatch = require('nightwatch');
 const test = require('ava');
 
 const smartcar = require('../../');
-
 const {getAuthClientParams, runAuthFlow} = require('./helpers');
-const config = require('../config');
 
-const context = {};
-
-test.before(async() => {
-  context.client = nightwatch.initClient(config.get('nightwatch'));
-  context.browser = context.client.api();
-
+test.before(async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
+  const code = await runAuthFlow(client.getAuthUrl());
+  const {accessToken} = await client.exchangeCode(code);
 
-  const authUrl = client.getAuthUrl();
-
-  const code = await runAuthFlow(context.client, context.browser, authUrl);
-
-  const access = await client.exchangeCode(code);
-  context.accessToken = access.accessToken;
+  t.context.accessToken = accessToken;
 });
 
 test('getVehicleIds', async(t) => {
-  await t.notThrowsAsync(smartcar.getVehicleIds(context.accessToken));
+  await t.notThrowsAsync(smartcar.getVehicleIds(t.context.accessToken));
 });
 
 test('getUserId', async(t) => {
-  await t.notThrowsAsync(smartcar.getUserId(context.accessToken));
+  await t.notThrowsAsync(smartcar.getUserId(t.context.accessToken));
 });

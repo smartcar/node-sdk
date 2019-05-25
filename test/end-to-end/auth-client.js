@@ -1,28 +1,14 @@
 'use strict';
 
 const _ = require('lodash');
-const nightwatch = require('nightwatch');
 const test = require('ava');
 
 const smartcar = require('../../');
-
 const {getAuthClientParams, runAuthFlow} = require('./helpers');
-const config = require('../config');
-
-const context = {};
-
-test.before(() => {
-  context.client = nightwatch.initClient(config.get('nightwatch'));
-  context.browser = context.client.api();
-});
 
 test('exchangeCode', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
-
-  const authUrl = client.getAuthUrl();
-
-  const code = await runAuthFlow(context.client, context.browser, authUrl);
-
+  const code = await runAuthFlow(client.getAuthUrl());
   const access = await client.exchangeCode(code);
 
   t.deepEqual(
@@ -38,10 +24,7 @@ test('exchangeCode', async(t) => {
 
 test('exchangeRefreshToken', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
-
-  const authUrl = client.getAuthUrl();
-
-  const code = await runAuthFlow(context.client, context.browser, authUrl);
+  const code = await runAuthFlow(client.getAuthUrl());
 
   const oldAccess = await client.exchangeCode(code);
   const newAccess = await client.exchangeRefreshToken(oldAccess.refreshToken);
