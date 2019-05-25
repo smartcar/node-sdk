@@ -42,7 +42,7 @@ test('isExpired - string', function(t) {
 
 test('getVehicleIds - missing token', async function(t) {
 
-  const err = await t.throws(smartcar.getVehicleIds(), TypeError);
+  const err = await t.throwsAsync(smartcar.getVehicleIds(), TypeError);
   t.is(err.message, '"token" argument must be a string');
 
 });
