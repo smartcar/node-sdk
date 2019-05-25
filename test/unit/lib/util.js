@@ -85,10 +85,10 @@ test('request - default opts', async function(t) {
 test('wrap', async function(t) {
 
   const not = util.wrap(Promise.reject(new Error('blah')));
-  await t.throws(not, /blah/);
+  await t.throwsAsync(not, /blah/);
 
   const should = util.wrap(Promise.reject(new StatusCodeError('h')));
-  await t.throws(should);
+  await t.throwsAsync(should);
 
 });
 
@@ -101,7 +101,7 @@ test('catch - ValidationError', async function(t) {
       message: 'password must be a string',
     });
 
-  const err = await t.throws(util.request('https://mock.com/validation'));
+  const err = await t.throwsAsync(util.request('https://mock.com/validation'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.ValidationError);
@@ -119,7 +119,7 @@ test('catch - AuthenticationError', async function(t) {
       message: 'invalid bearer header',
     });
 
-  const err = await t.throws(util.request('https://mock.com/auth', {
+  const err = await t.throwsAsync(util.request('https://mock.com/auth', {
     auth: {
       bearer: 'pizza',
     },
@@ -141,7 +141,7 @@ test('catch - PermissionError', async function(t) {
       message: 'you shall not pass',
     });
 
-  const err = await t.throws(util.request('https://mock.com/perm'));
+  const err = await t.throwsAsync(util.request('https://mock.com/perm'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.PermissionError);
@@ -159,7 +159,7 @@ test('catch - ResourceNotFoundError', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/404'));
+  const err = await t.throwsAsync(util.request('https://mock.com/404'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.ResourceNotFoundError);
@@ -177,7 +177,7 @@ test('catch - VehicleStateError', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/state', {
+  const err = await t.throwsAsync(util.request('https://mock.com/state', {
     json: {ACTION: 'LOCK'},
   }));
   const boxed = t.throws(() => util.catch(err));
@@ -197,7 +197,7 @@ test('catch - RateLimitingError', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/ratelimit'));
+  const err = await t.throwsAsync(util.request('https://mock.com/ratelimit'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.RateLimitingError);
@@ -215,7 +215,7 @@ test('catch - MonthlyLimitExceeded', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/monthly'));
+  const err = await t.throwsAsync(util.request('https://mock.com/monthly'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.MonthlyLimitExceeded);
@@ -233,7 +233,7 @@ test('catch - ServerError', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/server'));
+  const err = await t.throwsAsync(util.request('https://mock.com/server'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.ServerError);
@@ -251,7 +251,7 @@ test('catch - NotCapableError', async function(t) {
       message: 'wat',
     });
 
-  const err = await t.throws(util.request('https://mock.com/notcap'));
+  const err = await t.throwsAsync(util.request('https://mock.com/notcap'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.NotCapableError);
@@ -269,7 +269,7 @@ test('catch - SmartcarError', async function(t) {
       message: 'yes, really',
     });
 
-  const err = await t.throws(util.request('https://mock.com/generic'));
+  const err = await t.throwsAsync(util.request('https://mock.com/generic'));
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.SmartcarError);

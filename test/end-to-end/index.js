@@ -25,9 +25,9 @@ test.before(async() => {
 });
 
 test('getVehicleIds', async(t) => {
-  await t.notThrows(smartcar.getVehicleIds(context.accessToken));
+  await t.notThrowsAsync(smartcar.getVehicleIds(context.accessToken));
 });
 
 test('getUserId', async(t) => {
-  await t.notThrows(smartcar.getUserId(context.accessToken));
+  await t.notThrowsAsync(smartcar.getUserId(context.accessToken));
 });
