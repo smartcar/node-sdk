@@ -1,59 +1,47 @@
 'use strict';
 
-const nightwatch = require('nightwatch');
 const test = require('ava');
 
 const smartcar = require('../../');
-
 const {getAuthClientParams, runAuthFlow} = require('./helpers');
-const config = require('../config');
 
-const context = {};
-
-test.before(async() => {
-  context.client = nightwatch.initClient(config.get('nightwatch'));
-  context.browser = context.client.api();
-
+test.before(async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
-
-  const authUrl = client.getAuthUrl();
-
-  const code = await runAuthFlow(context.client, context.browser, authUrl);
-
-  const access = await client.exchangeCode(code);
-  const accessToken = access.accessToken;
+  const code = await runAuthFlow(client.getAuthUrl());
+  const {accessToken} = await client.exchangeCode(code);
   const vehicleIds = await smartcar.getVehicleIds(accessToken);
-  context.vehicle = new smartcar.Vehicle(vehicleIds.vehicles[0], accessToken);
+
+  t.context.vehicle = new smartcar.Vehicle(vehicleIds.vehicles[0], accessToken);
 });
 
 test('vehicle info', async(t) => {
-  await t.notThrowsAsync(context.vehicle.info());
+  await t.notThrowsAsync(t.context.vehicle.info());
 });
 
 test('vehicle location', async(t) => {
-  await t.notThrowsAsync(context.vehicle.location());
+  await t.notThrowsAsync(t.context.vehicle.location());
 });
 
 test('vehicle odometer', async(t) => {
-  await t.notThrowsAsync(context.vehicle.odometer());
+  await t.notThrowsAsync(t.context.vehicle.odometer());
 });
 
 test('vehicle vin', async(t) => {
-  await t.notThrowsAsync(context.vehicle.vin());
+  await t.notThrowsAsync(t.context.vehicle.vin());
 });
 
 test('vehicle lock', async(t) => {
-  await t.notThrowsAsync(context.vehicle.lock());
+  await t.notThrowsAsync(t.context.vehicle.lock());
 });
 
 test('vehicle unlock', async(t) => {
-  await t.notThrowsAsync(context.vehicle.unlock());
+  await t.notThrowsAsync(t.context.vehicle.unlock());
 });
 
 test('vehicle permissions', async(t) => {
-  await t.notThrowsAsync(context.vehicle.permissions());
+  await t.notThrowsAsync(t.context.vehicle.permissions());
 });
 
 test('vehicle disconnect', async(t) => {
-  await t.notThrowsAsync(context.vehicle.disconnect());
+  await t.notThrowsAsync(t.context.vehicle.disconnect());
 });
