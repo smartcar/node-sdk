@@ -33,7 +33,6 @@
     "lint": "eslint . --cache",
     "cover": "nyc npm run test:unit -s",
     "cover:integration": "nyc npm test:integration -s",
-    "release": "semantic-release",
     "jsdoc": "jsdoc -c .jsdoc.json .",
     "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed 's/[ \t]*$//' > doc/readme.md"
   },

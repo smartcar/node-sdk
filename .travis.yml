@@ -10,22 +10,21 @@ language:
   - node_js
 
 node_js:
-  - 10
-  - 8
-  - 6
+  - "10"
+  - "8"
+  - "6"
 
 cache:
   directories:
-    - $HOME/.npm
-    - .eslintcache
+    - "$HOME/.npm"
+    - ".eslintcache"
 
-branches:
-  except:
-    # Don't run on tag pushes
-    - /^v\d+\.\d+\.\d+$/
+if: tag IS blank # do not build tags
 
 notifications:
-  slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
+  slack:
+    secure: "CHS39tAvw6WiIN8cYSyE3QT2PVeFdrHszT/00kU3pb1BH5Ec5JYx5U7bMrVf3yq3GQC/wxBhXs4E119LwZM0n04CGUOshShqSkLeUf9RfWYlqx2Qw2+tT8sOi+OXCzE+yaG3Yt+TWFqKyC5t0A9jZX6cdJbcBaKX2wJiOyI/HiTpXHXrJgeeflxRe03KDpIfpmWgpMjnouZ6rKMnP30H+CG4Ya5uouM/Sv5flgJ+1VnZo/kB89hQ4CELr3bBfxSW4lCS1Tmg/z8w059D2nsn7wiMols3Qgw4FJu773K03fyLGoV4JshxA9lvnLt/Vy+azDNEBP5drQeQ7l8GMrLAPIEN8oGbuH9+TyYoxj0P38Kx4hzlW3owGs1U2+wCuYCq2b58oGTYonKnynFV4Pi8f94uBWd6ziIJoKhwx6MsJzKIt/6T91QWjWozOpF9uGy81ZfR3WHU/gnIyWDTJsLnB7nFA5z9V3/K3Orj5tlVr7iZbCUhA9v6XMYTpyyxjoMtBjVad2IztaWXZIZ97Xx7WBkGS9lvFZIqgHMYERb/On/4bEEXdPlzyJxwwlPBNvPv7enVAsYjPJJ58CQ42fuYkMYZlNcTGfYz9Nw/K64ocMidfdMKvdFD1w6Cw/U1HkQ0SZssy6yEb1BpzdBfMbsUDnh0OJffUpeGp402XOwUNT4="
+
 
 before_install:
   - dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
@@ -40,8 +39,11 @@ script:
   - if test "$TRAVIS_NODE_VERSION" -gt 6; then npm run test:e2e; fi
   - npm run cover
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 jobs:
   include:
     - stage: publish
       node_js: 10
-      script: echo -e "machine github.com\n  login $GH_TOKEN" >> ~/.netrc && npm run release
+      script: npx semantic-release
