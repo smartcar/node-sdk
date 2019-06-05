@@ -229,8 +229,8 @@ the current vehicle state.
 | Param | Description |
 | --- | --- |
 | message | an error description to set |
-| body | A things |
-| body.errorCode | a vehicle state error code |
+| body | A response body of Smartcar API call |
+| body.code | a vehicle state error code |
 
 <a name="module_errors.RateLimitingError"></a>
 
