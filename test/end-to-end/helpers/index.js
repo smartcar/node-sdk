@@ -54,7 +54,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   // OEM Selector
   await driver.get(authUrl);
-  await driver.findElement(By.css('a[data-make="TESLA"]')).click();
+  await driver.findElement(By.css('button[data-make="TESLA"]')).click();
 
   // Login
   const email = `${uuid()}@email.com`;

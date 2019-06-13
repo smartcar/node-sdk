@@ -183,7 +183,7 @@ test('catch - VehicleStateError', async function(t) {
   const boxed = t.throws(() => util.catch(err));
 
   t.true(boxed instanceof errors.VehicleStateError);
-  t.regex(boxed.message, /https:\/\/mock.com\/state/);
+  t.is(boxed.message, 'wat');
   t.true(n.isDone());
 
 });

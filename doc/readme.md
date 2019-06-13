@@ -150,7 +150,7 @@ Return the user's id.
     * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
     * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
     * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
-    * [.VehicleStateError(message)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
+    * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
     * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
     * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
     * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
@@ -219,7 +219,7 @@ Error thrown when the requested resource is not found.
 
 <a name="module_errors.VehicleStateError"></a>
 
-### errors.VehicleStateError(message) ⇐ <code>SmartcarError</code>
+### errors.VehicleStateError(message, code) ⇐ <code>SmartcarError</code>
 Error thrown when the vehicle is not capable of performing the request in
 the current vehicle state.
 
@@ -229,6 +229,7 @@ the current vehicle state.
 | Param | Description |
 | --- | --- |
 | message | an error description to set |
+| code | a vehicle state error code |
 
 <a name="module_errors.RateLimitingError"></a>
 
