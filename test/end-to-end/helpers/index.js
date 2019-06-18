@@ -18,7 +18,7 @@ const CLIENT_SECRET = process.env.INTEGRATION_CLIENT_SECRET;
 if (!CLIENT_ID || !CLIENT_SECRET) {
   throw new Error(
     // eslint-disable-next-line max-len
-    '"INTEGRATION_CLIENT_ID" and "INTEGRATION_CLIENT_SECRET" environment variables must be set'
+    '"INTEGRATION_CLIENT_ID" and "INTEGRATION_CLIENT_SECRET" environment variables must be set',
   );
 }
 
@@ -54,7 +54,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   // OEM Selector
   await driver.get(authUrl);
-  await driver.findElement(By.css('a[data-make="TESLA"]')).click();
+  await driver.findElement(By.css('button[data-make="TESLA"]')).click();
 
   // Login
   const email = `${uuid()}@email.com`;
