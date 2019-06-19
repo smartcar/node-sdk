@@ -335,7 +335,7 @@ to always display the permissions dialog to the user by setting
 approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>String</code> - Smartcar Connect to direct user to.
+**Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |

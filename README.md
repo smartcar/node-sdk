@@ -74,7 +74,7 @@ const client = new smartcar.AuthClient({
   clientSecret: 'SMARTCAR_CLIENT_SECRET',
   redirectUri: 'YOUR_CALLBACK_URI',
   scope: ['read_vehicle_info'],
-  testMode: true, // launch the Smartcar Connect in test mode
+  testMode: true, // launch Smartcar Connect in test mode
 });
 
 // Redirect to Smartcar Connect
