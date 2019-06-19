@@ -30,12 +30,12 @@ not have access to the dashboard, please
 
 - Create a new `AuthClient` object with your `clientId`, `clientSecret`,
   `redirectUri`, and required `scope`.
-- Redirect the user to Smartcar's authentication flow using `getAuthUrl` or one
+- Redirect the user to Smartcar Connect using `getAuthUrl` or one
   of our frontend SDKs.
 - The user will login, and then accept or deny your `scope`'s permissions.
 - Handle the get request to `redirectUri`.
   - If the user accepted your permissions, `req.query.code` will contain an
-    authentication code.
+    authorization code.
     - Use `exchangeCode` with this code to obtain an access object
       containing an access token (lasting 2 hours) and a refresh token
       (lasting 60 days).
@@ -74,10 +74,10 @@ const client = new smartcar.AuthClient({
   clientSecret: 'SMARTCAR_CLIENT_SECRET',
   redirectUri: 'YOUR_CALLBACK_URI',
   scope: ['read_vehicle_info'],
-  testMode: true, // launch the Smartcar auth flow in test mode
+  testMode: true, // launch the Smartcar Connect in test mode
 });
 
-// Redirect to Smartcar's authentication flow
+// Redirect to Smartcar Connect
 app.get('/login', function(req, res) {
   const link = client.getAuthUrl();
 

@@ -321,13 +321,13 @@ Create a Smartcar OAuth client for your application.
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
 | [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch the Smartcar auth flow in test mode. [API Reference](https://smartcar.com/docs#request-authorization). |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in test mode. [Documentation](https://smartcar.com/docs/guides/testing/). |
 | [options.development] | <code>Boolean</code> | <code>false</code> | DEPRECATED: Launch Smartcar auth in development mode to enable mock vehicle brands. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
 ### authClient.getAuthUrl([options]) ⇒ <code>String</code>
-Generate the OAuth authorization URL.
+Generate the Smartcar Connect URL.
 
 By default users are not shown the permission dialog if they have already
 approved the set of scopes for this application. The application can elect
@@ -335,7 +335,7 @@ to always display the permissions dialog to the user by setting
 approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>String</code> - OAuth authorization URL to direct user to.
+**Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
