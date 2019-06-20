@@ -59,6 +59,8 @@ test('getVehicleIds - simple', async function(t) {
 
   const res = await smartcar.getVehicleIds('simple');
   t.is(res.vehicles.length, 3);
+  t.deepEqual(Object.keys(res), ['vehicles', 'paging']);
+  t.deepEqual(Object.keys(res.headers), ['requestId']);
   t.true(n.isDone());
 
 });
@@ -76,6 +78,8 @@ test('getVehicleIds - paging', async function(t) {
 
   const res = await smartcar.getVehicleIds('token', {limit: 1});
   t.is(res.vehicles.length, 1);
+  t.deepEqual(Object.keys(res), ['vehicles', 'paging']);
+  t.deepEqual(Object.keys(res.headers), ['requestId']);
   t.true(n.isDone());
 
 });

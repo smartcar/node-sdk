@@ -88,6 +88,13 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
       bearer: token,
     },
     qs: paging,
+  }).then((res) => {
+    const response = {
+      ...res.body,
+    };
+
+    util.appendHeaders(response, res, 'requestId', 'headers.sc-request-id');
+    return response;
   });
 
 });
@@ -109,9 +116,7 @@ smartcar.getUserId = Promise.method(function(token) {
     auth: {
       bearer: token,
     },
-  }).then(function(response) {
-    return response.id;
-  });
+  }).then((response) => response.body.id);
 
 });
 

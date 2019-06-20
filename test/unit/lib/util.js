@@ -15,14 +15,19 @@ const API_URL = config.api + '/v' + config.version;
 test('formatAccess', function(t) {
 
   /* eslint-disable camelcase */
-  const response = {
-    token_type: 'Bearer',
-    expires_in: 7200,
-    access_token: 'df12ca11-36a7-4196-9c33-b9fa1f18dd14',
-    refresh_token: 'c569b7ed-6536-4d19-9790-61ba7a4389c6',
+  const res = {
+    body: {
+      token_type: 'Bearer',
+      expires_in: 7200,
+      access_token: 'df12ca11-36a7-4196-9c33-b9fa1f18dd14',
+      refresh_token: 'c569b7ed-6536-4d19-9790-61ba7a4389c6',
+    },
+    headers: {
+      'sc-request-id': 'request-id',
+    },
   };
   /* eslint-enable camelcase */
-  const access = util.formatAccess(response);
+  const response = util.formatAccess(res);
   const expectedKeys = [
     'accessToken',
     'refreshToken',
@@ -30,22 +35,23 @@ test('formatAccess', function(t) {
     'refreshExpiration',
   ];
 
-  t.is(_.xor(Object.keys(access), expectedKeys).length, 0);
+  t.deepEqual(Object.keys(response), expectedKeys);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
+  t.deepEqual(response.headers, {requestId: 'request-id'});
 
-  t.is(access.accessToken, response.access_token);
-  t.is(access.refreshToken, response.refresh_token);
+  t.is(response.accessToken, res.body.access_token);
+  t.is(response.refreshToken, res.body.refresh_token);
 
   const expected = Date.now() + (7200 * 1000);
   const rExpected = Date.now() + (60 * 24 * 60 * 60 * 1000);
 
-  t.true(_.isDate(access.expiration));
-  t.true(_.isDate(access.refreshExpiration));
+  t.true(_.isDate(response.expiration));
+  t.true(_.isDate(response.refreshExpiration));
 
-  const actual = access.expiration.getTime();
-  const rActual = access.refreshExpiration.getTime();
+  const actual = response.expiration.getTime();
+  const rActual = response.refreshExpiration.getTime();
   t.true(expected - 1000 <= actual && actual <= expected + 1000);
   t.true(rExpected - 1000 <= rActual && rActual <= rExpected + 1000);
-
 });
 
 test('getUrl - no args', function(t) {
@@ -63,6 +69,38 @@ test('getUrl - id & endpoint', function(t) {
   t.is(url, API_URL + '/vehicles/VID/odometer');
 });
 
+test('appendHeaders - default', function(t) {
+  const destination = {body: {key: 'value'}};
+  const copyDestination = _.cloneDeep(destination);
+  const source = {headers: {'sc-request-id': 'request-id'}};
+  const key = 'requestId';
+  const path = 'headers.sc-request-id';
+
+  util.appendHeaders(destination, source, key, path);
+
+  // Object should not change
+  t.deepEqual(destination, copyDestination);
+  // Verify headers key is hidden.
+  t.deepEqual(_.keys(destination), ['body']);
+  t.deepEqual(destination.headers, {requestId: 'request-id'});
+});
+
+test('appendHeaders - undefined', function(t) {
+  const destination = {body: {key: 'value'}};
+  const copyDestination = _.cloneDeep(destination);
+  const source = {};
+  const key = undefined;
+  const path = 'rubbish';
+
+  util.appendHeaders(destination, source, key, path);
+
+  // Object should not change
+  t.deepEqual(destination, copyDestination);
+  // Verify headers key is hidden.
+  t.deepEqual(_.keys(destination), ['body']);
+  t.deepEqual(destination.headers, {undefined});
+});
+
 test('request - default opts', async function(t) {
   const n = nock('https://mock.com')
     .get('/test')
@@ -77,7 +115,8 @@ test('request - default opts', async function(t) {
   const response = await util.request('https://mock.com/test');
 
   t.is(typeof response, 'object');
-  t.is(response.test, 'data');
+  t.is(response.body.test, 'data');
+  t.deepEqual(_.keys(response).sort(), ['headers', 'body'].sort());
   t.true(n.isDone());
 
 });

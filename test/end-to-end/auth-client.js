@@ -6,7 +6,7 @@ const test = require('ava');
 const smartcar = require('../../');
 const {getAuthClientParams, runAuthFlow} = require('./helpers');
 
-test('exchangeCode', async(t) => {
+test.serial('exchangeCode', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl());
   const access = await client.exchangeCode(code);
@@ -22,7 +22,7 @@ test('exchangeCode', async(t) => {
   );
 });
 
-test('exchangeRefreshToken', async(t) => {
+test.serial('exchangeRefreshToken', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl());
 
@@ -40,7 +40,7 @@ test('exchangeRefreshToken', async(t) => {
   );
 });
 
-test('isCompatible', async(t) => {
+test.serial('isCompatible', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';

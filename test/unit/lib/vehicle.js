@@ -40,8 +40,8 @@ test('constructor', async function(t) {
   t.is(vehicle.unitSystem, 'metric');
 
   const res = await vehicle.request('/default');
-  t.is(res, 'default');
-
+  t.is(res.body, 'default');
+  t.deepEqual(_.keys(res).sort(), ['body', 'headers'].sort());
 });
 
 test('constructor - imperial', async function(t) {
@@ -58,8 +58,8 @@ test('constructor - imperial', async function(t) {
   t.is(vehicle.unitSystem, 'imperial');
 
   const res = await vehicle.request('/constructor/imperial');
-  t.is(res, 'imperial build');
-
+  t.is(res.body, 'imperial build');
+  t.deepEqual(_.keys(res).sort(), ['body', 'headers'].sort());
 });
 
 test('constructor - errors without new', function(t) {
@@ -83,8 +83,8 @@ test('setUnitSystem - imperial', async function(t) {
   t.is(vehicle.unitSystem, 'imperial');
 
   const res = await vehicle.request('/unit/imperial');
-  t.is(res, 'imperial');
-
+  t.is(res.body, 'imperial');
+  t.deepEqual(_.keys(res).sort(), ['body', 'headers'].sort());
 });
 
 test('setUnitSystem - metric', async function(t) {
@@ -99,8 +99,8 @@ test('setUnitSystem - metric', async function(t) {
   t.is(vehicle.unitSystem, 'metric');
 
   const res = await vehicle.request('/unit/metric');
-  t.is(res, 'metric');
-
+  t.is(res.body, 'metric');
+  t.deepEqual(_.keys(res).sort(), ['body', 'headers'].sort());
 });
 
 test('setUnitSystem - error', function(t) {
@@ -109,18 +109,22 @@ test('setUnitSystem - error', function(t) {
 });
 
 test('disconnect', async function(t) {
+  const body = {status: 'success'};
 
   t.context.n = nocks.base()
     .delete('/application')
-    .reply(200, 'disconnect');
+    .reply(200, body);
 
   const response = await vehicle.disconnect();
-  t.is(response, 'disconnect');
+
+  t.is(response.status, body.status);
+  // Headers should be hidden
+  t.deepEqual(_.keys(response), _.keys(body));
+  t.deepEqual(_.keys(response.headers), ['requestId']);
 
 });
 
 test('permissions', async function(t) {
-
   t.context.n = nocks.base()
     .get('/permissions')
     .reply(200, {
@@ -128,12 +132,12 @@ test('permissions', async function(t) {
     });
 
   const permissions = await vehicle.permissions();
+
   t.is(permissions.length, 3);
 
 });
 
 test('info', async function(t) {
-
   const body = {
     id: 'id',
     make: 'make',
@@ -145,12 +149,14 @@ test('info', async function(t) {
     .reply(200, body);
 
   const response = await vehicle.info();
+
+  // Headers should be hidden
   t.deepEqual(response, body);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
 
 });
 
 test('location', async function(t) {
-
   const body = {
     latitude: 1234,
     longitude: 1234,
@@ -163,7 +169,10 @@ test('location', async function(t) {
     .reply(200, body, headers);
 
   const response = await vehicle.location();
+
+  // Headers should be hidden
   t.deepEqual(response.data, body);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
@@ -171,7 +180,6 @@ test('location', async function(t) {
 });
 
 test('location - no age', async function(t) {
-
   const body = {
     latitude: 1234,
     longitude: 1234,
@@ -182,13 +190,15 @@ test('location - no age', async function(t) {
     .reply(200, body, headers);
 
   const response = await vehicle.location();
+
+  // Headers should be hidden
   t.deepEqual(response.data, body);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
   t.is(response.age, null);
 
 });
 
 test('odometer', async function(t) {
-
   const body = {
     distance: 1234,
   };
@@ -201,16 +211,17 @@ test('odometer', async function(t) {
     .reply(200, body, headers);
 
   const response = await vehicle.odometer();
+
+  // Headers should be hidden
   t.deepEqual(response.data, body);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
   t.is(response.unitSystem, headers['sc-unit-system']);
-
 });
 
 test('odometer - no age', async function(t) {
-
   const body = {
     distance: 1234,
   };
@@ -222,7 +233,10 @@ test('odometer - no age', async function(t) {
     .reply(200, body, headers);
 
   const response = await vehicle.odometer();
+
+  // Headers should be hidden
   t.deepEqual(response.data, body);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
   t.is(response.age, null);
   t.is(response.unitSystem, headers['sc-unit-system']);
 
@@ -243,35 +257,27 @@ test('vin', async function(t) {
 });
 
 test('lock', async function(t) {
-
   t.context.nock = nocks.base()
     .post('/security', {action: 'LOCK'})
     .reply(200, {status: 'success'});
 
   const response = await vehicle.lock();
 
-  t.deepEqual(
-    _.xor(_.keys(response), [
-      'status',
-    ]),
-    []
-  );
   t.is(response.status, 'success');
+  // Headers should be hidden
+  t.deepEqual(_.keys(response), ['status']);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
 });
 
 test('unlock', async function(t) {
-
   t.context.nock = nocks.base()
     .post('/security', {action: 'UNLOCK'})
     .reply(200, {status: 'success'});
 
   const response = await vehicle.unlock();
 
-  t.deepEqual(
-    _.xor(_.keys(response), [
-      'status',
-    ]),
-    []
-  );
   t.is(response.status, 'success');
+  // Headers should be hidden
+  t.deepEqual(_.keys(response), ['status']);
+  t.deepEqual(_.keys(response.headers), ['requestId']);
 });
