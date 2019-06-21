@@ -30,8 +30,16 @@ helpers.getAuthClientParams = () => ({
 });
 
 const getCodeFromUri = function(uri) {
-  const uriObj = new URL(uri);
-  return uriObj.searchParams.get('code');
+  const {searchParams} = new URL(uri);
+  const code = searchParams.get('code');
+
+  if (code) {
+    return code;
+  } else {
+    throw new Error(
+      `Did not get code in url! Query string: ${searchParams.get('error')}`
+    );
+  }
 };
 
 helpers.runAuthFlow = async function(authUrl) {
@@ -63,11 +71,10 @@ helpers.runAuthFlow = async function(authUrl) {
   await driver.findElement(By.css('button[id=sign-in-button]')).click();
 
   // Permissions
-  await driver
-    .wait(until.elementLocated(By.css('button[id=approval-button]')))
-    .click();
+  await driver.wait(until.elementLocated(By.css('.wrapper-page')));
+  await driver.findElement(By.css('button[id=approval-button]')).click();
 
-  await driver.wait(until.urlContains('code='));
+  await driver.wait(until.urlContains('example.com'));
 
   const url = await driver.getCurrentUrl();
   await driver.quit();
