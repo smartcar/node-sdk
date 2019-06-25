@@ -324,7 +324,6 @@ test('charge', async function(t) {
   };
   const headers = {
     'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
   };
   t.context.n = nocks.base()
     .get('/charge')
@@ -335,8 +334,6 @@ test('charge', async function(t) {
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-
 });
 
 test('charge - no age', async function(t) {
@@ -345,18 +342,15 @@ test('charge - no age', async function(t) {
     isPluggedIn: true,
     state: 'CHARGING',
   };
-  const headers = {
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks.base()
+  const headers = {};
+  t.context.n = nocks
+    .base()
     .get('/charge')
     .reply(200, body, headers);
 
   const response = await vehicle.charge();
   t.deepEqual(response.data, body);
   t.is(response.age, null);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-
 });
 
 test('vin', async function(t) {
