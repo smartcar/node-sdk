@@ -704,7 +704,7 @@ POST Vehicle.unlock
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
 | data.isPluggedIn | <code>Number</code> | Indicates whether charging cable is   plugged in. |
-| data.state | <code>Number</code> | Indicates the current state of the charge   system. Can be "FULLY_CHARGED", "CHARGING", or "NOT_CHARGING". |
+| data.state | <code>Number</code> | Indicates the current state of the charge   system. Can be `FULLY_CHARGED`, `CHARGING`, or `NOT_CHARGING`. |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
 | unitSystem | <code>String</code> | The unit system of the returned data. |
 
