@@ -32,9 +32,11 @@ helpers.getAuthClientParams = () => ({
     'read_odometer',
     'control_security',
     'read_vin',
-    'read_fuel',
-    'read_battery',
-    'read_charge',
+    /*
+     *'read_fuel',
+     *'read_battery',
+     *'read_charge',
+     */
   ],
   testMode: true,
 });
