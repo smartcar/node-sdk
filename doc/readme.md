@@ -706,7 +706,6 @@ POST Vehicle.unlock
 | data.isPluggedIn | <code>Number</code> | Indicates whether charging cable is   plugged in. |
 | data.state | <code>Number</code> | Indicates the current state of the charge   system. Can be `FULLY_CHARGED`, `CHARGING`, or `NOT_CHARGING`. |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data. |
 
 **Example**
 ```js
@@ -716,7 +715,6 @@ POST Vehicle.unlock
     state: "FULLY_CHARGED",
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'imperial',
 }
 ```
 <a name="Security"></a>
