@@ -334,6 +334,7 @@ test('charge', async function(t) {
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
+
 });
 
 test('charge - no age', async function(t) {
@@ -351,6 +352,7 @@ test('charge - no age', async function(t) {
   const response = await vehicle.charge();
   t.deepEqual(response.data, body);
   t.is(response.age, null);
+
 });
 
 test('vin', async function(t) {
