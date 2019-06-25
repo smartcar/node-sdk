@@ -41,6 +41,12 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#Fuel">Fuel</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Battery">Battery</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Security">Security</a> : <code>Object</code></dt>
 <dd></dd>
 </dl>
@@ -412,6 +418,9 @@ _To use this function, please contact us!_
     * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
     * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
     * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
+    * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
+    * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
+    * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
     * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
@@ -483,6 +492,27 @@ GET Vehicle.odometer
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
+<a name="Vehicle+fuel"></a>
+
+### vehicle.fuel() ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
+GET Vehicle.fuel
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
+<a name="Vehicle+battery"></a>
+
+### vehicle.battery() ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
+GET Vehicle.battery
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
+<a name="Vehicle+charge"></a>
+
+### vehicle.charge() ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
+GET Vehicle.charge
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
 <a name="Vehicle+vin"></a>
 
 ### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
@@ -607,6 +637,83 @@ POST Vehicle.unlock
 {
   data: {
     distance: 1234.12,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial',
+}
+```
+<a name="Fuel"></a>
+
+## Fuel : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). |
+| data.percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
+| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters of gallons (US)). |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned data. |
+
+**Example**
+```js
+{
+  data: {
+    range: 40.5,
+    percentRemaining: 0.3,
+    amountRemaining: 40.5,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial',
+}
+```
+<a name="Battery"></a>
+
+## Battery : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). |
+| data.percentRemaining | <code>Number</code> | The remaining level of charge in   the battery (in percent). |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned data. |
+
+**Example**
+```js
+{
+  data: {
+    range: 40.5,
+    percentRemaining: 0.3,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial',
+}
+```
+<a name="Charge"></a>
+
+## Charge : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.isPluggedIn | <code>Number</code> | Indicates whether charging cable is   plugged in. |
+| data.state | <code>Number</code> | Indicates the current state of the charge   system. Can be "FULLY_CHARGED", "CHARGING", or "NOT_CHARGING". |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned data. |
+
+**Example**
+```js
+{
+  data: {
+    isPluggedIn: false,
+    state: "FULLY_CHARGED",
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
   unitSystem: 'imperial',

@@ -26,6 +26,18 @@ test('vehicle odometer', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.odometer());
 });
 
+test('vehicle fuel', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.fuel());
+});
+
+test('vehicle battery', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.battery());
+});
+
+test('vehicle charge', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.charge());
+});
+
 test('vehicle vin', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.vin());
 });
