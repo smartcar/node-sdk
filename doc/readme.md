@@ -160,7 +160,8 @@ Return the user's id.
     * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
     * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
     * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
-    * [.NotCapableError(message)](#module_errors.NotCapableError) ⇐ <code>SmartcarError</code>
+    * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
+    * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
     * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
 
 <a name="module_errors.SmartcarError"></a>
@@ -274,10 +275,22 @@ Error thrown when the server throws an unexpected error.
 | --- | --- |
 | message | an error description to set |
 
-<a name="module_errors.NotCapableError"></a>
+<a name="module_errors.VehicleNotCapableError"></a>
 
-### errors.NotCapableError(message) ⇐ <code>SmartcarError</code>
+### errors.VehicleNotCapableError(message) ⇐ <code>SmartcarError</code>
 Error thrown when vehicle is not capable of performing the method.
+
+**Kind**: static method of [<code>errors</code>](#module_errors)
+**Extends**: <code>SmartcarError</code>
+
+| Param | Description |
+| --- | --- |
+| message | an error description to set |
+
+<a name="module_errors.SmartcarNotCapableError"></a>
+
+### errors.SmartcarNotCapableError(message) ⇐ <code>SmartcarError</code>
+Error thrown when Smartcar is not capable of performing the method.
 
 **Kind**: static method of [<code>errors</code>](#module_errors)
 **Extends**: <code>SmartcarError</code>
@@ -342,6 +355,9 @@ approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
+**Throws**:
+
+- <code>SmartcarError</code>
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -367,6 +383,10 @@ Exchange an authorization code for an access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -379,6 +399,10 @@ Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -399,6 +423,10 @@ _To use this function, please contact us!_
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: <code>Promise.&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
   vehicle is likely compatible.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -459,6 +487,10 @@ to make requests to it again.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 <a name="Vehicle+permissions"></a>
 
 ### vehicle.permissions() ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
@@ -467,6 +499,10 @@ this vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 **Example**
 ```js
 ['read_vehicle_info', 'read_odometer', 'control_security']
@@ -478,6 +514,10 @@ GET Vehicle.info
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
+**Throws**:
+
+- <code>SmartcarError</code>
+
 <a name="Vehicle+location"></a>
 
 ### vehicle.location() ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
@@ -485,6 +525,10 @@ GET Vehicle.location
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 <a name="Vehicle+odometer"></a>
 
 ### vehicle.odometer() ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
@@ -492,6 +536,10 @@ GET Vehicle.odometer
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 <a name="Vehicle+fuel"></a>
 
 ### vehicle.fuel() ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
@@ -501,7 +549,7 @@ GET Vehicle.fuel
 **Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
 **Throws**:
 
-- <code>SmartcarError</code> on unsuccessful request
+- <code>SmartcarError</code>
 
 <a name="Vehicle+battery"></a>
 
@@ -512,7 +560,7 @@ GET Vehicle.battery
 **Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
 **Throws**:
 
-- <code>SmartcarError</code> on unsuccessful request
+- <code>SmartcarError</code>
 
 <a name="Vehicle+charge"></a>
 
@@ -523,7 +571,7 @@ GET Vehicle.charge
 **Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
 **Throws**:
 
-- <code>SmartcarError</code> on unsuccessful request
+- <code>SmartcarError</code>
 
 <a name="Vehicle+vin"></a>
 
@@ -532,6 +580,10 @@ GET Vehicle.vin
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 <a name="Vehicle+lock"></a>
 
 ### vehicle.lock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
