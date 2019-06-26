@@ -100,6 +100,10 @@ Return list of the user's vehicles ids.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
 **Returns**: [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
+**Throws**:
+
+- <code>SmartcarError</code>
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -115,6 +119,10 @@ Return the user's id.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
 **Returns**: <code>Promise.&lt;String&gt;</code> - the user id
+**Throws**:
+
+- <code>SmartcarError</code>
+
 
 | Param | Type | Description |
 | --- | --- | --- |
