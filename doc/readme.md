@@ -499,6 +499,10 @@ GET Vehicle.fuel
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
+**Throws**:
+
+- <code>SmartcarError</code> on unsuccessful request
+
 <a name="Vehicle+battery"></a>
 
 ### vehicle.battery() ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
@@ -506,6 +510,10 @@ GET Vehicle.battery
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
+**Throws**:
+
+- <code>SmartcarError</code> on unsuccessful request
+
 <a name="Vehicle+charge"></a>
 
 ### vehicle.charge() ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
@@ -513,6 +521,10 @@ GET Vehicle.charge
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
+**Throws**:
+
+- <code>SmartcarError</code> on unsuccessful request
+
 <a name="Vehicle+vin"></a>
 
 ### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
