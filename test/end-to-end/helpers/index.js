@@ -71,7 +71,8 @@ helpers.runAuthFlow = async function(authUrl) {
   await driver.findElement(By.css('button[id=sign-in-button]')).click();
 
   // Permissions
-  await driver.wait(until.elementLocated(By.css('.wrapper-page')));
+  await driver.sleep(5000);
+  await driver.wait(until.elementLocated(By.css('.page-content')));
   await driver.findElement(By.css('button[id=approval-button]')).click();
 
   await driver.wait(until.urlContains('example.com'));
