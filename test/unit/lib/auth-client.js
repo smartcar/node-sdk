@@ -99,6 +99,7 @@ test('getAuthUrl - simple', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=auto';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&mode=live';
 
@@ -123,6 +124,7 @@ test('getAuthUrl - with vehicleInfo={...}', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=auto';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&make=TESLA';
   expected += '&mode=live';
@@ -168,6 +170,7 @@ test('getAuthUrl - no scope', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&state=fakestate';
   expected += '&mode=live';
 
@@ -192,6 +195,7 @@ test('getAuthUrl - state & approval prompt', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=live';
@@ -218,6 +222,7 @@ test('getAuthUrl - test mode true', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=test';
@@ -244,6 +249,7 @@ test('getAuthUrl - test mode false', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=live';
@@ -270,6 +276,7 @@ test('getAuthUrl - deprecated development mode', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=test';
@@ -296,6 +303,7 @@ test('getAuthUrl - deprecated development mode false', function(t) {
   expected += `response_type=code&client_id=${CLIENT_ID}`;
   expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&single_select=false';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=live';
