@@ -327,7 +327,7 @@ Create a Smartcar OAuth client for your application.
 <a name="AuthClient+getAuthUrl"></a>
 
 ### authClient.getAuthUrl([options]) ⇒ <code>String</code>
-Generate the OAuth authorization URL.
+Generate the Smartcar Connect URL.
 
 By default users are not shown the permission dialog if they have already
 approved the set of scopes for this application. The application can elect
@@ -335,7 +335,7 @@ to always display the permissions dialog to the user by setting
 approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>String</code> - OAuth authorization URL to direct user to.
+**Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
