@@ -367,6 +367,7 @@ approval_prompt to `force`.
 
 - <code>SmartcarError</code>
 
+
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> |  |  |
