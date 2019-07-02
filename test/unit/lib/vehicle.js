@@ -132,7 +132,7 @@ test('permissions', async function(t) {
 
 });
 
-test('has permissions', async function(t) {
+test('has permissions - single', async function(t) {
 
   t.context.n = nocks.base()
     .get('/permissions')
@@ -140,10 +140,23 @@ test('has permissions', async function(t) {
       permissions: ['permission1', 'permission2', 'permission3'],
     });
 
-  const hasPermission = await vehicle.hasPermission('permission1');
+  const hasPermission = await vehicle.hasPermissions('permission1');
 
   t.is(hasPermission, true);
+});
 
+test('has permissions - multi', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermissions = await vehicle.hasPermissions(
+    ['permission1', 'permission2']);
+
+  t.is(hasPermissions, true);
 });
 
 test('info', async function(t) {
