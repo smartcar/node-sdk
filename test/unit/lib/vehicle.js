@@ -132,6 +132,20 @@ test('permissions', async function(t) {
 
 });
 
+test('has permissions', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermission = await vehicle.hasPermission('permission1');
+
+  t.is(hasPermission, true);
+
+});
+
 test('info', async function(t) {
 
   const body = {
