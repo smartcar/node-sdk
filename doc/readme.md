@@ -229,7 +229,7 @@ the current vehicle state.
 | Param | Description |
 | --- | --- |
 | message | an error description to set |
-| code | a vehicle state error code |
+| code | a vehicle state error code (https://smartcar.com/docs/api#errors) |
 
 <a name="module_errors.RateLimitingError"></a>
 
@@ -321,7 +321,7 @@ Create a Smartcar OAuth client for your application.
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
 | [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch the Smartcar auth flow in test mode. [API Reference](https://smartcar.com/docs#request-authorization). |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.development] | <code>Boolean</code> | <code>false</code> | DEPRECATED: Launch Smartcar auth in development mode to enable mock vehicle brands. |
 
 <a name="AuthClient+getAuthUrl"></a>
@@ -343,6 +343,7 @@ approval_prompt to `force`.
 | [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 | [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.singleSelect] | <code>Boolean</code> | <code>false</code> | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
 
 **Example**
 ```js
@@ -353,6 +354,7 @@ response_type=code
 &redirect_uri=https://example.com/home
 &state=0facda3319
 &make=TESLA
+&single_select=true
 ```
 <a name="AuthClient+exchangeCode"></a>
 
