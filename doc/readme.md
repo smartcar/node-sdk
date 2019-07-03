@@ -286,7 +286,7 @@ Error thrown when the server throws an unexpected error.
 <a name="module_errors.VehicleNotCapableError"></a>
 
 ### errors.VehicleNotCapableError(message) ⇐ <code>SmartcarError</code>
-Error thrown when vehicle is not capable of performing the method.
+Error thrown when vehicle is not capable of performing the request.
 
 **Kind**: static method of [<code>errors</code>](#module_errors)
 **Extends**: <code>SmartcarError</code>
@@ -298,7 +298,7 @@ Error thrown when vehicle is not capable of performing the method.
 <a name="module_errors.SmartcarNotCapableError"></a>
 
 ### errors.SmartcarNotCapableError(message) ⇐ <code>SmartcarError</code>
-Error thrown when Smartcar is not capable of performing the method.
+Error thrown when Smartcar is not capable of performing the request.
 
 **Kind**: static method of [<code>errors</code>](#module_errors)
 **Extends**: <code>SmartcarError</code>
@@ -365,7 +365,9 @@ approval_prompt to `force`.
 **Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+for all possible errors.
 
 
 | Param | Type | Default | Description |
@@ -394,7 +396,9 @@ Exchange an authorization code for an access object.
 **Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+for all possible errors.
 
 
 | Param | Type | Description |
@@ -410,7 +414,9 @@ Exchange a refresh token for a new access object.
 **Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+for all possible errors.
 
 
 | Param | Type | Description |
@@ -434,7 +440,9 @@ _To use this function, please contact us!_
   vehicle is likely compatible.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 
 | Param | Type | Description |
@@ -498,7 +506,9 @@ to make requests to it again.
 **Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+permissions"></a>
 
@@ -510,7 +520,9 @@ this vehicle.
 **Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 **Example**
 ```js
@@ -525,7 +537,9 @@ GET Vehicle.info
 **Returns**: [<code>Promise.&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+location"></a>
 
@@ -536,7 +550,9 @@ GET Vehicle.location
 **Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+odometer"></a>
 
@@ -547,7 +563,9 @@ GET Vehicle.odometer
 **Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+fuel"></a>
 
@@ -558,7 +576,9 @@ GET Vehicle.fuel
 **Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+battery"></a>
 
@@ -569,7 +589,9 @@ GET Vehicle.battery
 **Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+charge"></a>
 
@@ -580,7 +602,9 @@ GET Vehicle.charge
 **Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+vin"></a>
 
@@ -591,7 +615,9 @@ GET Vehicle.vin
 **Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+lock"></a>
 
@@ -602,7 +628,9 @@ POST Vehicle.lock
 **Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
 **Throws**:
 
-- <code>SmartcarError</code> on unsuccessful request
+- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="Vehicle+unlock"></a>
 
@@ -613,7 +641,9 @@ POST Vehicle.unlock
 **Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
 **Throws**:
 
-- <code>SmartcarError</code> on unsuccessful request
+- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 <a name="parseAge"></a>
 
@@ -701,9 +731,9 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.distance | <code>Number</code> | The reading of the vehicle's odometer. |
+| data.distance | <code>Number</code> | The reading of the vehicle's odometer (in   kms or miles). To set unit, @see [setUnitSystem](setUnitSystem). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned odometer. reading. `metric` signifies kilometers, `imperial` signifies miles. |
+| unitSystem | <code>String</code> | The unit system of the returned odometer. reading. `metric` signifies kilometers, `imperial` signifies miles. To set, @see [setUnitSystem](setUnitSystem). |
 
 **Example**
 ```js
@@ -724,11 +754,11 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, @see [setUnitSystem](setUnitSystem). |
 | data.percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
-| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters of gallons (US)). |
+| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). To set unit, @see [setUnitSystem](setUnitSystem). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data. |
+| unitSystem | <code>String</code> | The unit system of the returned data.   To set, @see [setUnitSystem](setUnitSystem). |
 
 **Example**
 ```js
@@ -751,10 +781,10 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles).To set unit, @see [setUnitSystem](setUnitSystem). |
 | data.percentRemaining | <code>Number</code> | The remaining level of charge in   the battery (in percent). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data. |
+| unitSystem | <code>String</code> | The unit system of the returned data.   To set, @see [setUnitSystem](setUnitSystem). |
 
 **Example**
 ```js
