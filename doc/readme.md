@@ -102,7 +102,9 @@ Return list of the user's vehicles ids.
 **Returns**: [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 
 | Param | Type | Description |
@@ -121,7 +123,9 @@ Return the user's id.
 **Returns**: <code>Promise.&lt;String&gt;</code> - the user id
 **Throws**:
 
-- <code>SmartcarError</code>
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
 
 
 | Param | Type | Description |
