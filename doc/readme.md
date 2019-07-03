@@ -366,7 +366,7 @@ approval_prompt to `force`.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
 for all possible errors.
 
 
@@ -397,7 +397,7 @@ Exchange an authorization code for an access object.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
 for all possible errors.
 
 
@@ -415,7 +415,7 @@ Exchange a refresh token for a new access object.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
 for all possible errors.
 
 
@@ -441,7 +441,7 @@ _To use this function, please contact us!_
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 
@@ -507,7 +507,7 @@ to make requests to it again.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+permissions"></a>
@@ -521,7 +521,7 @@ this vehicle.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 **Example**
@@ -538,7 +538,7 @@ GET Vehicle.info
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+location"></a>
@@ -551,7 +551,7 @@ GET Vehicle.location
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+odometer"></a>
@@ -564,7 +564,7 @@ GET Vehicle.odometer
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+fuel"></a>
@@ -577,7 +577,7 @@ GET Vehicle.fuel
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+battery"></a>
@@ -590,7 +590,7 @@ GET Vehicle.battery
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+charge"></a>
@@ -603,7 +603,7 @@ GET Vehicle.charge
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+vin"></a>
@@ -616,7 +616,7 @@ GET Vehicle.vin
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+lock"></a>
@@ -629,7 +629,7 @@ POST Vehicle.lock
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="Vehicle+unlock"></a>
@@ -642,7 +642,7 @@ POST Vehicle.unlock
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section of the README](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 <a name="parseAge"></a>
@@ -754,9 +754,9 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, @see [setUnitSystem](setUnitSystem). |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, @see [setUnitSystem](#Vehicle+setUnitSystem). |
 | data.percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
-| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). To set unit, @see [setUnitSystem](setUnitSystem). |
+| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). To set unit, see [setUnitSystem](@link Vehicle#setUnitSystem). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
 | unitSystem | <code>String</code> | The unit system of the returned data.   To set, @see [setUnitSystem](setUnitSystem). |
 
