@@ -159,6 +159,33 @@ test('has permissions - multi', async function(t) {
   t.is(hasPermissions, true);
 });
 
+test('has permissions - false', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermission = await vehicle.hasPermissions('permission4');
+
+  t.is(hasPermission, false);
+});
+
+test('has permissions - mutli false', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermissions = await vehicle.hasPermissions(
+    ['permission1', 'permission4']);
+
+  t.is(hasPermissions, false);
+});
+
 test('info', async function(t) {
 
   const body = {
