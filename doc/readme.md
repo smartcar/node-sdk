@@ -754,7 +754,7 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, @see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
 | data.percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
 | data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). To set unit, @see [setUnitSystem](@link Vehicle#setUnitSystem). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
