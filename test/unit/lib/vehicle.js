@@ -172,7 +172,7 @@ test('has permissions - false', async function(t) {
   t.is(hasPermission, false);
 });
 
-test('has permissions - mutli false', async function(t) {
+test('has permissions - multi false', async function(t) {
 
   t.context.n = nocks.base()
     .get('/permissions')
