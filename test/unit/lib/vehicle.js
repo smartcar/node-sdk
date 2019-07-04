@@ -140,7 +140,7 @@ test('has permissions - single', async function(t) {
       permissions: ['permission1', 'permission2', 'permission3'],
     });
 
-  const hasPermission = await vehicle.hasPermissions('permission1');
+  const hasPermission = await vehicle.hasPermissions('required:permission1');
 
   t.is(hasPermission, true);
 });
@@ -154,7 +154,7 @@ test('has permissions - multi', async function(t) {
     });
 
   const hasPermissions = await vehicle.hasPermissions(
-    ['permission1', 'permission2']);
+    ['permission1', 'required:permission2']);
 
   t.is(hasPermissions, true);
 });
