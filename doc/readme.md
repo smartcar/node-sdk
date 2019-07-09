@@ -469,11 +469,11 @@ this vehicle.
 Checks if permissions granted to a vehicle contain the specified permission(s).
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - An array of permissions names.
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Whether the vehicle has the specified permission(s)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Permission(s) to check if the vehicle has |
+| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Check if the vehicle has these permission(s) granted |
 
 <a name="Vehicle+info"></a>
 
