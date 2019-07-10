@@ -473,7 +473,7 @@ Checks if permissions granted to a vehicle contain the specified permission(s).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Check if the vehicle has these permission(s) granted |
+| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Permission(s) to check |
 
 <a name="Vehicle+info"></a>
 
