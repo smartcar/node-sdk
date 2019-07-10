@@ -42,6 +42,15 @@ test('vehicle permissions', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.permissions());
 });
 
+test('vehicle has permission', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.hasPermissions('read_odometer'));
+});
+
+test('vehicle has permissions', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.hasPermissions(
+    ['read_odometer', 'read_vehicle_info']));
+});
+
 test('vehicle disconnect', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.disconnect());
 });

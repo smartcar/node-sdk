@@ -409,6 +409,7 @@ _To use this function, please contact us!_
     * [.setUnitSystem(unitSystem)](#Vehicle+setUnitSystem)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>Promise</code>](#Promise)
     * [.permissions()](#Vehicle+permissions) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+    * [.hasPermissions(permissions)](#Vehicle+hasPermissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
     * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
     * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
@@ -462,6 +463,18 @@ this vehicle.
 ```js
 ['read_vehicle_info', 'read_odometer', 'control_security']
 ```
+<a name="Vehicle+hasPermissions"></a>
+
+### vehicle.hasPermissions(permissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Checks if permissions granted to a vehicle contain the specified permission(s).
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Whether the vehicle has the specified permission(s)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Permission(s) to check |
+
 <a name="Vehicle+info"></a>
 
 ### vehicle.info() ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
