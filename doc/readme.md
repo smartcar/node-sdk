@@ -343,7 +343,7 @@ approval_prompt to `force`.
 | [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 | [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> | <code>false</code> | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
+| [options.singleSelect] | <code>Boolean</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. Defaults to `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
 
 **Example**
 ```js
