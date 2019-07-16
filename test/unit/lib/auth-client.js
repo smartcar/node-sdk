@@ -305,7 +305,40 @@ test('getAuthUrl - single select false', function(t) {
   t.is(actual, expected);
 });
 
-test('getAuthUrl - single select junk', function(t) {
+test('getAuthUrl - single select vin', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const singleSelect = {
+    vin: '01234567890123',
+  };
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+    singleSelect,
+  });
+
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&single_select_vin=01234567890123';
+  expected += '&single_select=true';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+});
+
+test('getAuthUrl - single select with junk information passed in', function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -317,7 +350,7 @@ test('getAuthUrl - single select junk', function(t) {
     scope: 'this should be ignored',
     state: 'fakestate',
     forcePrompt: true,
-    singleSelect: 'potato',
+    singleSelect: 'alkdjfklsdjf',
   });
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
@@ -327,6 +360,58 @@ test('getAuthUrl - single select junk', function(t) {
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&single_select=false';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+});
+
+test('getAuthUrl - single select with junk keys in object passed in', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+    singleSelect: {pizza: '123124'},
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&single_select=false';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+});
+
+test('getAuthUrl - excludes single select when singleSelect not passed in', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
   expected += '&mode=live';
 
   t.is(actual, expected);
