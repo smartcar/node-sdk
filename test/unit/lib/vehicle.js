@@ -132,6 +132,60 @@ test('permissions', async function(t) {
 
 });
 
+test('has permissions - single', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermission = await vehicle.hasPermissions('required:permission1');
+
+  t.is(hasPermission, true);
+});
+
+test('has permissions - multi', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermissions = await vehicle.hasPermissions(
+    ['permission1', 'required:permission2']);
+
+  t.is(hasPermissions, true);
+});
+
+test('has permissions - false', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermission = await vehicle.hasPermissions('permission4');
+
+  t.is(hasPermission, false);
+});
+
+test('has permissions - multi false', async function(t) {
+
+  t.context.n = nocks.base()
+    .get('/permissions')
+    .reply(200, {
+      permissions: ['permission1', 'permission2', 'permission3'],
+    });
+
+  const hasPermissions = await vehicle.hasPermissions(
+    ['permission1', 'permission4']);
+
+  t.is(hasPermissions, false);
+});
+
 test('info', async function(t) {
 
   const body = {
