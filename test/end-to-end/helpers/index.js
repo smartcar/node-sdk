@@ -26,6 +26,16 @@ helpers.getAuthClientParams = () => ({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   redirectUri: 'https://example.com/auth',
+  scope: [
+    'read_vehicle_info',
+    'read_location',
+    'read_odometer',
+    'control_security',
+    'read_vin',
+    'read_fuel',
+    'read_battery',
+    'read_charge',
+  ],
   testMode: true,
 });
 

@@ -239,11 +239,9 @@ test('catch - ServerError', async function(t) {
   t.true(boxed instanceof errors.ServerError);
   t.is(boxed.message, 'Unexpected server error');
   t.true(n.isDone());
-
 });
 
-test('catch - NotCapableError', async function(t) {
-
+test('catch - VehicleNotCapableError', async function(t) {
   const n = nock('https://mock.com')
     .get('/notcap')
     .reply(501, {
@@ -254,12 +252,27 @@ test('catch - NotCapableError', async function(t) {
   const err = await t.throwsAsync(util.request('https://mock.com/notcap'));
   const boxed = t.throws(() => util.catch(err));
 
-  t.true(boxed instanceof errors.NotCapableError);
+  t.true(boxed instanceof errors.VehicleNotCapableError);
   t.regex(boxed.message, /https:\/\/mock.com\/notcap/);
   t.true(n.isDone());
+});
 
-}
-);
+test('catch - SmartcarNotCapableError', async function(t) {
+  const n = nock('https://mock.com')
+    .get('/notcap')
+    .reply(501, {
+      error: 'smartcar_not_capable_error',
+      message: 'wat',
+    });
+
+  const err = await t.throwsAsync(util.request('https://mock.com/notcap'));
+  const boxed = t.throws(() => util.catch(err));
+
+  t.true(boxed instanceof errors.SmartcarNotCapableError);
+  t.is(boxed.message, 'wat');
+  t.true(n.isDone());
+});
+
 test('catch - SmartcarError', async function(t) {
 
   const n = nock('https://mock.com')
