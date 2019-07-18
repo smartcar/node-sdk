@@ -282,6 +282,133 @@ test('odometer - no age', async function(t) {
 
 });
 
+test('fuel', async function(t) {
+
+  const body = {
+    range: 1234,
+    percentRemaining: 0.43,
+    amountRemaining: 7,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/fuel')
+    .reply(200, body, headers);
+
+  const response = await vehicle.fuel();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('fuel - no age', async function(t) {
+
+  const body = {
+    range: 1234,
+    percentRemaining: 0.43,
+    amountRemaining: 7,
+  };
+  const headers = {
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/fuel')
+    .reply(200, body, headers);
+
+  const response = await vehicle.fuel();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('battery', async function(t) {
+
+  const body = {
+    range: 1234,
+    percentRemaining: 0.43,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/battery')
+    .reply(200, body, headers);
+
+  const response = await vehicle.battery();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('battery - no age', async function(t) {
+
+  const body = {
+    range: 1234,
+    percentRemaining: 0.43,
+  };
+  const headers = {
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/battery')
+    .reply(200, body, headers);
+
+  const response = await vehicle.battery();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
+test('charge', async function(t) {
+
+  const body = {
+    isPluggedIn: true,
+    state: 'CHARGING',
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+  };
+  t.context.n = nocks.base()
+    .get('/charge')
+    .reply(200, body, headers);
+
+  const response = await vehicle.charge();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+
+});
+
+test('charge - no age', async function(t) {
+
+  const body = {
+    isPluggedIn: true,
+    state: 'CHARGING',
+  };
+  const headers = {};
+  t.context.n = nocks
+    .base()
+    .get('/charge')
+    .reply(200, body, headers);
+
+  const response = await vehicle.charge();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
+
+});
+
 test('vin', async function(t) {
 
   const body = {

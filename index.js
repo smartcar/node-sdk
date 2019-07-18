@@ -76,6 +76,9 @@ smartcar.isExpired = function(expiration) {
  * @param {Number} [paging.limit] - number of vehicles to return
  * @param {Number} [paging.offset] - index to start vehicle list
  * @return {Promise.<module:smartcar~VehicleIds>} A promise with the vehicle ids.
+ * @throws {SmartcarError} - an instance of SmartcarError.
+ *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+ *   for all possible errors.
  */
 smartcar.getVehicleIds = Promise.method(function(token, paging) {
 
@@ -98,6 +101,9 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
  * @method
  * @param {String} token - access token
  * @return {Promise.<String>} the user id
+ * @throws {SmartcarError} - an instance of SmartcarError.
+ *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+ *   for all possible errors.
  */
 smartcar.getUserId = Promise.method(function(token) {
 
