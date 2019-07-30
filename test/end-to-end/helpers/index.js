@@ -27,14 +27,14 @@ helpers.getAuthClientParams = () => ({
   clientSecret: CLIENT_SECRET,
   redirectUri: 'https://example.com/auth',
   scope: [
-    'read_vehicle_info',
-    'read_location',
-    'read_odometer',
-    'control_security',
-    'read_vin',
-    'read_fuel',
-    'read_battery',
-    'read_charge',
+    'required:read_vehicle_info',
+    'required:read_location',
+    'required:read_odometer',
+    'required:control_security',
+    'required:read_vin',
+    'required:read_fuel',
+    'required:read_battery',
+    'required:read_charge',
   ],
   testMode: true,
 });
@@ -72,7 +72,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   // OEM Selector
   await driver.get(authUrl);
-  await driver.findElement(By.css('button[data-make="TESLA"]')).click();
+  await driver.findElement(By.css('button[data-make="CHEVROLET"]')).click();
 
   // Login
   const email = `${uuid()}@email.com`;
