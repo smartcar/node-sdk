@@ -9,7 +9,10 @@ test('inheritance check', function(t) {
   Object.keys(errors).forEach(function(error) {
     switch (error) {
       case 'VehicleStateError':
-        t.true(new errors[error]('Message', {code: 'VS_000'}) instanceof errors.SmartcarError);
+        t.true(
+          new errors[error]('Message', {code: 'VS_000'})
+          instanceof errors.SmartcarError
+        );
         break;
       default:
         t.true(new errors[error]() instanceof errors.SmartcarError);
