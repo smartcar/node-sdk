@@ -70,8 +70,11 @@ helpers.runAuthFlow = async function(authUrl) {
     .forBrowser('firefox')
     .build();
 
-  // OEM Selector
   await driver.get(authUrl);
+  // Preamble
+  await driver.findElement(By.css('button[id="continue-button"]')).click();
+
+  // OEM Selector
   await driver.findElement(By.css('button[data-make="CHEVROLET"]')).click();
 
   // Login
