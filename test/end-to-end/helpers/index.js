@@ -72,7 +72,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   await driver.get(authUrl);
   // Preamble
-  await driver.findElement(By.css('button[id="continue-button"]')).click();
+  await driver.findElement(By.id('continue-button')).click();
 
   // OEM Selector
   await driver.findElement(By.css('button[data-make="CHEVROLET"]')).click();
