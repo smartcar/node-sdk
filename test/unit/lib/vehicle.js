@@ -306,6 +306,51 @@ test('fuel', async function(t) {
 
 });
 
+test('oil', async function(t) {
+
+  const body = {
+    lifeRemaining: 0.86,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+  };
+  t.context.n = nocks.base()
+    .get('/engine/oil')
+    .reply(200, body, headers);
+
+  const response = await vehicle.oil();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+
+});
+
+test('tire pressure', async function(t) {
+
+  const body = {
+    frontLeft: 33,
+    frontRight: 34,
+    backLeft: 33,
+    backRight: 33,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/tires/pressure')
+    .reply(200, body, headers);
+
+  const response = await vehicle.tirePressure();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
 test('fuel - no age', async function(t) {
 
   const body = {
