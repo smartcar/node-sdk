@@ -306,6 +306,27 @@ test('fuel', async function(t) {
 
 });
 
+test('fuel - no age', async function(t) {
+
+  const body = {
+    range: 1234,
+    percentRemaining: 0.43,
+    amountRemaining: 7,
+  };
+  const headers = {
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks.base()
+    .get('/fuel')
+    .reply(200, body, headers);
+
+  const response = await vehicle.fuel();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+
+});
+
 test('oil', async function(t) {
 
   const body = {
@@ -323,6 +344,22 @@ test('oil', async function(t) {
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
+
+});
+
+test('oil - no age', async function(t) {
+
+  const body = {
+    lifeRemaining: 0.86,
+  };
+  const headers = {};
+  t.context.n = nocks.base()
+    .get('/engine/oil')
+    .reply(200, body, headers);
+
+  const response = await vehicle.oil();
+  t.deepEqual(response.data, body);
+  t.is(response.age, null);
 
 });
 
@@ -351,21 +388,22 @@ test('tire pressure', async function(t) {
 
 });
 
-test('fuel - no age', async function(t) {
+test('tire pressure - no age', async function(t) {
 
   const body = {
-    range: 1234,
-    percentRemaining: 0.43,
-    amountRemaining: 7,
+    frontLeft: 33,
+    frontRight: 34,
+    backLeft: 33,
+    backRight: 33,
   };
   const headers = {
     'sc-unit-system': 'metric',
   };
   t.context.n = nocks.base()
-    .get('/fuel')
+    .get('/tires/pressure')
     .reply(200, body, headers);
 
-  const response = await vehicle.fuel();
+  const response = await vehicle.tirePressure();
   t.deepEqual(response.data, body);
   t.is(response.age, null);
   t.is(response.unitSystem, headers['sc-unit-system']);

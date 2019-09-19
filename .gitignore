@@ -6,9 +6,6 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# Environment Variable Files
-.env
-
 # Packages
 node_modules
 bower_components
