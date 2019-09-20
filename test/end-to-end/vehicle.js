@@ -30,6 +30,14 @@ test('vehicle fuel', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.fuel());
 });
 
+test('vehicle oil', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.oil());
+});
+
+test('vehicle tire pressure', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.tirePressure());
+});
+
 test('vehicle battery', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.battery());
 });
@@ -63,6 +71,6 @@ test('vehicle has permissions', async(t) => {
     ['read_odometer', 'read_vehicle_info']));
 });
 
-test('vehicle disconnect', async(t) => {
+test.after.always('vehicle disconnect', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.disconnect());
 });
