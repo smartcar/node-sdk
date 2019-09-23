@@ -47,6 +47,10 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#EngineOil">EngineOil</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Security">Security</a> : <code>Object</code></dt>
 <dd></dd>
 </dl>
@@ -473,6 +477,8 @@ _To use this function, please contact us!_
     * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
     * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
+    * [.oil()](#Vehicle+oil) ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
+    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
     * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
@@ -624,7 +630,31 @@ GET Vehicle.charge
 - <code>SmartcarError</code> - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
+  
+<a name="Vehicle+oil"></a>
 
+### vehicle.oil() ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
+GET Vehicle.oil
+
+**Kind**: instance method of [<code>EngineOil</code>](#EngineOil)
+**Returns**: [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's oil status.
+**Throws**:
+
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+  
+### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
+GET Vehicle.tirePressure
+
+**Kind**: instance method of [<code>TirePressure</code>](#TirePressure)
+**Returns**: [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure status.
+**Throws**:
+
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+  
 <a name="Vehicle+vin"></a>
 
 ### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
@@ -837,6 +867,56 @@ POST Vehicle.unlock
     state: "FULLY_CHARGED",
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
+}
+```
+<a name="EngineOil"></a>
+
+## EngineOil : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.lifeRemaining | <code>Number</code> | The engine oil's remaining life span (as a percentage). Oil life is based on the current quality of the oil. |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+
+**Example**
+```js
+{
+  data: {
+    lifeRemaining: 0.86,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+}
+```
+<a name="TirePressure"></a>
+
+## Battery : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.frontLeft | <code>Number</code> | The current air pressure of the front left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.frontRight | <code>Number</code> | The current air pressure of the front right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.backLeft | <code>Number</code> | The current air pressure of the back left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.backRight | <code>Number</code> | The current air pressure of the back right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+
+**Example**
+```js
+{
+  data: {
+    backLeft: 228.3,
+    backRight: 218.2,
+    frontLeft: 223.0,
+    frontRight: 218.6,,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'metric',
 }
 ```
 <a name="Security"></a>
