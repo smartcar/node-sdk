@@ -892,7 +892,7 @@ POST Vehicle.unlock
 ```
 <a name="TirePressure"></a>
 
-## Battery : <code>Object</code>
+## TirePressure : <code>Object</code>
 **Kind**: global typedef
 **Properties**
 
