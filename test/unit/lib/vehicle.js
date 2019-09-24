@@ -373,14 +373,14 @@ test('tire pressure', async function(t) {
   };
   const headers = {
     'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
+    'sc-unit-system': 'imperial',
   };
   t.context.n = nocks.base()
     .get('/tires/pressure')
     .reply(200, body, headers);
 
   const response = await vehicle.tirePressure();
-  t.deepEqual(response.data, body);
+  t.deepEqual(response.data.tires, body);
   t.true(_.isDate(response.age));
   const expectedISOString = new Date(headers['sc-data-age']).toISOString();
   t.is(response.age.toISOString(), expectedISOString);
@@ -397,14 +397,14 @@ test('tire pressure - no age', async function(t) {
     backRight: 33,
   };
   const headers = {
-    'sc-unit-system': 'metric',
+    'sc-unit-system': 'imperial',
   };
   t.context.n = nocks.base()
     .get('/tires/pressure')
     .reply(200, body, headers);
 
   const response = await vehicle.tirePressure();
-  t.deepEqual(response.data, body);
+  t.deepEqual(response.data.tires, body);
   t.is(response.age, null);
   t.is(response.unitSystem, headers['sc-unit-system']);
 

@@ -899,10 +899,11 @@ POST Vehicle.unlock
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.frontLeft | <code>Number</code> | The current air pressure of the front left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.frontRight | <code>Number</code> | The current air pressure of the front right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.backLeft | <code>Number</code> | The current air pressure of the back left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.backRight | <code>Number</code> | The current air pressure of the back right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.tires | <code>Object</code> | An object containing the vehicle's tire pressure data. |
+| data.tires.frontLeft | <code>Number</code> | The current air pressure of the front left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.tires.frontRight | <code>Number</code> | The current air pressure of the front right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.tires.backLeft | <code>Number</code> | The current air pressure of the back left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.tires.backRight | <code>Number</code> | The current air pressure of the back right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
 | age | <code>Date</code> | The timestamp of when the data was recorded. |
 | unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
 
@@ -910,10 +911,12 @@ POST Vehicle.unlock
 ```js
 {
   data: {
-    backLeft: 228.3,
-    backRight: 218.2,
-    frontLeft: 223.0,
-    frontRight: 218.6,,
+    tires : {
+      backLeft: 228.3,
+      backRight: 218.2,
+      frontLeft: 223.0,
+      frontRight: 218.6
+    }
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
   unitSystem: 'metric',
