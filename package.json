@@ -22,7 +22,7 @@
     "index.js"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
