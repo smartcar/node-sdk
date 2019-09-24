@@ -37,9 +37,9 @@
     "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed 's/[ \t]*$//' > doc/readme.md"
   },
   "dependencies": {
+    "@hapi/joi": "^16.1.4",
     "bluebird": "^3.5.5",
     "is-ci": "^2.0.0",
-    "joi": "^14.0.3",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
