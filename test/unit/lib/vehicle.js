@@ -366,10 +366,10 @@ test('oil - no age', async function(t) {
 test('tire pressure', async function(t) {
 
   const body = {
-    frontLeft: 33,
-    frontRight: 34,
-    backLeft: 33,
-    backRight: 33,
+    frontLeft: 33.0,
+    frontRight: 34.0,
+    backLeft: 33.0,
+    backRight: 33.0,
   };
   const headers = {
     'sc-data-age': '2018-05-03T03:45:51+00:00',
@@ -391,10 +391,10 @@ test('tire pressure', async function(t) {
 test('tire pressure - no age', async function(t) {
 
   const body = {
-    frontLeft: 33,
-    frontRight: 34,
-    backLeft: 33,
-    backRight: 33,
+    frontLeft: 33.0,
+    frontRight: 34.0,
+    backLeft: 33.0,
+    backRight: 33.0,
   };
   const headers = {
     'sc-unit-system': 'imperial',
