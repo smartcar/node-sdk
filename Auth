@@ -1,0 +1,16 @@
+// ./index.js
+
+// TODO: Authorization Step 1a: Launch Smartcar authentication dialog
+const client = new smartcar.AuthClient({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: process.env.REDIRECT_URI,
+  scope: ['required:read_vehicle_info'],
+  testMode: true,
+});
+
+app.get('/login', function(req, res) {
+  // TODO: Authorization Step 1b: Launch Smartcar authentication dialog
+  const link = client.getAuthUrl();
+  res.redirect(link);
+});
