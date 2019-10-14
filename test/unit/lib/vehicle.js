@@ -5,6 +5,7 @@ const nock = require('nock');
 const test = require('ava');
 
 const Vehicle = require('../../../lib/vehicle');
+const BatchRequest = require('../../../lib/batch-request');
 const {USER_AGENT} = require('../../../lib/util');
 
 const VID = 'ada7207c-3c0a-4027-a47f-6215ce6f7b93';
@@ -489,53 +490,119 @@ test('charge - no age', async function(t) {
   const response = await vehicle.charge();
   t.deepEqual(response.data, body);
   t.is(response.age, null);
-
 });
 
 test('vin', async function(t) {
-
   const body = {
     vin: '4JGBB8GB2AA537355',
   };
-  t.context.n = nocks.base()
+  t.context.n = nocks
+    .base()
     .get('/vin')
     .reply(200, body);
 
   const vin = await vehicle.vin();
   t.is(vin, body.vin);
-
 });
 
 test('lock', async function(t) {
-
-  t.context.nock = nocks.base()
+  t.context.nock = nocks
+    .base()
     .post('/security', {action: 'LOCK'})
     .reply(200, {status: 'success'});
 
   const response = await vehicle.lock();
 
-  t.deepEqual(
-    _.xor(_.keys(response), [
-      'status',
-    ]),
-    []
-  );
+  t.deepEqual(_.xor(_.keys(response), ['status']), []);
   t.is(response.status, 'success');
 });
 
 test('unlock', async function(t) {
-
-  t.context.nock = nocks.base()
+  t.context.nock = nocks
+    .base()
     .post('/security', {action: 'UNLOCK'})
     .reply(200, {status: 'success'});
 
   const response = await vehicle.unlock();
 
-  t.deepEqual(
-    _.xor(_.keys(response), [
-      'status',
-    ]),
-    []
-  );
+  t.deepEqual(_.xor(_.keys(response), ['status']), []);
   t.is(response.status, 'success');
+});
+
+test.only('batch request', async function(t) {
+  const defaultHeaders = {'sc-unit-system': 'imperial'};
+  const batchRequest = new BatchRequest(defaultHeaders);
+  batchRequest.addRequest('/odometer');
+  batchRequest.addRequest('/transmission/fluid', {'sc-unit-system': 'metric'});
+  batchRequest.addRequest('/fuel');
+  batchRequest.addRequest('/sunroof');
+  const requestBody = {
+    headers: {
+      'sc-unit-system': 'imperial',
+    },
+    requests: [
+      {
+        path: '/odometer',
+      },
+      {
+        headers: {
+          'sc-unit-system': 'metric',
+        },
+        path: '/transmission/fluid',
+      },
+      {
+        path: '/fuel',
+      },
+      {
+        path: '/sunroof',
+      },
+    ],
+  };
+  const responseBody = {
+    responses: [
+      {
+        headers: {'sc-unit-system': 'metric'},
+        path: '/odometer',
+        code: 200,
+        body: {
+          distance: 32768,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/transmission/fluid',
+        code: 200,
+        body: {
+          temperature: 98.2,
+          wear: 0.5,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'metric'},
+        path: '/fuel',
+        code: 200,
+        body: {
+          range: 550.8499755859375,
+          percentRemaining: 0.9449999928474426,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'metric'},
+        path: '/sunroof',
+        code: 501,
+        body: {
+          error: 'vehicle_not_capable_error',
+          message: 'Vehicle is not capable of performing request.',
+        },
+      },
+    ],
+  };
+
+  t.context.n = nocks
+    .base()
+    .post('/batch', requestBody)
+    .reply(200, responseBody);
+
+  const response = await vehicle.batch(batchRequest);
+  t.deepEqual(response.responses, responseBody.responses);
 });
