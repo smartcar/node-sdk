@@ -539,3 +539,74 @@ test('unlock', async function(t) {
   );
   t.is(response.status, 'success');
 });
+
+test.only('batch', async function(t) {
+  vehicle.setUnitSystem('imperial');
+  const endpoints = ['/odometer', '/transmission/fluid', '/fuel', '/sunroof'];
+  const requestBody = {
+    headers: {
+      'sc-unit-system': 'imperial',
+    },
+    requests: [
+      {
+        path: '/odometer',
+      },
+      {
+        path: '/transmission/fluid',
+      },
+      {
+        path: '/fuel',
+      },
+      {
+        path: '/sunroof',
+      },
+    ],
+  };
+  const responseBody = {
+    responses: [
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/odometer',
+        code: 200,
+        body: {
+          distance: 32768,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/transmission/fluid',
+        code: 200,
+        body: {
+          temperature: 98.2,
+          wear: 0.5,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/fuel',
+        code: 200,
+        body: {
+          range: 550.8499755859375,
+          percentRemaining: 0.9449999928474426,
+        },
+      },
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/sunroof',
+        code: 501,
+        body: {
+          error: 'vehicle_not_capable_error',
+          message: 'Vehicle is not capable of performing request.',
+        },
+      },
+    ],
+  };
+
+  t.context.n = nocks
+    .base()
+    .post('/batch', requestBody)
+    .reply(200, responseBody);
+
+  const response = await vehicle.batch(endpoints);
+  t.deepEqual(response.responses, responseBody.responses);
+});
