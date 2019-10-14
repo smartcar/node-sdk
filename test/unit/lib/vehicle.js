@@ -529,7 +529,7 @@ test('unlock', async function(t) {
   t.is(response.status, 'success');
 });
 
-test.only('batch request', async function(t) {
+test('batch request', async function(t) {
   const defaultHeaders = {'sc-unit-system': 'imperial'};
   const batchRequest = new BatchRequest(defaultHeaders);
   batchRequest.addRequest('/odometer');
