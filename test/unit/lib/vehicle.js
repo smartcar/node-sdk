@@ -540,7 +540,7 @@ test('unlock', async function(t) {
   t.is(response.status, 'success');
 });
 
-test.only('batch', async function(t) {
+test('batch', async function(t) {
   vehicle.setUnitSystem('imperial');
   const endpoints = ['/odometer', '/transmission/fluid', '/fuel', '/sunroof'];
   const requestBody = {
