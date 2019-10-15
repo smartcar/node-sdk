@@ -53,6 +53,8 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Security">Security</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
+<dd></dd>
 </dl>
 
 <a name="module_smartcar"></a>
@@ -482,6 +484,7 @@ _To use this function, please contact us!_
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
     * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
+    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
 
 <a name="new_Vehicle_new"></a>
 
@@ -643,7 +646,7 @@ GET Vehicle.oil
 - <code>SmartcarError</code> - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
-  
+
 ### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
 GET Vehicle.tirePressure
 
@@ -688,6 +691,19 @@ POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Throws**:
+
+- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+  
+<a name="Vehicle+batch"></a>
+
+### vehicle.batch(endpoints) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch) [![Pro](https://img.shields.io/badge/Pro-Smartcar%20Pro%20Feature-purple.svg)](https://smartcar.com/pricing/)
+POST Vehicle.batch
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;Batch&gt;</code>](#Batch) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -936,5 +952,45 @@ POST Vehicle.unlock
 ```js
 {
   status: 'success',
+}
+```
+<a name="Batch"></a>
+
+## Batch : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.responses | <code>Object[]</code> | An array containing the respons objects. |
+| data.responses[].headers | <code>Object</code> | The headers for a single response. |
+| data.responses[].headers.unitSystem | <code>String</code> | The unit system of the returned data. To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.responses[].path | <code>String</code> | The data endpoint that was requested. |
+| data.responses[].code | <code>Number</code> | The HTTP response code. |
+| data.responses[].body | <code>Object</code> | The response data from a single request. |
+
+
+**Example**
+```js
+{
+   responses: [
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/odometer',
+        code: 200,
+        body: {
+          distance: 32768,
+        }
+      },
+      {
+        headers: {'sc-unit-system': 'imperial'},
+        path: '/transmission/fluid',
+        code: 200,
+        body: {
+          temperature: 98.2,
+          wear: 0.5,
+        }
+    }
 }
 ```
