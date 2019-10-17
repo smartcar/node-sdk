@@ -533,7 +533,7 @@ test('batch', async function(t) {
       },
     ],
   };
-  const responseBody = {
+  const expectedResponseBody = {
     responses: [
       {
         headers: {'sc-unit-system': 'imperial'},
