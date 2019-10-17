@@ -572,12 +572,12 @@ test('batch', async function(t) {
       },
     ],
   };
-
   t.context.n = nocks
     .base()
     .post('/batch', requestBody)
-    .reply(200, responseBody);
+    .reply(200, expectedResponseBody);
 
   const response = await vehicle.batch(paths);
-  t.deepEqual(response.responses, responseBody.responses);
+
+  t.deepEqual(response.responses, expectedResponseBody.responses);
 });
