@@ -58,6 +58,10 @@ test('vehicle unlock', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.unlock());
 });
 
+test('vehicle batch', async(t) => {
+  await t.notThrowsAsync(t.context.vehicle.batch(['/odometer', '/location']));
+});
+
 test('vehicle permissions', async(t) => {
   await t.notThrowsAsync(t.context.vehicle.permissions());
 });
