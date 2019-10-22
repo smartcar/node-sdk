@@ -41,15 +41,15 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#EngineOil">EngineOil</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Fuel">Fuel</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Battery">Battery</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
-<dd></dd>
-<dt><a href="#EngineOil">EngineOil</a> : <code>Object</code></dt>
-<dd></dd>
-<dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Security">Security</a> : <code>Object</code></dt>
 <dd></dd>
@@ -476,11 +476,11 @@ _To use this function, please contact us!_
     * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
     * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
     * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
+    * [.oil()](#Vehicle+oil) ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
+    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
     * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
     * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
-    * [.oil()](#Vehicle+oil) ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
-    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
     * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
@@ -595,6 +595,32 @@ GET Vehicle.odometer
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
+<a name="Vehicle+oil"></a>
+
+### vehicle.oil() ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
+GET Vehicle.oil
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's engine oil.
+**Throws**:
+
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+<a name="Vehicle+tirePressure"></a>
+
+### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
+GET Vehicle.tirePressure
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure.
+**Throws**:
+
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
 <a name="Vehicle+fuel"></a>
 
 ### vehicle.fuel() ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
@@ -633,31 +659,7 @@ GET Vehicle.charge
 - <code>SmartcarError</code> - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
-  
-<a name="Vehicle+oil"></a>
 
-### vehicle.oil() ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
-GET Vehicle.oil
-
-**Kind**: instance method of [<code>EngineOil</code>](#EngineOil)
-**Returns**: [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's oil status.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
-GET Vehicle.tirePressure
-
-**Kind**: instance method of [<code>TirePressure</code>](#TirePressure)
-**Returns**: [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure status.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-  
 <a name="Vehicle+vin"></a>
 
 ### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
@@ -696,10 +698,10 @@ POST Vehicle.unlock
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
-  
+
 <a name="Vehicle+batch"></a>
 
-### vehicle.batch(endpoints) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch) [![Pro](https://img.shields.io/badge/Pro-Smartcar%20Pro%20Feature-purple.svg)](https://smartcar.com/pricing/)
+### vehicle.batch(paths) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
 POST Vehicle.batch
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -709,6 +711,11 @@ POST Vehicle.batch
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| paths | <code>Array.&lt;String&gt;</code> | A list of paths of endpoints to send requests to. |
 
 <a name="parseAge"></a>
 
@@ -810,6 +817,56 @@ POST Vehicle.batch
   unitSystem: 'imperial',
 }
 ```
+<a name="EngineOil"></a>
+
+## EngineOil : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.lifeRemaining | <code>Number</code> | The engine oil's remaining life span (as a percentage). Oil life is based on the current quality of the oil. |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+
+**Example**
+```js
+{
+  data: {
+    lifeRemaining: 0.86,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z')
+}
+```
+<a name="TirePressure"></a>
+
+## TirePressure : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.frontLeft | <code>Number</code> | The current air pressure of the front left tire |
+| data.frontRight | <code>Number</code> | The current air pressure of the back right tire |
+| data.backLeft | <code>Number</code> | The current air pressure of the back left tire |
+| data.backRight | <code>Number</code> | The current air pressure of the back right tire |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned odometer reading. `metric` signifies kilopascals (kpa), `imperial` signifies pounds per square inch (psi). To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+
+**Example**
+```js
+{
+  data: {
+    frontleft: 33,
+    frontRight: 34,
+    backLeft: 34,
+    backRight: 33
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial'
+}
+```
 <a name="Fuel"></a>
 
 ## Fuel : <code>Object</code>
@@ -885,59 +942,6 @@ POST Vehicle.batch
   age: new Date('2018-05-04T07:20:50.844Z'),
 }
 ```
-<a name="EngineOil"></a>
-
-## EngineOil : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.lifeRemaining | <code>Number</code> | The engine oil's remaining life span (as a percentage). Oil life is based on the current quality of the oil. |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-
-**Example**
-```js
-{
-  data: {
-    lifeRemaining: 0.86,
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-}
-```
-<a name="TirePressure"></a>
-
-## TirePressure : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.tires | <code>Object</code> | An object containing the vehicle's tire pressure data. |
-| data.tires.frontLeft | <code>Number</code> | The current air pressure of the front left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.tires.frontRight | <code>Number</code> | The current air pressure of the front right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.tires.backLeft | <code>Number</code> | The current air pressure of the back left tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.tires.backRight | <code>Number</code> | The current air pressure of the back right tire (in psi or kpa). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
-
-**Example**
-```js
-{
-  data: {
-    tires : {
-      backLeft: 228.3,
-      backRight: 218.2,
-      frontLeft: 223.0,
-      frontRight: 218.6
-    }
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'metric',
-}
-```
 <a name="Security"></a>
 
 ## Security : <code>Object</code>
@@ -963,34 +967,33 @@ POST Vehicle.batch
 | Name | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | The returned vehicle data. |
-| data.responses | <code>Object[]</code> | An array containing the respons objects. |
-| data.responses[].headers | <code>Object</code> | The headers for a single response. |
-| data.responses[].headers.unitSystem | <code>String</code> | The unit system of the returned data. To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| data.responses | <code>Array.&lt;Object&gt;</code> |  |
+| data.responses[].headers | <code>Object</code> | The standard response headers for this path. |
 | data.responses[].path | <code>String</code> | The data endpoint that was requested. |
 | data.responses[].code | <code>Number</code> | The HTTP response code. |
-| data.responses[].body | <code>Object</code> | The response data from a single request. |
-
+| data.responses[].body | <code>Object</code> | The response data (or error) from for this path. |
 
 **Example**
 ```js
 {
-   responses: [
-      {
-        headers: {'sc-unit-system': 'imperial'},
-        path: '/odometer',
-        code: 200,
-        body: {
-          distance: 32768,
-        }
-      },
-      {
-        headers: {'sc-unit-system': 'imperial'},
-        path: '/transmission/fluid',
-        code: 200,
-        body: {
-          temperature: 98.2,
-          wear: 0.5,
-        }
+  responses: [
+    {
+      headers: {'sc-unit-system': 'imperial'},
+      path: '/odometer',
+      code: 200,
+      body: {
+        distance: 32768,
+      }
+    },
+    {
+      headers: {'sc-unit-system': 'imperial'},
+      path: '/location',
+      code: 200,
+      body: {
+        latitude: 37.4292,
+        longitude: 122.1381
+      }
     }
+  ]
 }
 ```
