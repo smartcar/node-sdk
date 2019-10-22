@@ -512,12 +512,8 @@ test('unlock', async function(t) {
 });
 
 test('batch', async function(t) {
-  vehicle.setUnitSystem('imperial');
   const paths = ['/odometer', '/transmission/fluid', '/fuel', '/sunroof'];
   const requestBody = {
-    headers: {
-      'sc-unit-system': 'imperial',
-    },
     requests: [
       {
         path: '/odometer',
