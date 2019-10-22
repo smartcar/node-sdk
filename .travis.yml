@@ -34,6 +34,10 @@ install:
   - firefox -headless &
 
 script:
+  # check if the docs have been generated
+  - npm run docs
+  - test -z "$(git diff --name-only | grep '^doc/readme.md$')"
+
   - npm run test:unit
     # e2e tests use async/await
   - if test "$TRAVIS_NODE_VERSION" -gt 6; then npm run test:e2e; fi
