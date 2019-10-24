@@ -966,9 +966,9 @@ POST Vehicle.batch
 
 | Name | Type | Description |
 | --- | --- | --- |
-| responses | <code>Object</code> | The object containing multiple HTTP responses. |
+| responses | <code>Object</code> | The object of multiple HTTP responses. |
 | data.ENDPOINT | <code>Object</code> | The HTTP response for a given endpoint. ENDPOINT is a Smartcar endpoint (i.e. /odometer, /fuel). |
-| data.ENDPOINT.code | <code>Number</code> | The HTTP status code for this response. |
+| data.ENDPOINT.code | <code>Number</code> | The HTTP response code for this response. |
 | data.ENDPOINT.headers | <code>Object</code> | The HTTP headers for this response. |
 | data.ENDPOINT.body | <code>Object</code> | The body for this response. |
 
