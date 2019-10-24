@@ -966,34 +966,34 @@ POST Vehicle.batch
 
 | Name | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.responses | <code>Array.&lt;Object&gt;</code> |  |
-| data.responses[].headers | <code>Object</code> | The standard response headers for this path. |
-| data.responses[].path | <code>String</code> | The data endpoint that was requested. |
-| data.responses[].code | <code>Number</code> | The HTTP response code. |
-| data.responses[].body | <code>Object</code> | The response data (or error) from for this path. |
+| responses | <code>Object</code> | The object containing multiple HTTP responses. |
+| data.ENDPOINT | <code>Object</code> | The HTTP response for a given endpoint. ENDPOINT is a Smartcar endpoint (i.e. /odometer, /fuel). |
+| data.ENDPOINT.code | <code>Number</code> | The HTTP status code for this response. |
+| data.ENDPOINT.headers | <code>Object</code> | The HTTP headers for this response. |
+| data.ENDPOINT.body | <code>Object</code> | The body for this response. |
 
 **Example**
 ```js
 {
-  responses: [
-    {
-      headers: {'sc-unit-system': 'imperial'},
-      path: '/odometer',
-      code: 200,
-      body: {
-        distance: 32768,
+   "/odometer" : {
+     "body": {
+       "distance": 37829
+     },
+     "code": 200,
+     "headers": {
+       "sc-data-age": "2019-10-24T00:43:46.000Z",
+       "sc-unit-system": "metric"
       }
-    },
-    {
-      headers: {'sc-unit-system': 'imperial'},
-      path: '/location',
-      code: 200,
-      body: {
-        latitude: 37.4292,
-        longitude: 122.1381
-      }
-    }
-  ]
+   },
+   "/location" : {
+     "body": {
+       "latitude": 37.4292,
+       "longitude": 122.1381
+     },
+     "code": 200,
+     "headers": {
+       "sc-data-age": "2019-10-24T00:43:46.000Z"
+     }
+   }
 }
 ```
