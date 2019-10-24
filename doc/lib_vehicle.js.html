@@ -1,4 +1,32 @@
-'use strict';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/vehicle.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/vehicle.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
 const util = require('./util');
 const _ = require('lodash');
@@ -51,7 +79,7 @@ function Vehicle(id, token, unitSystem) {
  * or `imperial`.
  */
 Vehicle.prototype.setUnitSystem = function(unitSystem) {
-  if (['imperial', 'metric'].indexOf(unitSystem) < 0) {
+  if (['imperial', 'metric'].indexOf(unitSystem) &lt; 0) {
     throw new TypeError("unit system must be one of: 'imperial', 'metric'");
   }
 
@@ -83,7 +111,7 @@ Vehicle.prototype.disconnect = function() {
  * Fetch the list of permissions that this application has been granted for
  * this vehicle.
  *
- * @return {Promise.<String[]>} An array of permissions names.
+ * @return {Promise.&lt;String[]>} An array of permissions names.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -101,7 +129,7 @@ Vehicle.prototype.permissions = function() {
  *
  * @param {String[]|String} permissions Permission(s) to check
  *
- * @return {Promise.<Boolean>} Whether the vehicle has the specified permission(s)
+ * @return {Promise.&lt;Boolean>} Whether the vehicle has the specified permission(s)
  */
 Vehicle.prototype.hasPermissions = function(permissions) {
   return this.permissions().then(function(vehiclePermissions) {
@@ -140,7 +168,7 @@ Vehicle.prototype.hasPermissions = function(permissions) {
 /**
  * GET Vehicle.info
  *
- * @return {Promise.<Info>} A promise for info on the vehicle's info
+ * @return {Promise.&lt;Info>} A promise for info on the vehicle's info
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -170,7 +198,7 @@ Vehicle.prototype.info = function() {
 /**
  * GET Vehicle.location
  *
- * @return {Promise.<Location>} A promise for info on the vehicle's location.
+ * @return {Promise.&lt;Location>} A promise for info on the vehicle's location.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -209,7 +237,7 @@ Vehicle.prototype.location = function() {
 /**
  * GET Vehicle.odometer
  *
- * @return {Promise.<Odometer>} A promise for info on the vehicle's odometer.
+ * @return {Promise.&lt;Odometer>} A promise for info on the vehicle's odometer.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -245,7 +273,7 @@ Vehicle.prototype.odometer = function() {
 /**
  * GET Vehicle.oil
  *
- * @return {Promise.<EngineOil>} A promise for info on the vehicle's engine oil.
+ * @return {Promise.&lt;EngineOil>} A promise for info on the vehicle's engine oil.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -288,7 +316,7 @@ Vehicle.prototype.oil = function() {
 /**
  * GET Vehicle.tirePressure
  *
- * @return {Promise.<TirePressure>} A promise for info on the vehicle's tire pressure.
+ * @return {Promise.&lt;TirePressure>} A promise for info on the vehicle's tire pressure.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -337,7 +365,7 @@ Vehicle.prototype.tirePressure = function() {
 /**
  * GET Vehicle.fuel
  *
- * @return {Promise.<Fuel>} A promise for info on the vehicle's fuel status.
+ * @return {Promise.&lt;Fuel>} A promise for info on the vehicle's fuel status.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -379,7 +407,7 @@ Vehicle.prototype.fuel = function() {
 /**
  * GET Vehicle.battery
  *
- * @return {Promise.<Battery>} A promise for info on the vehicle's battery status.
+ * @return {Promise.&lt;Battery>} A promise for info on the vehicle's battery status.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -418,7 +446,7 @@ Vehicle.prototype.battery = function() {
 /**
  * GET Vehicle.charge
  *
- * @return {Promise.<Charge>} A promise for info on the vehicle's charge status.
+ * @return {Promise.&lt;Charge>} A promise for info on the vehicle's charge status.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -436,7 +464,7 @@ Vehicle.prototype.charge = function() {
 /**
  * GET Vehicle.vin
  *
- * @return {Promise.<String>} A promise for info on the vehicle's vin.
+ * @return {Promise.&lt;String>} A promise for info on the vehicle's vin.
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -461,7 +489,7 @@ Vehicle.prototype.vin = function() {
 /**
  * POST Vehicle.lock
  *
- * @return {Promise.<Security>} response on successful request
+ * @return {Promise.&lt;Security>} response on successful request
  * @throws {SmartcarError} - on unsuccessful request. An instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -474,7 +502,7 @@ Vehicle.prototype.lock = function() {
 /**
  * POST Vehicle.unlock
  *
- * @return {Promise.<Security>} response on successful request
+ * @return {Promise.&lt;Security>} response on successful request
  * @throws {SmartcarError} - on unsuccessful request. An instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -525,7 +553,7 @@ Vehicle.prototype.unlock = function() {
  * POST Vehicle.batch
  *
  * @param {String[]} paths - A list of paths of endpoints to send requests to.
- * @return {Promise<Batch>} response on successful request
+ * @return {Promise&lt;Batch>} response on successful request
  *
  * @throws {SmartcarError} - on unsuccessful request. An instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
@@ -546,3 +574,26 @@ Vehicle.prototype.batch = async function(paths) {
 };
 
 module.exports = Vehicle;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-errors.html">errors</a></li><li><a href="module-smartcar.html">smartcar</a></li></ul><h3>Classes</h3><ul><li><a href="AuthClient.html">AuthClient</a></li><li><a href="Vehicle.html">Vehicle</a></li></ul><h3>Global</h3><ul><li><a href="global.html#parseAge">parseAge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Oct 24 2019 11:31:33 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

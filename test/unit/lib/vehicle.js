@@ -529,7 +529,40 @@ test('batch', async function(t) {
       },
     ],
   };
-  const expectedResponseBody = {
+  const expected = {
+    '/odometer': {
+      headers: {'sc-unit-system': 'imperial'},
+      code: 200,
+      body: {
+        distance: 32768,
+      },
+    },
+    '/transmission/fluid': {
+      headers: {'sc-unit-system': 'imperial'},
+      code: 200,
+      body: {
+        temperature: 98.2,
+        wear: 0.5,
+      },
+    },
+    '/fuel': {
+      headers: {'sc-unit-system': 'imperial'},
+      code: 200,
+      body: {
+        range: 550.8499755859375,
+        percentRemaining: 0.9449999928474426,
+      },
+    },
+    '/sunroof': {
+      headers: {'sc-unit-system': 'imperial'},
+      code: 501,
+      body: {
+        error: 'vehicle_not_capable_error',
+        message: 'Vehicle is not capable of performing request.',
+      },
+    },
+  };
+  const mockResponse = {
     responses: [
       {
         headers: {'sc-unit-system': 'imperial'},
@@ -571,9 +604,9 @@ test('batch', async function(t) {
   t.context.n = nocks
     .base()
     .post('/batch', requestBody)
-    .reply(200, expectedResponseBody);
+    .reply(200, mockResponse);
 
   const response = await vehicle.batch(paths);
 
-  t.deepEqual(response.responses, expectedResponseBody.responses);
+  t.deepEqual(response, expected);
 });
