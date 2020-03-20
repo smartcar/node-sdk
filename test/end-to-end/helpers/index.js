@@ -76,8 +76,10 @@ helpers.runAuthFlow = async function(authUrl) {
   // Preamble
   await driver.findElement(By.id('continue-button')).click();
 
-  // OEM Selector
-  await driver.findElement(By.css('button[data-make="CHEVROLET"]')).click();
+  // Brand Selector
+  await driver
+    .findElement(By.css('button.brand-selector-button[data-make="CHEVROLET"]'))
+    .click();
 
   // Login
   const email = `${uuid()}@email.com`;
