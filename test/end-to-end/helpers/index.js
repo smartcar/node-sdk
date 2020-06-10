@@ -37,6 +37,7 @@ helpers.getAuthClientParams = () => ({
     'required:read_charge',
     'required:read_engine_oil',
     'required:read_tires',
+    'required:control_charge',
   ],
   testMode: true,
 });
@@ -74,7 +75,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   await driver.get(authUrl);
   // Preamble
-  await driver.findElement(By.id('continue-button')).click();
+  await driver.findElement(By.css('button#continue-button')).click();
 
   // Brand Selector
   await driver
