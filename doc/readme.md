@@ -51,7 +51,7 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Security">Security</a> : <code>Object</code></dt>
+<dt><a href="#ActionSuccess">ActionSuccess</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
 <dd></dd>
@@ -482,8 +482,10 @@ _To use this function, please contact us!_
     * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
     * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
-    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
-    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
+    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
     * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
 
 <a name="new_Vehicle_new"></a>
@@ -675,11 +677,11 @@ GET Vehicle.vin
 
 <a name="Vehicle+lock"></a>
 
-### vehicle.lock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
+### vehicle.lock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.lock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -688,11 +690,37 @@ POST Vehicle.lock
 
 <a name="Vehicle+unlock"></a>
 
-### vehicle.unlock() ⇒ [<code>Promise.&lt;Security&gt;</code>](#Security)
+### vehicle.unlock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Security&gt;</code>](#Security) - response on successful request
+**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Throws**:
+
+- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+<a name="Vehicle+startCharge"></a>
+
+### vehicle.startCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+POST Vehicle.startCharge
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Throws**:
+
+- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+<a name="Vehicle+stopCharge"></a>
+
+### vehicle.stopCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+POST Vehicle.stopCharge
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -942,9 +970,9 @@ POST Vehicle.batch
   age: new Date('2018-05-04T07:20:50.844Z'),
 }
 ```
-<a name="Security"></a>
+<a name="ActionSuccess"></a>
 
-## Security : <code>Object</code>
+## ActionSuccess : <code>Object</code>
 **Kind**: global typedef
 **Properties**
 

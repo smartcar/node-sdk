@@ -511,6 +511,30 @@ test('unlock', async function(t) {
   t.is(response.status, 'success');
 });
 
+test('startCharge', async function(t) {
+  t.context.nock = nocks
+    .base()
+    .post('/charge', {action: 'START'})
+    .reply(200, {status: 'success'});
+
+  const response = await vehicle.startCharge();
+
+  t.deepEqual(_.xor(_.keys(response), ['status']), []);
+  t.is(response.status, 'success');
+});
+
+test('stopCharge', async function(t) {
+  t.context.nock = nocks
+    .base()
+    .post('/charge', {action: 'STOP'})
+    .reply(200, {status: 'success'});
+
+  const response = await vehicle.stopCharge();
+
+  t.deepEqual(_.xor(_.keys(response), ['status']), []);
+  t.is(response.status, 'success');
+});
+
 test('batch', async function(t) {
   const paths = ['/odometer', '/transmission/fluid', '/fuel', '/sunroof'];
   const requestBody = {
