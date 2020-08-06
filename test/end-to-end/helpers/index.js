@@ -22,23 +22,24 @@ if (!CLIENT_ID || !CLIENT_SECRET) {
   );
 }
 
-helpers.getAuthClientParams = () => ({
+const DEFAULT_SCOPE = [
+  'required:read_vehicle_info',
+  'required:read_location',
+  'required:read_odometer',
+  'required:control_security',
+  'required:read_vin',
+  'required:read_fuel',
+  'required:read_battery',
+  'required:read_charge',
+  'required:read_engine_oil',
+  'required:read_tires',
+];
+
+helpers.getAuthClientParams = (scope = DEFAULT_SCOPE) => ({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   redirectUri: 'https://example.com/auth',
-  scope: [
-    'required:read_vehicle_info',
-    'required:read_location',
-    'required:read_odometer',
-    'required:control_security',
-    'required:read_vin',
-    'required:read_fuel',
-    'required:read_battery',
-    'required:read_charge',
-    'required:read_engine_oil',
-    'required:read_tires',
-    'required:control_charge',
-  ],
+  scope,
   testMode: true,
 });
 
@@ -50,12 +51,12 @@ const getCodeFromUri = function(uri) {
     return code;
   } else {
     throw new Error(
-      `Did not get code in url! Query string: ${searchParams.get('error')}`
+      `Did not get code in url! Query string: ${searchParams.get('error')}`,
     );
   }
 };
 
-helpers.runAuthFlow = async function(authUrl) {
+helpers.runAuthFlow = async function(authUrl, brand = 'CHEVROLET') {
   const firefoxOptions = new firefox.Options();
   const chromeOptions = new chrome.Options()
     .addArguments('disable-infobars')
@@ -79,7 +80,7 @@ helpers.runAuthFlow = async function(authUrl) {
 
   // Brand Selector
   await driver
-    .findElement(By.css('button.brand-selector-button[data-make="CHEVROLET"]'))
+    .findElement(By.css(`button.brand-selector-button[data-make="${brand}"]`))
     .click();
 
   // Login
