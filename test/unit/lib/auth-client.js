@@ -610,7 +610,7 @@ test('isCompatible - with scope', async function(t) {
 
   const n = nock('https://api.smartcar.com')
     .get('/v1.0/compatibility')
-    .query({vin, scope: 'read_location read_odometer'})
+    .query({vin, scope: 'read_location read_odometer', country: 'US'})
     .basicAuth({
       user: CLIENT_ID,
       pass: CLIENT_SECRET,
