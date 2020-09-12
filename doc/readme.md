@@ -399,6 +399,7 @@ response_type=code
 &state=0facda3319
 &make=TESLA
 &single_select=true
+&single_select_vin=5YJSA1E14FF101307
 &flags=country:DE color:00819D
 ```
 <a name="AuthClient+exchangeCode"></a>
