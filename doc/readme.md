@@ -343,7 +343,7 @@ Error thrown when gateway to Smartcar times out
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
     * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.isCompatible(vin, scope, country)](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.isCompatible(vin, scope, [country])](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_AuthClient_new"></a>
 
@@ -440,7 +440,7 @@ for all possible errors.
 
 <a name="AuthClient+isCompatible"></a>
 
-### authClient.isCompatible(vin, scope, country) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+### authClient.isCompatible(vin, scope, [country]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
@@ -460,11 +460,11 @@ _To use this function, please contact us!_
   for all possible errors.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| vin | <code>String</code> | the VIN of the vehicle |
-| scope | <code>Array.&lt;String&gt;</code> | list of permissions to check compatibility for |
-| country | <code>String</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). Defaults to 'US'. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| vin | <code>String</code> |  | the VIN of the vehicle |
+| scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
+| [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
 
 <a name="Vehicle"></a>
 
