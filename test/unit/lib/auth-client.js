@@ -448,6 +448,33 @@ test('getAuthUrl - excludes single select when singleSelect not passed in', func
   t.is(actual, expected);
 });
 
+test('getAuthUrl - flags are included', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    scope: ['read_odometer', 'read_vehicle_info'],
+  });
+
+  const actual = client.getAuthUrl({
+    scope: 'this should be ignored',
+    state: 'fakestate',
+    forcePrompt: true,
+    flags: ['country:DE', 'flag:suboption'],
+  });
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&flags=country%3ADE%20flag%3Asuboption';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+});
+
 test('getAuthUrl - deprecated development mode', function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
@@ -583,7 +610,7 @@ test('isCompatible - with scope', async function(t) {
 
   const n = nock('https://api.smartcar.com')
     .get('/v1.0/compatibility')
-    .query({vin, scope: 'read_location read_odometer'})
+    .query({vin, scope: 'read_location read_odometer', country: 'US'})
     .basicAuth({
       user: CLIENT_ID,
       pass: CLIENT_SECRET,

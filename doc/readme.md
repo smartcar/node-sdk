@@ -343,7 +343,7 @@ Error thrown when gateway to Smartcar times out
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
     * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
     * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.isCompatible(vin, scope)](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.isCompatible(vin, scope, [country])](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_AuthClient_new"></a>
 
@@ -387,6 +387,7 @@ for all possible errors.
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 | [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
+| [options.flags] | <code>Array.&lt;String&gt;</code> |  | List of feature flags that your application has early access to. |
 
 **Example**
 ```js
@@ -398,6 +399,8 @@ response_type=code
 &state=0facda3319
 &make=TESLA
 &single_select=true
+&single_select_vin=5YJSA1E14FF101307
+&flags=country:DE color:00819D
 ```
 <a name="AuthClient+exchangeCode"></a>
 
@@ -437,7 +440,7 @@ for all possible errors.
 
 <a name="AuthClient+isCompatible"></a>
 
-### authClient.isCompatible(vin, scope) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+### authClient.isCompatible(vin, scope, [country]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
@@ -457,10 +460,11 @@ _To use this function, please contact us!_
   for all possible errors.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| vin | <code>String</code> | the VIN of the vehicle |
-| scope | <code>Array.&lt;String&gt;</code> | list of permissions to check compatibility for |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| vin | <code>String</code> |  | the VIN of the vehicle |
+| scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
+| [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
 
 <a name="Vehicle"></a>
 

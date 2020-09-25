@@ -40,7 +40,7 @@ test('exchangeRefreshToken', async(t) => {
   );
 });
 
-test('isCompatible', async(t) => {
+test('isCompatible - no country set', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
 
   const teslaVin = '5YJXCDE22HF068739';
@@ -50,6 +50,23 @@ test('isCompatible', async(t) => {
 
   const teslaComp = await client.isCompatible(teslaVin, scopes);
   const audiComp = await client.isCompatible(audiVin, scopes);
+
+  t.truthy(teslaComp);
+  t.falsy(audiComp);
+});
+
+test('isCompatible - country set', async(t) => {
+  const client = new smartcar.AuthClient(getAuthClientParams());
+
+  const teslaVin = '5YJXCDE22HF068739';
+  const audiVin = 'WAUAFAFL1GN014882';
+
+  const scopes = ['read_odometer', 'read_location'];
+
+  const country = 'US';
+
+  const teslaComp = await client.isCompatible(teslaVin, scopes, country);
+  const audiComp = await client.isCompatible(audiVin, scopes, country);
 
   t.truthy(teslaComp);
   t.falsy(audiComp);
