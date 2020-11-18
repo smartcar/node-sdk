@@ -54,7 +54,7 @@
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
-    "semantic-release": "^15.13.12",
+    "semantic-release": "^17.2.3",
     "uuid": "^3.3.2"
   }
 }
