@@ -65,6 +65,10 @@ test('vehicle battery', async(t) => {
   await t.notThrowsAsync(t.context.volt.battery());
 });
 
+test('vehicle batteryCapacity', async(t) => {
+  await t.notThrowsAsync(t.context.volt.batteryCapacity());
+});
+
 test('vehicle charge', async(t) => {
   await t.notThrowsAsync(t.context.volt.charge());
 });

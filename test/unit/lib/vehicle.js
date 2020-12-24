@@ -438,6 +438,27 @@ test('battery - no age', async function(t) {
   t.is(response.unitSystem, headers['sc-unit-system']);
 });
 
+test('batteryCapacity', async function(t) {
+  const body = {
+    capacity: 24,
+  };
+  const headers = {
+    'sc-data-age': '2018-05-03T03:45:51+00:00',
+    'sc-unit-system': 'metric',
+  };
+  t.context.n = nocks
+    .base()
+    .get('/battery/capacity')
+    .reply(200, body, headers);
+
+  const response = await vehicle.batteryCapacity();
+  t.deepEqual(response.data, body);
+  t.true(_.isDate(response.age));
+  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
+  t.is(response.age.toISOString(), expectedISOString);
+  t.is(response.unitSystem, headers['sc-unit-system']);
+});
+
 test('charge', async function(t) {
   const body = {
     isPluggedIn: true,
