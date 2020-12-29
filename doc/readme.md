@@ -49,6 +49,8 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#Battery">Battery</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#BatteryCapcity">BatteryCapcity</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#ActionSuccess">ActionSuccess</a> : <code>Object</code></dt>
@@ -484,6 +486,7 @@ _To use this function, please contact us!_
     * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
     * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
+    * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ <code>Promise.&lt;BatteryCapacity&gt;</code>
     * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
     * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
@@ -647,6 +650,19 @@ GET Vehicle.battery
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
+**Throws**:
+
+- <code>SmartcarError</code> - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+<a name="Vehicle+batteryCapacity"></a>
+
+### vehicle.batteryCapacity() ⇒ <code>Promise.&lt;BatteryCapacity&gt;</code>
+GET Vehicle.batteryCapacity
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: <code>Promise.&lt;BatteryCapacity&gt;</code> - A promise for info on the vehicle's battery capacity.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -949,6 +965,29 @@ POST Vehicle.batch
   }
   age: new Date('2018-05-04T07:20:50.844Z'),
   unitSystem: 'imperial',
+}
+```
+<a name="BatteryCapcity"></a>
+
+## BatteryCapcity : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The returned vehicle data. |
+| data.capacity | <code>Number</code> | The total capacity of the  vehicle's battery (in kilowatt-hours) |
+| age | <code>Date</code> | The timestamp of when the data was recorded. |
+| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+
+**Example**
+```js
+{
+  data: {
+    capacity: 24,
+  }
+  age: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'metric',
 }
 ```
 <a name="Charge"></a>
