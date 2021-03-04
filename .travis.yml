@@ -27,7 +27,8 @@ notifications:
 
 
 before_install:
-  - dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
+  # npm@^7.0.0 requires Node.js >= 10
+  - dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@^6.0.0
 
 install:
   - npm ci
