@@ -17,7 +17,6 @@ const smartcar = {
   Vehicle: require('./lib/vehicle'),
   /** @see {@link AuthClient}*/
   AuthClient: require('./lib/auth-client'),
-  VERSION: '1.0',
 };
 /* eslint-enable global-require */
 
@@ -28,7 +27,7 @@ const smartcar = {
  * @param {String} version
  */
 smartcar.setApiVersion = function(version) {
-  smartcar.VERSION = version;
+  config.version = version;
 };
 
 /**

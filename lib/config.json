@@ -2,5 +2,6 @@
   "auth": "https://auth.smartcar.com",
   "api": "https://api.smartcar.com",
   "connect": "https://connect.smartcar.com",
-  "timeout": 310000
+  "timeout": 310000,
+  "version": "1.0"
 }
