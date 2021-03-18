@@ -11,10 +11,11 @@ const smartcar = require('../../../');
 const config = require('../../../lib/config');
 const errors = require('../../../lib/errors');
 
-const API_URL = config.api + '/v' + smartcar.VERSION;
+const API_URL = config.api + '/v' + config.version;
 
 test.afterEach(() => {
   smartcar.setApiVersion('1.0');
+  // t.true(config.version === '1.0');
 });
 
 test('formatAccess', function(t) {
@@ -305,7 +306,6 @@ test('catch - SmartcarError', async function(t) {
 
 test('catch - SmartcarErrorV2', async function(t) {
 
-  smartcar.setApiVersion('2.0');
   const n = nock('https://api.smartcar.com/v2.0')
     .get('/something')
     .reply(500, {
@@ -319,6 +319,7 @@ test('catch - SmartcarErrorV2', async function(t) {
       statusCode: 500,
     });
 
+  smartcar.setApiVersion('2.0');
   const err = await t.throwsAsync(util.request('https://api.smartcar.com/v2.0/something'));
   const boxed = t.throws(() => util.catch(err));
 
