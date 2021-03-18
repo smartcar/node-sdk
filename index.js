@@ -17,8 +17,19 @@ const smartcar = {
   Vehicle: require('./lib/vehicle'),
   /** @see {@link AuthClient}*/
   AuthClient: require('./lib/auth-client'),
+  VERSION: '1.0',
 };
 /* eslint-enable global-require */
+
+
+/**
+ * Sets the version of Smartcar API you are using
+ * @method
+ * @param {String} version
+ */
+smartcar.setApiVersion = function(version) {
+  smartcar.VERSION = version;
+};
 
 /**
  * Check if a token has expired.
@@ -85,7 +96,6 @@ smartcar.getVehicleIds = Promise.method(function(token, paging) {
   if (!_.isString(token)) {
     throw new TypeError('"token" argument must be a string');
   }
-
   return util.request.get(util.getUrl(), {
     auth: {
       bearer: token,

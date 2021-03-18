@@ -7,10 +7,15 @@ const Promise = require('bluebird');
 const {StatusCodeError} = require('request-promise/errors');
 
 const util = require('../../../lib/util');
+const smartcar = require('../../../');
 const config = require('../../../lib/config');
 const errors = require('../../../lib/errors');
 
-const API_URL = config.api + '/v' + config.version;
+const API_URL = config.api + '/v' + smartcar.VERSION;
+
+test.afterEach(() => {
+  smartcar.setApiVersion('1.0');
+});
 
 test('formatAccess', function(t) {
 
@@ -61,6 +66,12 @@ test('getUrl - id', function(t) {
 test('getUrl - id & endpoint', function(t) {
   const url = util.getUrl('VID', 'odometer');
   t.is(url, API_URL + '/vehicles/VID/odometer');
+});
+
+test('getUrl - version 2.0', function(t) {
+  smartcar.setApiVersion('2.0');
+  const url = util.getUrl('VID', 'odometer');
+  t.is(url, 'https://api.smartcar.com/v2.0/vehicles/VID/odometer');
 });
 
 test('request - default opts', async function(t) {
@@ -288,6 +299,31 @@ test('catch - SmartcarError', async function(t) {
   t.true(boxed instanceof errors.SmartcarError);
   t.regex(boxed.message, /monkeys_on_mars/);
   t.true(boxed.original instanceof StatusCodeError);
+  t.true(n.isDone());
+
+});
+
+test('catch - SmartcarErrorV2', async function(t) {
+
+  smartcar.setApiVersion('2.0');
+  const n = nock('https://api.smartcar.com/v2.0')
+    .get('/something')
+    .reply(500, {
+      type: 'type',
+      code: 'code',
+      description: 'description',
+      resolution: null,
+      detail: null,
+      requestId: '123',
+      docURL: null,
+      statusCode: 500,
+    });
+
+  const err = await t.throwsAsync(util.request('https://api.smartcar.com/v2.0/something'));
+  const boxed = t.throws(() => util.catch(err));
+
+  t.true(boxed instanceof errors.SmartcarErrorV2);
+  t.is(boxed.description, 'description');
   t.true(n.isDone());
 
 });

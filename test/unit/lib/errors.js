@@ -14,6 +14,8 @@ test('inheritance check', function(t) {
           instanceof errors.SmartcarError
         );
         break;
+      case 'SmartcarErrorV2':
+        break;
       default:
         t.true(new errors[error]() instanceof errors.SmartcarError);
     }
@@ -29,6 +31,8 @@ test('message check', function(t) {
     switch (error) {
       case 'VehicleStateError':
         t.regex(new errors[error]('R2D2', {code: 'VS_000'}).message, /R2D2/);
+        break;
+      case 'SmartcarErrorV2':
         break;
       default:
         t.regex(new errors[error]('R2D2').message, /R2D2/);
