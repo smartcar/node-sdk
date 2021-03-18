@@ -34,6 +34,7 @@ test.before(async(t) => {
     getVehicle('VOLKSWAGEN', ['required:control_charge']),
   ]);
 
+  smartcar.setApiVersion('1.0');
   t.context = {volt, egolf};
 });
 

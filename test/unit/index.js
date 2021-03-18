@@ -120,4 +120,5 @@ test('exports', function(t) {
   t.true('errors' in smartcar);
   t.true('Vehicle' in smartcar);
   t.true('AuthClient' in smartcar);
+  t.true('VERSION' in smartcar);
 });
