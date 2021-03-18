@@ -68,9 +68,10 @@ Smartcar Node SDK documentation.
         * [.errors](#module_smartcar.errors)
         * [.Vehicle](#module_smartcar.Vehicle)
         * [.AuthClient](#module_smartcar.AuthClient)
+        * [.setApiVersion(version)](#module_smartcar.setApiVersion)
         * [.isExpired(expiration)](#module_smartcar.isExpired) ⇒ <code>Boolean</code>
-        * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
-        * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>Promise.&lt;String&gt;</code>
+        * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
+        * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code>
     * _inner_
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
 
@@ -89,6 +90,17 @@ Smartcar Node SDK documentation.
 ### smartcar.AuthClient
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
 **See**: [AuthClient](#AuthClient)
+<a name="module_smartcar.setApiVersion"></a>
+
+### smartcar.setApiVersion(version)
+Sets the version of Smartcar API you are using
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+
+| Param | Type |
+| --- | --- |
+| version | <code>String</code> |
+
 <a name="module_smartcar.isExpired"></a>
 
 ### smartcar.isExpired(expiration) ⇒ <code>Boolean</code>
@@ -103,11 +115,11 @@ Check if a token has expired.
 
 <a name="module_smartcar.getVehicleIds"></a>
 
-### smartcar.getVehicleIds(token, [paging]) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
+### smartcar.getVehicleIds(token, [paging]) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
 Return list of the user's vehicles ids.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -124,11 +136,11 @@ Return list of the user's vehicles ids.
 
 <a name="module_smartcar.getUserId"></a>
 
-### smartcar.getUserId(token) ⇒ <code>Promise.&lt;String&gt;</code>
+### smartcar.getUserId(token) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code>
 Return the user's id.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: <code>Promise.&lt;String&gt;</code> - the user id
+**Returns**: <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code> - the user id
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -148,7 +160,7 @@ Return the user's id.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| vehicles | <code>Array.&lt;String&gt;</code> | A list of the user's authorized vehicle ids. |
+| vehicles | <code>[ &#x27;Array&#x27; ].&lt;String&gt;</code> | A list of the user's authorized vehicle ids. |
 | paging | <code>Object</code> |  |
 | paging.count- | <code>Number</code> | The total number of vehicles. |
 | paging.offset | <code>Number</code> | The current start index of returned vehicle ids. |
@@ -171,18 +183,22 @@ Return the user's id.
 ## errors
 
 * [errors](#module_errors)
-    * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
-    * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
-    * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
-    * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
-    * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
-    * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
-    * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
-    * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
-    * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
-    * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
-    * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
-    * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
+    * _static_
+        * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
+        * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
+        * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
+        * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
+        * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
+        * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
+        * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
+        * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
+        * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
+        * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
+        * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
+        * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
+    * _inner_
+        * [~SmartcarErrorV2](#module_errors..SmartcarErrorV2)
+            * [new SmartcarErrorV2(error)](#new_module_errors..SmartcarErrorV2_new)
 
 <a name="module_errors.SmartcarError"></a>
 
@@ -330,6 +346,20 @@ Error thrown when gateway to Smartcar times out
 | --- | --- |
 | message | an error description to set |
 
+<a name="module_errors..SmartcarErrorV2"></a>
+
+### errors~SmartcarErrorV2
+Enhanced errors from API v2.0
+
+**Kind**: inner class of [<code>errors</code>](#module_errors)
+<a name="new_module_errors..SmartcarErrorV2_new"></a>
+
+#### new SmartcarErrorV2(error)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>Object</code> \| <code>String</code> | response body from a v2.0 request |
+
 <a name="Promise"></a>
 
 ## Promise
@@ -343,9 +373,9 @@ Error thrown when gateway to Smartcar times out
 * [AuthClient](#AuthClient)
     * [new AuthClient(options)](#new_AuthClient_new)
     * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
-    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.isCompatible(vin, scope, [country])](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access)
+    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access)
+    * [.isCompatible(vin, scope, [country])](#AuthClient+isCompatible) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code>
 
 <a name="new_AuthClient_new"></a>
 
@@ -359,7 +389,7 @@ Create a Smartcar OAuth client for your application.
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
-| [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
+| [options.scope] | <code>[ &#x27;Array&#x27; ].&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
 | [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.development] | <code>Boolean</code> | <code>false</code> | DEPRECATED: Launch Smartcar auth in development mode to enable mock vehicle brands. |
 
@@ -389,7 +419,7 @@ for all possible errors.
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 | [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
-| [options.flags] | <code>Array.&lt;String&gt;</code> |  | List of feature flags that your application has early access to. |
+| [options.flags] | <code>[ &#x27;Array&#x27; ].&lt;String&gt;</code> |  | List of feature flags that your application has early access to. |
 
 **Example**
 ```js
@@ -406,11 +436,11 @@ response_type=code
 ```
 <a name="AuthClient+exchangeCode"></a>
 
-### authClient.exchangeCode(code) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+### authClient.exchangeCode(code) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access)
 Exchange an authorization code for an access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -424,11 +454,11 @@ for all possible errors.
 
 <a name="AuthClient+exchangeRefreshToken"></a>
 
-### authClient.exchangeRefreshToken(token) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+### authClient.exchangeRefreshToken(token) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access)
 Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -442,7 +472,7 @@ for all possible errors.
 
 <a name="AuthClient+isCompatible"></a>
 
-### authClient.isCompatible(vin, scope, [country]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+### authClient.isCompatible(vin, scope, [country]) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code>
 Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
@@ -453,7 +483,7 @@ A compatible vehicle is a vehicle that:
 _To use this function, please contact us!_
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
+**Returns**: <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
   vehicle is likely compatible.
 **Throws**:
 
@@ -465,7 +495,7 @@ _To use this function, please contact us!_
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | vin | <code>String</code> |  | the VIN of the vehicle |
-| scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
+| scope | <code>[ &#x27;Array&#x27; ].&lt;String&gt;</code> |  | list of permissions to check compatibility for |
 | [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
 
 <a name="Vehicle"></a>
@@ -477,23 +507,23 @@ _To use this function, please contact us!_
     * [new Vehicle(id, token, [unitSystem])](#new_Vehicle_new)
     * [.setUnitSystem(unitSystem)](#Vehicle+setUnitSystem)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>Promise</code>](#Promise)
-    * [.permissions()](#Vehicle+permissions) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
-    * [.hasPermissions(permissions)](#Vehicle+hasPermissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-    * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
-    * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
-    * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
-    * [.oil()](#Vehicle+oil) ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
-    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
-    * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
-    * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
-    * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
-    * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
-    * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
-    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
+    * [.permissions()](#Vehicle+permissions) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Array.&lt;String&gt;&gt;</code>
+    * [.hasPermissions(permissions)](#Vehicle+hasPermissions) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code>
+    * [.info()](#Vehicle+info) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Info&gt;</code>](#Info)
+    * [.location()](#Vehicle+location) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Location&gt;</code>](#Location)
+    * [.odometer()](#Vehicle+odometer) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Odometer&gt;</code>](#Odometer)
+    * [.oil()](#Vehicle+oil) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;EngineOil&gt;</code>](#EngineOil)
+    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;TirePressure&gt;</code>](#TirePressure)
+    * [.fuel()](#Vehicle+fuel) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Fuel&gt;</code>](#Fuel)
+    * [.battery()](#Vehicle+battery) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Battery&gt;</code>](#Battery)
+    * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
+    * [.charge()](#Vehicle+charge) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Charge&gt;</code>](#Charge)
+    * [.vin()](#Vehicle+vin) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code>
+    * [.lock()](#Vehicle+lock) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.unlock()](#Vehicle+unlock) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Batch&gt;</code>](#Batch)
 
 <a name="new_Vehicle_new"></a>
 
@@ -537,12 +567,12 @@ to make requests to it again.
 
 <a name="Vehicle+permissions"></a>
 
-### vehicle.permissions() ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
+### vehicle.permissions() ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Array.&lt;String&gt;&gt;</code>
 Fetch the list of permissions that this application has been granted for
 this vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
+**Returns**: <code>[ &#x27;Promise&#x27; ].&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -555,11 +585,11 @@ this vehicle.
 ```
 <a name="Vehicle+hasPermissions"></a>
 
-### vehicle.hasPermissions(permissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+### vehicle.hasPermissions(permissions) ⇒ <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code>
 Checks if permissions granted to a vehicle contain the specified permission(s).
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Whether the vehicle has the specified permission(s)
+**Returns**: <code>[ &#x27;Promise&#x27; ].&lt;Boolean&gt;</code> - Whether the vehicle has the specified permission(s)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -567,11 +597,11 @@ Checks if permissions granted to a vehicle contain the specified permission(s).
 
 <a name="Vehicle+info"></a>
 
-### vehicle.info() ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
+### vehicle.info() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Info&gt;</code>](#Info)
 GET Vehicle.info
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -580,11 +610,11 @@ GET Vehicle.info
 
 <a name="Vehicle+location"></a>
 
-### vehicle.location() ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
+### vehicle.location() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Location&gt;</code>](#Location)
 GET Vehicle.location
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -593,11 +623,11 @@ GET Vehicle.location
 
 <a name="Vehicle+odometer"></a>
 
-### vehicle.odometer() ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
+### vehicle.odometer() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Odometer&gt;</code>](#Odometer)
 GET Vehicle.odometer
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -606,11 +636,11 @@ GET Vehicle.odometer
 
 <a name="Vehicle+oil"></a>
 
-### vehicle.oil() ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
+### vehicle.oil() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;EngineOil&gt;</code>](#EngineOil)
 GET Vehicle.oil
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's engine oil.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's engine oil.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -619,11 +649,11 @@ GET Vehicle.oil
 
 <a name="Vehicle+tirePressure"></a>
 
-### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
+### vehicle.tirePressure() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;TirePressure&gt;</code>](#TirePressure)
 GET Vehicle.tirePressure
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -632,11 +662,11 @@ GET Vehicle.tirePressure
 
 <a name="Vehicle+fuel"></a>
 
-### vehicle.fuel() ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
+### vehicle.fuel() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Fuel&gt;</code>](#Fuel)
 GET Vehicle.fuel
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -645,11 +675,11 @@ GET Vehicle.fuel
 
 <a name="Vehicle+battery"></a>
 
-### vehicle.battery() ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
+### vehicle.battery() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Battery&gt;</code>](#Battery)
 GET Vehicle.battery
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -658,11 +688,11 @@ GET Vehicle.battery
 
 <a name="Vehicle+batteryCapacity"></a>
 
-### vehicle.batteryCapacity() ⇒ [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
+### vehicle.batteryCapacity() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
 GET Vehicle.batteryCapacity
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity) - A promise for info on the vehicle's battery capacity.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;BatteryCapacity&gt;</code>](#BatteryCapacity) - A promise for info on the vehicle's battery capacity.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -671,11 +701,11 @@ GET Vehicle.batteryCapacity
 
 <a name="Vehicle+charge"></a>
 
-### vehicle.charge() ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
+### vehicle.charge() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Charge&gt;</code>](#Charge)
 GET Vehicle.charge
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -684,11 +714,11 @@ GET Vehicle.charge
 
 <a name="Vehicle+vin"></a>
 
-### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
+### vehicle.vin() ⇒ <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code>
 GET Vehicle.vin
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
+**Returns**: <code>[ &#x27;Promise&#x27; ].&lt;String&gt;</code> - A promise for info on the vehicle's vin.
 **Throws**:
 
 - <code>SmartcarError</code> - an instance of SmartcarError.
@@ -697,11 +727,11 @@ GET Vehicle.vin
 
 <a name="Vehicle+lock"></a>
 
-### vehicle.lock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+### vehicle.lock() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.lock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -710,11 +740,11 @@ POST Vehicle.lock
 
 <a name="Vehicle+unlock"></a>
 
-### vehicle.unlock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+### vehicle.unlock() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.unlock
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -723,11 +753,11 @@ POST Vehicle.unlock
 
 <a name="Vehicle+startCharge"></a>
 
-### vehicle.startCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+### vehicle.startCharge() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.startCharge
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -736,11 +766,11 @@ POST Vehicle.startCharge
 
 <a name="Vehicle+stopCharge"></a>
 
-### vehicle.stopCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
+### vehicle.stopCharge() ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess)
 POST Vehicle.stopCharge
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -749,11 +779,11 @@ POST Vehicle.stopCharge
 
 <a name="Vehicle+batch"></a>
 
-### vehicle.batch(paths) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
+### vehicle.batch(paths) ⇒ [<code>[ &#x27;Promise&#x27; ].&lt;Batch&gt;</code>](#Batch)
 POST Vehicle.batch
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Batch&gt;</code>](#Batch) - response on successful request
+**Returns**: [<code>[ &#x27;Promise&#x27; ].&lt;Batch&gt;</code>](#Batch) - response on successful request
 **Throws**:
 
 - <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
@@ -763,7 +793,7 @@ POST Vehicle.batch
 
 | Param | Type | Description |
 | --- | --- | --- |
-| paths | <code>Array.&lt;String&gt;</code> | A list of paths of endpoints to send requests to. |
+| paths | <code>[ &#x27;Array&#x27; ].&lt;String&gt;</code> | A list of paths of endpoints to send requests to. |
 
 <a name="parseAge"></a>
 
