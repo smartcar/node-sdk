@@ -183,23 +183,111 @@ Return the user's id.
 ## errors
 
 * [errors](#module_errors)
-    * _static_
-        * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
-        * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
-        * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
-        * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
-        * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
-        * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
-        * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
-        * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
-        * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
-        * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
-        * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
-        * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
-    * _inner_
-        * [~SmartcarErrorV2](#module_errors..SmartcarErrorV2)
-            * [new SmartcarErrorV2(error)](#new_module_errors..SmartcarErrorV2_new)
+    * [.SmartcarErrorV2](#module_errors.SmartcarErrorV2)
+        * [new errors.SmartcarErrorV2(error)](#new_module_errors.SmartcarErrorV2_new)
+        * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
+        * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
+        * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
+        * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>int</code>
+        * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
+        * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
+        * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
+        * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>string</code>
+    * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
+    * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
+    * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
+    * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
+    * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
+    * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
+    * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
+    * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
+    * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
+    * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
+    * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
+    * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
 
+<a name="module_errors.SmartcarErrorV2"></a>
+
+### errors.SmartcarErrorV2
+Enhanced errors from API v2.0
+
+**Kind**: static class of [<code>errors</code>](#module_errors)
+
+* [.SmartcarErrorV2](#module_errors.SmartcarErrorV2)
+    * [new errors.SmartcarErrorV2(error)](#new_module_errors.SmartcarErrorV2_new)
+    * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
+    * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
+    * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
+    * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>int</code>
+    * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
+    * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
+    * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
+    * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>string</code>
+
+<a name="new_module_errors.SmartcarErrorV2_new"></a>
+
+#### new errors.SmartcarErrorV2(error)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>Object</code> \| <code>String</code> | response body from a v2.0 request |
+
+<a name="module_errors.SmartcarErrorV2+type"></a>
+
+#### smartcarErrorV2.type : <code>string</code>
+Type of error
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+code"></a>
+
+#### smartcarErrorV2.code : <code>string</code>
+Error code
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+description"></a>
+
+#### smartcarErrorV2.description : <code>string</code>
+Description of meaning of the error
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+statusCode"></a>
+
+#### smartcarErrorV2.statusCode : <code>int</code>
+HTTP status code
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+requestId"></a>
+
+#### smartcarErrorV2.requestId : <code>string</code>
+Unique identifier for request
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+resolution"></a>
+
+#### smartcarErrorV2.resolution : <code>string</code>
+Possible resolution for fixing the error
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+docURL"></a>
+
+#### smartcarErrorV2.docURL : <code>string</code>
+Reference to Smartcar documentation
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
+<a name="module_errors.SmartcarErrorV2+detail"></a>
+
+#### smartcarErrorV2.detail : <code>string</code>
+Further detail about the error
+
+**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
+**Access**: public
 <a name="module_errors.SmartcarError"></a>
 
 ### errors.SmartcarError(message) ⇐ <code>Error</code>
@@ -345,20 +433,6 @@ Error thrown when gateway to Smartcar times out
 | Param | Description |
 | --- | --- |
 | message | an error description to set |
-
-<a name="module_errors..SmartcarErrorV2"></a>
-
-### errors~SmartcarErrorV2
-Enhanced errors from API v2.0
-
-**Kind**: inner class of [<code>errors</code>](#module_errors)
-<a name="new_module_errors..SmartcarErrorV2_new"></a>
-
-#### new SmartcarErrorV2(error)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| error | <code>Object</code> \| <code>String</code> | response body from a v2.0 request |
 
 <a name="Promise"></a>
 
