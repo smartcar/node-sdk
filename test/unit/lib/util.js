@@ -13,9 +13,9 @@ const errors = require('../../../lib/errors');
 
 const API_URL = config.api + '/v' + config.version;
 
-test.afterEach(() => {
+test.afterEach((t) => {
   smartcar.setApiVersion('1.0');
-  // t.true(config.version === '1.0');
+  t.true(config.version === '1.0');
 });
 
 test('formatAccess', function(t) {
