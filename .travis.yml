@@ -38,6 +38,7 @@ script:
   # check if the docs have been generated
   - npm run docs
   - sed -i -e 's/\[\ &#x27;/ /g' -e 's/&#x27; \]/ /g' doc/readme.md
+  - git diff
   - test -z "$(git diff --name-only | grep '^doc/readme.md$')"
 
   - npm run test:unit
