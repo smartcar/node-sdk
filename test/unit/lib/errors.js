@@ -15,7 +15,7 @@ test('inheritance check', function(t) {
         );
         break;
       default:
-        t.true(new errors[error]() instanceof errors.SmartcarError);
+        t.true(new errors[error]('Message') instanceof errors.SmartcarError);
     }
   });
 
