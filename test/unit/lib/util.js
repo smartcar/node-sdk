@@ -327,3 +327,18 @@ test.serial('catch - SmartcarErrorV2', async function(t) {
   t.true(n.isDone());
 
 });
+
+test.serial('catch - SmartcarErrorV2 - string response', async function(t) {
+
+  const n = nock('https://api.smartcar.com/v2.0')
+    .get('/something')
+    .reply(500, 'just a string response');
+
+  const err = await t.throwsAsync(util.request('https://api.smartcar.com/v2.0/something'));
+  const boxed = t.throws(() => util.catch(err));
+
+  t.true(boxed instanceof errors.SmartcarErrorV2);
+  t.is(boxed.description, 'just a string response');
+  t.true(n.isDone());
+
+});
