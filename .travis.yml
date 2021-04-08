@@ -37,6 +37,8 @@ install:
 script:
   # check if the docs have been generated
   - npm run docs
+  - npm ls jsdoc-to-markdown
+  - git diff
   - test -z "$(git diff --name-only | grep '^doc/readme.md$')"
 
   - npm run test:unit
