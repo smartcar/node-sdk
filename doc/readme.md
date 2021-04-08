@@ -188,11 +188,11 @@ Return the user's id.
         * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
         * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
         * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
-        * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>int</code>
+        * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>number</code>
         * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
         * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
         * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
-        * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>string</code>
+        * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>[ &#x27;Array&#x27; ].&lt;object&gt;</code>
     * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
     * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
     * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
@@ -218,11 +218,11 @@ Enhanced errors from API v2.0
     * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
     * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
     * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
-    * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>int</code>
+    * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>number</code>
     * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
     * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
     * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
-    * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>string</code>
+    * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>[ &#x27;Array&#x27; ].&lt;object&gt;</code>
 
 <a name="new_module_errors.SmartcarErrorV2_new"></a>
 
@@ -255,7 +255,7 @@ Description of meaning of the error
 **Access**: public
 <a name="module_errors.SmartcarErrorV2+statusCode"></a>
 
-#### smartcarErrorV2.statusCode : <code>int</code>
+#### smartcarErrorV2.statusCode : <code>number</code>
 HTTP status code
 
 **Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
@@ -283,7 +283,7 @@ Reference to Smartcar documentation
 **Access**: public
 <a name="module_errors.SmartcarErrorV2+detail"></a>
 
-#### smartcarErrorV2.detail : <code>string</code>
+#### smartcarErrorV2.detail : <code>[ &#x27;Array&#x27; ].&lt;object&gt;</code>
 Further detail about the error
 
 **Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
