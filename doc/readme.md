@@ -210,6 +210,7 @@ Return the user's id.
 
 ### errors.SmartcarErrorV2
 Enhanced errors from API v2.0
+Please see our [v2.0 error guides](https://smartcar.com/docs/errors/v2.0/billing) to see a list of all the possible error types and codes
 
 **Kind**: static class of [<code>errors</code>](#module_errors)
 
