@@ -34,7 +34,7 @@
     "cover": "nyc npm run test:unit -s",
     "cover:integration": "nyc npm test:integration -s",
     "jsdoc": "jsdoc -c .jsdoc.json .",
-    "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed 's/[ \t]*$//' > doc/readme.md"
+    "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed -e 's/[ \t]*$//' -e 's/\\[\\ &#x27;//g' -e 's/&#x27;\\ \\]//g' > doc/readme.md"
   },
   "dependencies": {
     "bluebird": "^3.5.5",
