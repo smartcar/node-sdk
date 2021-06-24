@@ -22,7 +22,7 @@
     "index.js"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
@@ -31,14 +31,12 @@
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc npm run test:unit -s",
-    "cover:integration": "nyc npm test:integration -s",
+    "cover": "nyc npm run test -s",
     "jsdoc": "jsdoc -c .jsdoc.json .",
     "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed -e 's/[ \t]*$//' -e 's/\\[\\ &#x27;//g' -e 's/&#x27;\\ \\]//g' > doc/readme.md"
   },
   "dependencies": {
     "bluebird": "^3.5.5",
-    "joi": "^14.0.3",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"

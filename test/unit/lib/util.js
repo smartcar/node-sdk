@@ -2,14 +2,14 @@
 
 const _ = require('lodash');
 const test = require('ava');
-const nock = require('nock');
 const Promise = require('bluebird');
 const {StatusCodeError} = require('request-promise/errors');
+const {env} = require('process');
 
 const util = require('../../../lib/util');
 const smartcar = require('../../../');
 const config = require('../../../lib/config');
-const errors = require('../../../lib/errors');
+const SmartcarError = require('../../../lib/smartcar-error');
 
 const API_URL = config.api + '/v' + config.version;
 
@@ -51,7 +51,16 @@ test('formatAccess', function(t) {
   const rActual = access.refreshExpiration.getTime();
   t.true(expected - 1000 <= actual && actual <= expected + 1000);
   t.true(rExpected - 1000 <= rActual && rActual <= rExpected + 1000);
+});
 
+test('getOrThrowConfig - success', function(t) {
+  env.PIZZA = 'PASTA';
+  t.is(util.getOrThrowConfig('PIZZA'), 'PASTA');
+});
+
+test('getOrThrowConfig - error', function(t) {
+  const error = t.throws(() => (util.getOrThrowConfig('PASTA')));
+  t.is(error.message, 'PASTA not set or passed as arguments');
 });
 
 test('getUrl - no args', function(t) {
@@ -70,28 +79,8 @@ test('getUrl - id & endpoint', function(t) {
 });
 
 test('getUrl - version 2.0', function(t) {
-  smartcar.setApiVersion('2.0');
-  const url = util.getUrl('VID', 'odometer');
+  const url = util.getUrl('VID', 'odometer', '2.0');
   t.is(url, 'https://api.smartcar.com/v2.0/vehicles/VID/odometer');
-});
-
-test('request - default opts', async function(t) {
-  const n = nock('https://mock.com')
-    .get('/test')
-    .matchHeader('accept', 'application/json')
-    .matchHeader(
-      'user-agent',
-      /* eslint-disable-next-line max-len */
-      /^Smartcar\/(\d+\.\d+\.\d+-[\w-]*) \((\w+); (\w+)\) Node.js v(\d+\.\d+\.\d+)$/
-    )
-    .reply(200, {test: 'data'});
-
-  const response = await util.request('https://mock.com/test');
-
-  t.is(typeof response, 'object');
-  t.is(response.test, 'data');
-  t.true(n.isDone());
-
 });
 
 test('wrap', async function(t) {
@@ -104,241 +93,167 @@ test('wrap', async function(t) {
 
 });
 
-test('catch - ValidationError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/validation')
-    .reply(400, {
-      error: 'validation_error',
-      message: 'password must be a string',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/validation'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.ValidationError);
-  t.is(boxed.message, 'password must be a string');
-  t.true(n.isDone());
-
-});
-
-test('catch - AuthenticationError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/auth')
-    .reply(401, {
-      error: 'authentication_error',
-      message: 'invalid bearer header',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/auth', {
-    auth: {
-      bearer: 'pizza',
+test('handleError - non-json', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 504,
+    response: {
+      body: 'what',
     },
   }));
-  const boxed = t.throws(() => util.catch(err));
 
-  t.true(boxed instanceof errors.AuthenticationError);
-  t.true(boxed.message.includes('invalid bearer header'));
-  t.true(n.isDone());
-
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 504);
+  t.is(boxed.message, 'what');
 });
 
-test('catch - PermissionError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/perm')
-    .reply(403, {
-      error: 'permission_error',
-      message: 'you shall not pass',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/perm'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.PermissionError);
-  t.regex(boxed.message, /https:\/\/mock.com\/perm/);
-  t.true(n.isDone());
-
-});
-
-test('catch - ResourceNotFoundError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/404')
-    .reply(404, {
-      error: 'resource_not_found_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/404'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.ResourceNotFoundError);
-  t.regex(boxed.message, /https:\/\/mock.com\/404/);
-  t.true(n.isDone());
-
-});
-
-test('catch - VehicleStateError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/state')
-    .reply(409, {
-      error: 'vehicle_state_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/state', {
-    json: {ACTION: 'LOCK'},
+test('handleError - String/non-json body', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 500,
+    response: {
+      body: 'what',
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
   }));
-  const boxed = t.throws(() => util.catch(err));
 
-  t.true(boxed instanceof errors.VehicleStateError);
-  t.is(boxed.message, 'wat');
-  t.true(n.isDone());
-
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 500);
+  t.is(boxed.message, 'SDK_ERROR:undefined - what');
+  t.is(boxed.type, 'SDK_ERROR');
 });
 
-test('catch - RateLimitingError', async function(t) {
+test('handleError - SmartcarError V1', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 600,
+    response: {
+      body: {
+        error: 'monkeys_on_mars',
+        message: 'yes, really',
+      },
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  }));
 
-  const n = nock('https://mock.com')
-    .get('/ratelimit')
-    .reply(429, {
-      error: 'rate_limit_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/ratelimit'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.RateLimitingError);
-  t.notRegex(boxed.message, /https:\/\/mock.com\/ratelimit/);
-  t.true(n.isDone());
-
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 600);
+  t.is(boxed.message, 'monkeys_on_mars:undefined - yes, really');
+  t.is(boxed.type, 'monkeys_on_mars');
 });
 
-test('catch - MonthlyLimitExceeded', async function(t) {
+test('handleError - when bit-flips because of moon position', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 999,
+    response: {
+      body: {
+        random: 'testing',
+      },
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  }));
 
-  const n = nock('https://mock.com')
-    .get('/monthly')
-    .reply(430, {
-      error: 'montly_limit_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/monthly'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.MonthlyLimitExceeded);
-  t.notRegex(boxed.message, /https:\/\/mock.com\/monthly/);
-  t.true(n.isDone());
-
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 999);
+  t.is(boxed.message, 'SDK_ERROR:undefined - Unknown error');
+  t.is(boxed.type, 'SDK_ERROR');
 });
 
-test('catch - ServerError', async function(t) {
 
-  const n = nock('https://mock.com')
-    .get('/server')
-    .reply(500, {
-      error: 'server_error',
-      message: 'wat',
-    });
+test('handleError - SmartcarError V2 no resolution', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 500,
+    response: {
+      body: {
+        type: 'type',
+        code: 'code',
+        description: 'description',
+        resolution: null,
+        detail: null,
+        requestId: '123',
+        docURL: null,
+        statusCode: 500,
+      },
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  }));
 
-  const err = await t.throwsAsync(util.request('https://mock.com/server'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.ServerError);
-  t.is(boxed.message, 'Unexpected server error');
-  t.true(n.isDone());
-});
-
-test('catch - VehicleNotCapableError', async function(t) {
-  const n = nock('https://mock.com')
-    .get('/notcap')
-    .reply(501, {
-      error: 'vehicle_not_capable_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/notcap'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.VehicleNotCapableError);
-  t.regex(boxed.message, /https:\/\/mock.com\/notcap/);
-  t.true(n.isDone());
-});
-
-test('catch - SmartcarNotCapableError', async function(t) {
-  const n = nock('https://mock.com')
-    .get('/notcap')
-    .reply(501, {
-      error: 'smartcar_not_capable_error',
-      message: 'wat',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/notcap'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.SmartcarNotCapableError);
-  t.is(boxed.message, 'wat');
-  t.true(n.isDone());
-});
-
-test('catch - SmartcarError', async function(t) {
-
-  const n = nock('https://mock.com')
-    .get('/generic')
-    .reply(600, {
-      error: 'monkeys_on_mars',
-      message: 'yes, really',
-    });
-
-  const err = await t.throwsAsync(util.request('https://mock.com/generic'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.SmartcarError);
-  t.regex(boxed.message, /monkeys_on_mars/);
-  t.true(boxed.original instanceof StatusCodeError);
-  t.true(n.isDone());
-
-});
-
-test.serial('catch - SmartcarErrorV2', async function(t) {
-
-  const n = nock('https://api.smartcar.com/v2.0')
-    .get('/something')
-    .reply(500, {
-      type: 'type',
-      code: 'code',
-      description: 'description',
-      resolution: null,
-      detail: null,
-      requestId: '123',
-      docURL: null,
-      statusCode: 500,
-    });
-
-  const err = await t.throwsAsync(util.request('https://api.smartcar.com/v2.0/something'));
-  const boxed = t.throws(() => util.catch(err));
-
-  t.true(boxed instanceof errors.SmartcarErrorV2);
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 500);
+  t.false('resolution' in boxed);
+  t.false('detail' in boxed);
+  t.false('docURL' in boxed);
   t.is(boxed.description, 'description');
-  t.true(n.isDone());
-
+  t.is(boxed.type, 'type');
+  t.is(boxed.code, 'code');
+  t.is(boxed.requestId, '123');
+  t.is(boxed.message, 'type:code - description');
 });
 
-test.serial('catch - SmartcarErrorV2 - string response', async function(t) {
+test('handleError - SmartcarError V2 resolution string', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 500,
+    response: {
+      body: {
+        type: 'type',
+        code: 'code',
+        description: 'description',
+        resolution: 'resolution',
+        requestId: '123',
+        statusCode: 500,
+      },
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  }));
 
-  const n = nock('https://api.smartcar.com/v2.0')
-    .get('/something')
-    .reply(500, 'just a string response');
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 500);
+  t.is(boxed.resolution.type, 'resolution');
+  t.false('url' in boxed.resolution);
+  t.false('detail' in boxed);
+  t.false('docURL' in boxed);
+  t.is(boxed.description, 'description');
+  t.is(boxed.type, 'type');
+  t.is(boxed.code, 'code');
+  t.is(boxed.requestId, '123');
+  t.is(boxed.message, 'type:code - description');
+});
 
-  const err = await t.throwsAsync(util.request('https://api.smartcar.com/v2.0/something'));
-  const boxed = t.throws(() => util.catch(err));
+test('handleError - SmartcarError V2 with all attrbutes', function(t) {
+  const boxed = t.throws(() => util.handleError({
+    statusCode: 500,
+    response: {
+      body: {
+        type: 'type',
+        code: 'code',
+        description: 'description',
+        docURL: 'docURL',
+        resolution: {pizza: 'resolution'},
+        requestId: '123',
+        statusCode: 500,
+        detail: ['pizza'],
+      },
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  }));
 
-  t.true(boxed instanceof errors.SmartcarErrorV2);
-  t.is(boxed.description, 'just a string response');
-  t.true(n.isDone());
-
+  t.true(boxed instanceof SmartcarError);
+  t.is(boxed.statusCode, 500);
+  t.is(boxed.resolution.pizza, 'resolution');
+  t.is(boxed.docURL, 'docURL');
+  t.is(boxed.description, 'description');
+  t.is(boxed.type, 'type');
+  t.is(boxed.code, 'code');
+  t.is(boxed.requestId, '123');
+  t.is(boxed.message, 'type:code - description');
+  t.is(boxed.detail[0], 'pizza');
 });

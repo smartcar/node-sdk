@@ -29,8 +29,8 @@ not have access to the dashboard, please
 ### Flow
 
 - Create a new `AuthClient` object with your `clientId`, `clientSecret`,
-  `redirectUri`, and required `scope`.
-- Redirect the user to Smartcar Connect using `getAuthUrl` or one
+  `redirectUri`.
+- Redirect the user to Smartcar Connect using `getAuthUrl` with required `scope` or with one
   of our frontend SDKs.
 - The user will login, and then accept or deny your `scope`'s permissions.
 - Handle the get request to `redirectUri`.
@@ -44,7 +44,7 @@ not have access to the dashboard, please
       to `"access_denied"`.
     - If you passed a state parameter to `getAuthUrl`, `req.query.state` will
       contain the state value.
-- Get the user's vehicles with `getVehicleIds`.
+- Get the user's vehicles with `getVehicles`.
 - Create a new `Vehicle` object using a `vehicleId` from the previous response,
   and the `access_token`.
 - Make requests to the Smartcar API.
@@ -70,23 +70,22 @@ const app = express();
 const port = 4000;
 
 const client = new smartcar.AuthClient({
-  clientId: 'SMARTCAR_CLIENT_ID',
-  clientSecret: 'SMARTCAR_CLIENT_SECRET',
-  redirectUri: 'YOUR_CALLBACK_URI',
-  scope: ['read_vehicle_info'],
+  clientId: '<Smartcar Client Id>', // fallback to SMARTCAR_CLIENT_ID ENV variable
+  clientSecret: '<Smartcar Client Secret>', // fallback to SMARTCAR_CLIENT_SECRET ENV variable
+  redirectUri: '<Your callback URI>', // fallback to SMARTCAR_REDIRECT_URI ENV variable
   testMode: true, // launch Smartcar Connect in test mode
 });
 
 // Redirect to Smartcar Connect
 app.get('/login', function(req, res) {
-  const link = client.getAuthUrl();
+  const link = client.getAuthUrl(['read_vehicle_info']);
 
   // redirect to the link
   res.redirect(link);
 });
 
 // Handle Smartcar callback with auth code
-app.get('/callback', function(req, res, next) {
+app.get('/callback', async function(req, res, next) {
   let access;
 
   if (req.query.error) {
@@ -95,32 +94,23 @@ app.get('/callback', function(req, res, next) {
   }
 
   // exchange auth code for access token
-  return client
-    .exchangeCode(req.query.code)
-    .then(function(_access) {
-      // in a production app you'll want to store this in some kind of persistent storage
-      access = _access;
-      // get the user's vehicles
-      return smartcar.getVehicleIds(access.accessToken);
-    })
-    .then(function(res) {
-      // instantiate first vehicle in vehicle list
-      const vehicle = new smartcar.Vehicle(res.vehicles[0], access.accessToken);
-      // get identifying information about a vehicle
-      return vehicle.info();
-    })
-    .then(function(data) {
-      console.log(data);
-      // {
-      //   "id": "36ab27d0-fd9d-4455-823a-ce30af709ffc",
-      //   "make": "TESLA",
-      //   "model": "Model S",
-      //   "year": 2014
-      // }
-
-      // json response will be sent to the user
-      res.json(data);
-    });
+  const tokens = await client.exchangeCode(req.query.code)
+  // get the user's vehicles
+  const vehicles = await smartcar.getVehicles(tokens.accessToken);
+  // instantiate first vehicle in vehicle list
+  const vehicle = new smartcar.Vehicle(vehicles.vehicles[0], tokens.accessToken);
+  // get identifying information about a vehicle
+  const attributes = await vehicle.attributes();
+  console.log(attributes);
+  // {
+  //   "id": "36ab27d0-fd9d-4455-823a-ce30af709ffc",
+  //   "make": "TESLA",
+  //   "model": "Model S",
+  //   "year": 2014
+  //   "meta": {
+  //     "requestId": "ada7207c-3c0a-4027-a47f-6215ce6f7b93"
+  //   }
+  // }
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -145,7 +135,20 @@ To test:
 npm run test
 ```
 
+Note: In order to run tests locally the following environment variables would have to be set : 
+- `E2E_SMARTCAR_CLIENT_ID` - Client ID to be used.
+- `E2E_SMARTCAR_CLIENT_SECRET` - Client secret to be used.
+- `E2E_SMARTCAR_REDIRECT_URI` - Redirect URI for the auth flow.
+- `E2E_SMARTCAR_AMT` - AMT from dashboard for webhooks tests.
+- `E2E_SMARTCAR_WEBHOOK_ID` - Webhook ID use in the webhook tests success case.
+
 [ci-url]: https://travis-ci.com/smartcar/node-sdk
 [ci-image]: https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
 [npm-url]: https://badge.fury.io/js/smartcar
 [npm-image]: https://badge.fury.io/js/smartcar.svg
+
+## Supported Node.js Versions 
+
+Smartcar aims to support the SDK on all Node.js versions that have a status of "Maintenance" or "Active LTS" as defined in the [Node.js Release schedule](https://github.com/nodejs/Release#release-schedule).
+ 
+In accordance with the Semantic Versioning specification, the addition of support for new Node.js versions would result in a MINOR version bump and the removal of support for Node.js versions would result in a MAJOR version bump.
