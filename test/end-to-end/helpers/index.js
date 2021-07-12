@@ -11,18 +11,18 @@ const helpers = {};
 
 /* eslint-disable no-process-env */
 const HEADLESS = isCI || process.env.HEADLESS;
-const CLIENT_ID = process.env.INTEGRATION_CLIENT_ID;
-const CLIENT_SECRET = process.env.INTEGRATION_CLIENT_SECRET;
+const CLIENT_ID = process.env.E2E_SMARTCAR_CLIENT_ID;
+const CLIENT_SECRET = process.env.E2E_SMARTCAR_CLIENT_SECRET;
 /* eslint-enable */
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   throw new Error(
     // eslint-disable-next-line max-len
-    '"INTEGRATION_CLIENT_ID" and "INTEGRATION_CLIENT_SECRET" environment variables must be set',
+    '"E2E_SMARTCAR_CLIENT_ID" and "E2E_SMARTCAR_CLIENT_SECRET" environment variables must be set',
   );
 }
 
-const DEFAULT_SCOPE = [
+helpers.DEFAULT_SCOPES = [
   'required:read_vehicle_info',
   'required:read_location',
   'required:read_odometer',
@@ -35,11 +35,10 @@ const DEFAULT_SCOPE = [
   'required:read_tires',
 ];
 
-helpers.getAuthClientParams = (scope = DEFAULT_SCOPE) => ({
+helpers.getAuthClientParams = () => ({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   redirectUri: 'https://example.com/auth',
-  scope,
   testMode: true,
 });
 
@@ -56,7 +55,11 @@ const getCodeFromUri = function(uri) {
   }
 };
 
-helpers.runAuthFlow = async function(authUrl, brand = 'CHEVROLET') {
+helpers.runAuthFlow = async function(
+  authUrl,
+  brand = 'CHEVROLET',
+  email = ''
+) {
   const firefoxOptions = new firefox.Options();
   const chromeOptions = new chrome.Options()
     .addArguments('disable-infobars')
@@ -84,7 +87,7 @@ helpers.runAuthFlow = async function(authUrl, brand = 'CHEVROLET') {
     .click();
 
   // Login
-  const email = `${uuid()}@email.com`;
+  email = email || `${uuid()}@email.com`;
   await driver.findElement(By.css('input[id=username]')).sendKeys(email);
   await driver.findElement(By.css('input[id=password')).sendKeys('password');
   await driver.findElement(By.css('button[id=sign-in-button]')).click();
