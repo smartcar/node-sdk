@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
 const nock = require('nock');
 const test = require('ava');
 
@@ -13,8 +12,8 @@ const TOKEN = '9ad942c6-32b8-4af2-ada6-5e8ecdbad9c2';
 const vehicle = new Vehicle(VID, TOKEN);
 
 const nocks = {
-  base(vid = VID, token = TOKEN) {
-    return nock(`https://api.smartcar.com/v1.0/vehicles/${vid}`)
+  base(version = vehicle.version, vid = VID, token = TOKEN) {
+    return nock(`https://api.smartcar.com/v${version}/vehicles/${vid}`)
       .matchHeader('User-Agent', USER_AGENT)
       .matchHeader('Authorization', `Bearer ${token}`);
   },
@@ -26,591 +25,103 @@ test.afterEach(function(t) {
   }
 });
 
-test('constructor', async function(t) {
+test('constructor - default parameters check', async function(t) {
+  const vehicle = new Vehicle(VID, TOKEN);
   t.context.n = nocks
-    .base()
+    .base(vehicle.version)
     .matchHeader('sc-unit-system', 'metric')
     .get('/default')
-    .reply(200, 'default');
+    .reply(200, '{"pizza": "pasta"}');
 
-  const vehicle = new Vehicle(VID, TOKEN);
   t.is(vehicle.id, VID);
   t.is(vehicle.token, TOKEN);
-  t.is(typeof vehicle.request, 'function');
   t.is(vehicle.unitSystem, 'metric');
+  t.is(vehicle.version, '2.0');
 
-  const res = await vehicle.request('/default');
-  t.is(res, 'default');
+  const res = await vehicle.service.request('get', 'default');
+  t.is(res.pizza, 'pasta');
 });
 
-test('constructor - imperial', async function(t) {
+test('constructor - non default unit and version', async function(t) {
+  const vehicle = new Vehicle(VID, TOKEN, {
+    unitSystem: 'imperial',
+    version: '4.4',
+  });
   t.context.n = nocks
-    .base()
+    .base('4.4')
     .matchHeader('sc-unit-system', 'imperial')
     .get('/constructor/imperial')
-    .reply(200, 'imperial build');
+    .reply(200, '{"pizza": "pasta"}');
 
-  const vehicle = new Vehicle(VID, TOKEN, 'imperial');
   t.is(vehicle.id, VID);
   t.is(vehicle.token, TOKEN);
-  t.is(typeof vehicle.request, 'function');
   t.is(vehicle.unitSystem, 'imperial');
 
-  const res = await vehicle.request('/constructor/imperial');
-  t.is(res, 'imperial build');
+  const res = await vehicle.service.request('get', '/constructor/imperial');
+  t.is(res.pizza, 'pasta');
 });
 
-test('constructor - errors without new', function(t) {
-  const err = t.throws(() => Vehicle(VID, TOKEN), TypeError);
-  t.regex(err.message, /cannot be invoked without 'new'/);
-});
-
-test('constructor - errors for invalid unit', function(t) {
-  t.throws(() => Vehicle(VID, TOKEN), TypeError);
-});
-
-test('setUnitSystem - imperial', async function(t) {
+test('vehicle webhook subscribe', async(t) => {
+  const responseBody = {webhookId: 'webhookID', vehicleId: 'vehicleId'};
   t.context.n = nocks
     .base()
-    .matchHeader('sc-unit-system', 'imperial')
-    .get('/unit/imperial')
-    .reply(200, 'imperial');
+    .post('/webhooks/webhookID')
+    .reply(200, responseBody, {'sc-request-id': 'requestId'});
 
-  const vehicle = new Vehicle(VID, TOKEN);
-  vehicle.setUnitSystem('imperial');
-  t.is(vehicle.unitSystem, 'imperial');
+  const response = await vehicle.subscribe('webhookID');
 
-  const res = await vehicle.request('/unit/imperial');
-  t.is(res, 'imperial');
+  t.is(response.webhookId, 'webhookID');
+  t.is(response.vehicleId, 'vehicleId');
+  t.is(response.meta.requestId, 'requestId');
 });
 
-test('setUnitSystem - metric', async function(t) {
+test('vehicle webhook unsubscribe', async(t) => {
   t.context.n = nocks
-    .base()
-    .matchHeader('sc-unit-system', 'metric')
-    .get('/unit/metric')
-    .reply(200, 'metric');
+    .base(vehicle.version, VID, 'amt')
+    .delete('/webhooks/webhookID')
+    .reply(200, '', {'sc-request-id': 'requestId'});
 
-  const vehicle = new Vehicle(VID, TOKEN, 'imperial');
-  vehicle.setUnitSystem('metric');
-  t.is(vehicle.unitSystem, 'metric');
+  const response = await vehicle.unsubscribe('amt', 'webhookID');
 
-  const res = await vehicle.request('/unit/metric');
-  t.is(res, 'metric');
+  t.is(response.meta.requestId, 'requestId');
 });
 
-test('setUnitSystem - error', function(t) {
-  const err = t.throws(() => vehicle.setUnitSystem('big'), TypeError);
-  t.regex(err.message, /unit/);
-});
-
-test('disconnect', async function(t) {
-  t.context.n = nocks
-    .base()
-    .delete('/application')
-    .reply(200, 'disconnect');
-
-  const response = await vehicle.disconnect();
-  t.is(response, 'disconnect');
-});
-
-test('permissions', async function(t) {
+test('vehicle permissions', async(t) => {
   t.context.n = nocks
     .base()
     .get('/permissions')
-    .reply(200, {
-      permissions: ['permission1', 'permission2', 'permission3'],
-    });
+    .query({limit: '1'})
+    .reply(200, {permissions: []}, {'sc-request-id': 'requestId'});
 
-  const permissions = await vehicle.permissions();
-  t.is(permissions.length, 3);
+  const response = await vehicle.permissions({limit: 1});
+
+  t.is(response.meta.requestId, 'requestId');
+  t.is(response.permissions.length, 0);
+  t.true(t.context.n.isDone());
 });
 
-test('has permissions - single', async function(t) {
-  t.context.n = nocks
-    .base()
-    .get('/permissions')
-    .reply(200, {
-      permissions: ['permission1', 'permission2', 'permission3'],
-    });
-
-  const hasPermission = await vehicle.hasPermissions('required:permission1');
-
-  t.is(hasPermission, true);
-});
-
-test('has permissions - multi', async function(t) {
-  t.context.n = nocks
-    .base()
-    .get('/permissions')
-    .reply(200, {
-      permissions: ['permission1', 'permission2', 'permission3'],
-    });
-
-  const hasPermissions = await vehicle.hasPermissions([
-    'permission1',
-    'required:permission2',
-  ]);
-
-  t.is(hasPermissions, true);
-});
-
-test('has permissions - false', async function(t) {
-  t.context.n = nocks
-    .base()
-    .get('/permissions')
-    .reply(200, {
-      permissions: ['permission1', 'permission2', 'permission3'],
-    });
-
-  const hasPermission = await vehicle.hasPermissions('permission4');
-
-  t.is(hasPermission, false);
-});
-
-test('has permissions - multi false', async function(t) {
-  t.context.n = nocks
-    .base()
-    .get('/permissions')
-    .reply(200, {
-      permissions: ['permission1', 'permission2', 'permission3'],
-    });
-
-  const hasPermissions = await vehicle.hasPermissions([
-    'permission1',
-    'permission4',
-  ]);
-
-  t.is(hasPermissions, false);
-});
-
-test('info', async function(t) {
-  const body = {
-    id: 'id',
-    make: 'make',
-    model: 'model',
-    year: 1234,
-  };
-  t.context.n = nocks
-    .base()
-    .get('/')
-    .reply(200, body);
-
-  const response = await vehicle.info();
-  t.deepEqual(response, body);
-});
-
-test('location', async function(t) {
-  const body = {
-    latitude: 1234,
-    longitude: 1234,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/location')
-    .reply(200, body, headers);
-
-  const response = await vehicle.location();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-});
-
-test('location - no age', async function(t) {
-  const body = {
-    latitude: 1234,
-    longitude: 1234,
-  };
-  const headers = {};
-  t.context.n = nocks
-    .base()
-    .get('/location')
-    .reply(200, body, headers);
-
-  const response = await vehicle.location();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-});
-
-test('odometer', async function(t) {
-  const body = {
-    distance: 1234,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/odometer')
-    .reply(200, body, headers);
-
-  const response = await vehicle.odometer();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('odometer - no age', async function(t) {
-  const body = {
-    distance: 1234,
-  };
-  const headers = {
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/odometer')
-    .reply(200, body, headers);
-
-  const response = await vehicle.odometer();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('fuel', async function(t) {
-  const body = {
-    range: 1234,
-    percentRemaining: 0.43,
-    amountRemaining: 7,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/fuel')
-    .reply(200, body, headers);
-
-  const response = await vehicle.fuel();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('fuel - no age', async function(t) {
-  const body = {
-    range: 1234,
-    percentRemaining: 0.43,
-    amountRemaining: 7,
-  };
-  const headers = {
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/fuel')
-    .reply(200, body, headers);
-
-  const response = await vehicle.fuel();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('oil', async function(t) {
-  const body = {
-    lifeRemaining: 0.86,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/engine/oil')
-    .reply(200, body, headers);
-
-  const response = await vehicle.oil();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-});
-
-test('oil - no age', async function(t) {
-  const body = {
-    lifeRemaining: 0.86,
-  };
-  const headers = {};
-  t.context.n = nocks
-    .base()
-    .get('/engine/oil')
-    .reply(200, body, headers);
-
-  const response = await vehicle.oil();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-});
-
-test('tire pressure', async function(t) {
-  const body = {
-    frontLeft: 33.0,
-    frontRight: 34.0,
-    backLeft: 33.0,
-    backRight: 33.0,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'imperial',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/tires/pressure')
-    .reply(200, body, headers);
-
-  const response = await vehicle.tirePressure();
-  t.deepEqual(response.data.tires, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('tire pressure - no age', async function(t) {
-  const body = {
-    frontLeft: 33.0,
-    frontRight: 34.0,
-    backLeft: 33.0,
-    backRight: 33.0,
-  };
-  const headers = {
-    'sc-unit-system': 'imperial',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/tires/pressure')
-    .reply(200, body, headers);
-
-  const response = await vehicle.tirePressure();
-  t.deepEqual(response.data.tires, body);
-  t.is(response.age, null);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('battery', async function(t) {
-  const body = {
-    range: 1234,
-    percentRemaining: 0.43,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/battery')
-    .reply(200, body, headers);
-
-  const response = await vehicle.battery();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('battery - no age', async function(t) {
-  const body = {
-    range: 1234,
-    percentRemaining: 0.43,
-  };
-  const headers = {
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/battery')
-    .reply(200, body, headers);
-
-  const response = await vehicle.battery();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('batteryCapacity', async function(t) {
-  const body = {
-    capacity: 24,
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-    'sc-unit-system': 'metric',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/battery/capacity')
-    .reply(200, body, headers);
-
-  const response = await vehicle.batteryCapacity();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-  t.is(response.unitSystem, headers['sc-unit-system']);
-});
-
-test('charge', async function(t) {
-  const body = {
-    isPluggedIn: true,
-    state: 'CHARGING',
-  };
-  const headers = {
-    'sc-data-age': '2018-05-03T03:45:51+00:00',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/charge')
-    .reply(200, body, headers);
-
-  const response = await vehicle.charge();
-  t.deepEqual(response.data, body);
-  t.true(_.isDate(response.age));
-  const expectedISOString = new Date(headers['sc-data-age']).toISOString();
-  t.is(response.age.toISOString(), expectedISOString);
-});
-
-test('charge - no age', async function(t) {
-  const body = {
-    isPluggedIn: true,
-    state: 'CHARGING',
-  };
-  const headers = {};
-  t.context.n = nocks
-    .base()
-    .get('/charge')
-    .reply(200, body, headers);
-
-  const response = await vehicle.charge();
-  t.deepEqual(response.data, body);
-  t.is(response.age, null);
-});
-
-test('vin', async function(t) {
-  const body = {
-    vin: '4JGBB8GB2AA537355',
-  };
-  t.context.n = nocks
-    .base()
-    .get('/vin')
-    .reply(200, body);
-
-  const vin = await vehicle.vin();
-  t.is(vin, body.vin);
-});
-
-test('lock', async function(t) {
-  t.context.nock = nocks
-    .base()
-    .post('/security', {action: 'LOCK'})
-    .reply(200, {status: 'success'});
-
-  const response = await vehicle.lock();
-
-  t.deepEqual(_.xor(_.keys(response), ['status']), []);
-  t.is(response.status, 'success');
-});
-
-test('unlock', async function(t) {
-  t.context.nock = nocks
-    .base()
-    .post('/security', {action: 'UNLOCK'})
-    .reply(200, {status: 'success'});
-
-  const response = await vehicle.unlock();
-
-  t.deepEqual(_.xor(_.keys(response), ['status']), []);
-  t.is(response.status, 'success');
-});
-
-test('startCharge', async function(t) {
-  t.context.nock = nocks
-    .base()
-    .post('/charge', {action: 'START'})
-    .reply(200, {status: 'success'});
-
-  const response = await vehicle.startCharge();
-
-  t.deepEqual(_.xor(_.keys(response), ['status']), []);
-  t.is(response.status, 'success');
-});
-
-test('stopCharge', async function(t) {
-  t.context.nock = nocks
-    .base()
-    .post('/charge', {action: 'STOP'})
-    .reply(200, {status: 'success'});
-
-  const response = await vehicle.stopCharge();
-
-  t.deepEqual(_.xor(_.keys(response), ['status']), []);
-  t.is(response.status, 'success');
-});
-
-test('batch', async function(t) {
-  const paths = ['/odometer', '/transmission/fluid', '/fuel', '/sunroof'];
+test('batch - success', async function(t) {
+  const paths = ['/odometer', '/engine/oil', '/location'];
   const requestBody = {
     requests: [
       {
         path: '/odometer',
       },
       {
-        path: '/transmission/fluid',
+        path: '/engine/oil',
       },
       {
-        path: '/fuel',
-      },
-      {
-        path: '/sunroof',
+        path: '/location',
       },
     ],
-  };
-  const expected = {
-    '/odometer': {
-      headers: {'sc-unit-system': 'imperial'},
-      code: 200,
-      body: {
-        distance: 32768,
-      },
-    },
-    '/transmission/fluid': {
-      headers: {'sc-unit-system': 'imperial'},
-      code: 200,
-      body: {
-        temperature: 98.2,
-        wear: 0.5,
-      },
-    },
-    '/fuel': {
-      headers: {'sc-unit-system': 'imperial'},
-      code: 200,
-      body: {
-        range: 550.8499755859375,
-        percentRemaining: 0.9449999928474426,
-      },
-    },
-    '/sunroof': {
-      headers: {'sc-unit-system': 'imperial'},
-      code: 501,
-      body: {
-        error: 'vehicle_not_capable_error',
-        message: 'Vehicle is not capable of performing request.',
-      },
-    },
   };
   const mockResponse = {
     responses: [
       {
-        headers: {'sc-unit-system': 'imperial'},
+        headers: {
+          'sc-unit-system': 'imperial',
+          'sc-data-age': '2018-05-04T07:20:50.844Z',
+        },
         path: '/odometer',
         code: 200,
         body: {
@@ -618,26 +129,16 @@ test('batch', async function(t) {
         },
       },
       {
-        headers: {'sc-unit-system': 'imperial'},
-        path: '/transmission/fluid',
+        headers: {'sc-data-age': '2018-05-04T07:20:50.844Z'},
+        path: '/engine/oil',
         code: 200,
         body: {
-          temperature: 98.2,
-          wear: 0.5,
+          lifeRemaining: 0.1123,
         },
       },
       {
         headers: {'sc-unit-system': 'imperial'},
-        path: '/fuel',
-        code: 200,
-        body: {
-          range: 550.8499755859375,
-          percentRemaining: 0.9449999928474426,
-        },
-      },
-      {
-        headers: {'sc-unit-system': 'imperial'},
-        path: '/sunroof',
+        path: '/location',
         code: 501,
         body: {
           error: 'vehicle_not_capable_error',
@@ -649,9 +150,54 @@ test('batch', async function(t) {
   t.context.n = nocks
     .base()
     .post('/batch', requestBody)
-    .reply(200, mockResponse);
+    .reply(200, mockResponse, {'sc-request-id': 'requestId'});
 
   const response = await vehicle.batch(paths);
 
-  t.deepEqual(response, expected);
+  const odometer = response.odometer();
+  t.is(odometer.distance, 32768);
+  t.is(odometer.meta.requestId, 'requestId');
+  t.is(odometer.meta.unitSystem, 'imperial');
+  t.is(odometer.meta.dataAge.valueOf(), 1525418450844);
+
+  const engineOil = response.engineOil();
+  t.is(engineOil.lifeRemaining, 0.1123);
+  t.is(engineOil.meta.dataAge.valueOf(), 1525418450844);
+
+  const expectedMessage = 'vehicle_not_capable_error:undefined - '
+    + 'Vehicle is not capable of performing request.';
+  const error = t.throws(() => response.location());
+  t.is(error.message, expectedMessage);
+  t.is(error.type, 'vehicle_not_capable_error');
+});
+
+test('batch - error', async function(t) {
+  const paths = ['/odometer', '/engine/oil', '/location'];
+  const requestBody = {
+    requests: [
+      {
+        path: '/odometer',
+      },
+      {
+        path: '/engine/oil',
+      },
+      {
+        path: '/location',
+      },
+    ],
+  };
+
+  t.context.n = nocks
+    .base()
+    .post('/batch', requestBody)
+    .reply(500, {
+      error: 'monkeys_on_mars',
+      message: 'yes, really',
+    }, {
+      'sc-request-id': 'requestId',
+    });
+
+  const error = await t.throwsAsync(vehicle.batch(paths));
+  t.is(error.message, 'monkeys_on_mars:undefined - yes, really');
+  t.is(error.type, 'monkeys_on_mars');
 });

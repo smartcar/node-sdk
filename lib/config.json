@@ -3,5 +3,5 @@
   "api": "https://api.smartcar.com",
   "connect": "https://connect.smartcar.com",
   "timeout": 310000,
-  "version": "1.0"
+  "version": "2.0"
 }

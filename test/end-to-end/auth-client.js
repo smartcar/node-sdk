@@ -4,11 +4,11 @@ const _ = require('lodash');
 const test = require('ava');
 
 const smartcar = require('../../');
-const {getAuthClientParams, runAuthFlow} = require('./helpers');
+const {getAuthClientParams, runAuthFlow, DEFAULT_SCOPES} = require('./helpers');
 
 test('exchangeCode', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
-  const code = await runAuthFlow(client.getAuthUrl());
+  const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
   const access = await client.exchangeCode(code);
 
   t.deepEqual(
@@ -18,13 +18,13 @@ test('exchangeCode', async(t) => {
       'refreshExpiration',
       'refreshToken',
     ]),
-    []
+    [],
   );
 });
 
 test('exchangeRefreshToken', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
-  const code = await runAuthFlow(client.getAuthUrl());
+  const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
 
   const oldAccess = await client.exchangeCode(code);
   const newAccess = await client.exchangeRefreshToken(oldAccess.refreshToken);
@@ -36,38 +36,14 @@ test('exchangeRefreshToken', async(t) => {
       'refreshExpiration',
       'refreshToken',
     ]),
-    []
+    [],
   );
-});
 
-test('isCompatible - no country set', async(t) => {
-  const client = new smartcar.AuthClient(getAuthClientParams());
+  const error = await t.throwsAsync(
+    client.exchangeRefreshToken(oldAccess.refreshToken)
+  );
+  const expectedMessage = 'invalid_grant:undefined - Invalid or expired refresh token.';
+  t.is(error.message, expectedMessage);
 
-  const teslaVin = '5YJXCDE22HF068739';
-  const audiVin = 'WAUAFAFL1GN014882';
-
-  const scopes = ['read_odometer', 'read_location'];
-
-  const teslaComp = await client.isCompatible(teslaVin, scopes);
-  const audiComp = await client.isCompatible(audiVin, scopes);
-
-  t.truthy(teslaComp);
-  t.falsy(audiComp);
-});
-
-test('isCompatible - country set', async(t) => {
-  const client = new smartcar.AuthClient(getAuthClientParams());
-
-  const teslaVin = '5YJXCDE22HF068739';
-  const audiVin = 'WAUAFAFL1GN014882';
-
-  const scopes = ['read_odometer', 'read_location'];
-
-  const country = 'US';
-
-  const teslaComp = await client.isCompatible(teslaVin, scopes, country);
-  const audiComp = await client.isCompatible(audiVin, scopes, country);
-
-  t.truthy(teslaComp);
-  t.falsy(audiComp);
+  t.is(error.type, 'invalid_grant');
 });

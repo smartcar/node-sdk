@@ -8,8 +8,6 @@ Smartcar Node SDK documentation.
 <dl>
 <dt><a href="#module_smartcar">smartcar</a></dt>
 <dd></dd>
-<dt><a href="#module_errors">errors</a></dt>
-<dd></dd>
 </dl>
 
 ## Classes
@@ -19,15 +17,30 @@ Smartcar Node SDK documentation.
 <dd></dd>
 <dt><a href="#AuthClient">AuthClient</a></dt>
 <dd></dd>
+<dt><a href="#SmartcarError">SmartcarError</a></dt>
+<dd><p>Class to handle all errors from Smartcar API
+Please see our <a href="https://smartcar.com/docs">error guides</a> to see a list
+of all the possible error types and codes of both v2.0 and v1.0 requests.</p>
+</dd>
+<dt><a href="#SmartcarService">SmartcarService</a></dt>
+<dd></dd>
 <dt><a href="#Vehicle">Vehicle</a></dt>
 <dd></dd>
 </dl>
 
-## Functions
+## Constants
 
 <dl>
-<dt><a href="#parseAge">parseAge(response)</a> ⇒ <code>Date</code> | <code>null</code></dt>
-<dd></dd>
+<dt><a href="#METHODS_MAP">METHODS_MAP</a> : <code>object.&lt;String, Object&gt;</code></dt>
+<dd><p>Every key here is the function name on vehicle
+This map is used to generate the methods dynamically. Every value is an object of
+the following fields :</p>
+<ul>
+<li>requestType: http request type, defaults to &#39;get&#39; if not mentioned.</li>
+<li>path: url path to hit, defaults to the method name</li>
+<li>body: body for post requests.</li>
+</ul>
+</dd>
 </dl>
 
 ## Typedefs
@@ -35,27 +48,35 @@ Smartcar Node SDK documentation.
 <dl>
 <dt><a href="#Access">Access</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Info">Info</a> : <code>Object</code></dt>
+<dt><a href="#Permissions">Permissions</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Location">Location</a> : <code>Object</code></dt>
+<dt><a href="#WebhookSubscription">WebhookSubscription</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
+<dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#EngineOil">EngineOil</a> : <code>Object</code></dt>
+<dt><a href="#Meta">Meta</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
+<dt><a href="#Vin">Vin</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Fuel">Fuel</a> : <code>Object</code></dt>
+<dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Battery">Battery</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#BatteryCapacity">BatteryCapacity</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Charge">Charge</a> : <code>Object</code></dt>
+<dt><a href="#Fuel">Fuel</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#ActionSuccess">ActionSuccess</a> : <code>Object</code></dt>
+<dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
+<dt><a href="#EngineOil">EngineOil</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Location">Location</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Attributes">Attributes</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#ActionResponse">ActionResponse</a> : <code>Object</code></dt>
 <dd></dd>
 </dl>
 
@@ -65,21 +86,26 @@ Smartcar Node SDK documentation.
 
 * [smartcar](#module_smartcar)
     * _static_
-        * [.errors](#module_smartcar.errors)
+        * [.SmartcarError](#module_smartcar.SmartcarError)
         * [.Vehicle](#module_smartcar.Vehicle)
         * [.AuthClient](#module_smartcar.AuthClient)
         * [.setApiVersion(version)](#module_smartcar.setApiVersion)
-        * [.isExpired(expiration)](#module_smartcar.isExpired) ⇒ <code>Boolean</code>
-        * [.getVehicleIds(token, [paging])](#module_smartcar.getVehicleIds) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
-        * [.getUserId(token)](#module_smartcar.getUserId) ⇒ <code>Promise.&lt;String&gt;</code>
+        * [.getApiVersion()](#module_smartcar.getApiVersion) ⇒ <code>String</code>
+        * [.getUser(accessToken)](#module_smartcar.getUser) ⇒ [<code>User</code>](#module_smartcar..User)
+        * [.getVehicles(accessToken, [paging])](#module_smartcar.getVehicles) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
+        * [.getCompatibility(vin, scope, [country], [options])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+        * [.hashChallenge(amt, challenge)](#module_smartcar.hashChallenge) ⇒ <code>String</code>
+        * [.verifyPayload(amt, signature, body)](#module_smartcar.verifyPayload) ⇒ <code>Boolean</code>
     * _inner_
+        * [~User](#module_smartcar..User) : <code>Object</code>
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
+        * [~Compatibility](#module_smartcar..Compatibility) : <code>Object</code>
 
-<a name="module_smartcar.errors"></a>
+<a name="module_smartcar.SmartcarError"></a>
 
-### smartcar.errors
+### smartcar.SmartcarError
 **Kind**: static property of [<code>smartcar</code>](#module_smartcar)
-**See**: [errors](#module_errors)
+**See**: [module:errors](module:errors)
 <a name="module_smartcar.Vehicle"></a>
 
 ### smartcar.Vehicle
@@ -101,57 +127,128 @@ Sets the version of Smartcar API you are using
 | --- | --- |
 | version | <code>String</code> |
 
-<a name="module_smartcar.isExpired"></a>
+<a name="module_smartcar.getApiVersion"></a>
 
-### smartcar.isExpired(expiration) ⇒ <code>Boolean</code>
-Check if a token has expired.
-
-**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: <code>Boolean</code> - true if expired, false if not expired
-
-| Param | Type | Description |
-| --- | --- | --- |
-| expiration | <code>Date</code> \| <code>String</code> | token expiration timestamp |
-
-<a name="module_smartcar.getVehicleIds"></a>
-
-### smartcar.getVehicleIds(token, [paging]) ⇒ [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds)
-Return list of the user's vehicles ids.
+### smartcar.getApiVersion() ⇒ <code>String</code>
+Gets the version of Smartcar API that is set
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: [<code>Promise.&lt;VehicleIds&gt;</code>](#module_smartcar..VehicleIds) - A promise with the vehicle ids.
+**Returns**: <code>String</code> - version
+<a name="module_smartcar.getUser"></a>
+
+### smartcar.getUser(accessToken) ⇒ [<code>User</code>](#module_smartcar..User)
+Return the user's id.
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| token | <code>String</code> | access token |
+| accessToken | <code>String</code> | access token |
+
+<a name="module_smartcar.getVehicles"></a>
+
+### smartcar.getVehicles(accessToken, [paging]) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
+Return list of the user's vehicles ids.
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| accessToken | <code>String</code> | access token |
 | [paging] | <code>Object</code> |  |
 | [paging.limit] | <code>Number</code> | number of vehicles to return |
 | [paging.offset] | <code>Number</code> | index to start vehicle list |
 
-<a name="module_smartcar.getUserId"></a>
+<a name="module_smartcar.getCompatibility"></a>
 
-### smartcar.getUserId(token) ⇒ <code>Promise.&lt;String&gt;</code>
-Return the user's id.
+### smartcar.getCompatibility(vin, scope, [country], [options]) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+Determine whether a vehicle is compatible with Smartcar.
+
+A compatible vehicle is a vehicle that:
+1. has the hardware required for internet connectivity,
+2. belongs to the makes and models Smartcar supports, and
+3. supports the permissions.
+
+_To use this function, please contact us!_
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
-**Returns**: <code>Promise.&lt;String&gt;</code> - the user id
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| vin | <code>String</code> |  | the VIN of the vehicle |
+| scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
+| [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
+| [options] | <code>Object</code> |  |  |
+| [options.clientId] | <code>String</code> |  | client ID to use for basic auth. |
+| [options.clientSecret] | <code>String</code> |  | client secret to use for basic auth. |
+| [options.flags] | <code>Object</code> |  | Object of flags where key is the name of the flag value is string or boolean value. |
+| [options.version] | <code>Object</code> |  | API version to use |
+
+<a name="module_smartcar.hashChallenge"></a>
+
+### smartcar.hashChallenge(amt, challenge) ⇒ <code>String</code>
+Generate hash challenege for webhooks. It does HMAC_SHA256(amt, challenge)
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Returns**: <code>String</code> - String representing the hex digest
+
 | Param | Type | Description |
 | --- | --- | --- |
-| token | <code>String</code> | access token |
+| amt | <code>String</code> | Application Management Token |
+| challenge | <code>String</code> | Challenge string |
 
+<a name="module_smartcar.verifyPayload"></a>
+
+### smartcar.verifyPayload(amt, signature, body) ⇒ <code>Boolean</code>
+Verify webhook payload with AMT and signature.
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Returns**: <code>Boolean</code> - true if signature matches the hex digest of amt and body
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amt | <code>String</code> | Application Management Token |
+| signature | <code>String</code> | sc-signature header value |
+| body | <code>object</code> | webhook response body |
+
+<a name="module_smartcar..User"></a>
+
+### smartcar~User : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>String</code> | User Id |
+| meta | <code>module:smartcar.Vehicle.Meta</code> |  |
+
+**Example**
+```js
+{
+  id: "e0514ef4-5226-11e8-8c13-8f6e8f02e27e",
+  meta: {
+    requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
+  }
+}
+```
 <a name="module_smartcar..VehicleIds"></a>
 
 ### smartcar~VehicleIds : <code>Object</code>
@@ -164,6 +261,7 @@ Return the user's id.
 | paging | <code>Object</code> |  |
 | paging.count- | <code>Number</code> | The total number of vehicles. |
 | paging.offset | <code>Number</code> | The current start index of returned vehicle ids. |
+| meta | <code>module:smartcar.Vehicle.Meta</code> |  |
 
 **Example**
 ```js
@@ -175,266 +273,32 @@ Return the user's id.
   paging: {
     count: 2,
     offset: 0,
+  },
+  meta: {
+    requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
   }
 }
 ```
-<a name="module_errors"></a>
+<a name="module_smartcar..Compatibility"></a>
 
-## errors
+### smartcar~Compatibility : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
 
-* [errors](#module_errors)
-    * [.SmartcarErrorV2](#module_errors.SmartcarErrorV2)
-        * [new errors.SmartcarErrorV2(error)](#new_module_errors.SmartcarErrorV2_new)
-        * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
-        * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
-        * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
-        * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>number</code>
-        * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
-        * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
-        * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
-        * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>Array.&lt;object&gt;</code>
-    * [.SmartcarError(message)](#module_errors.SmartcarError) ⇐ <code>Error</code>
-    * [.ValidationError(message)](#module_errors.ValidationError) ⇐ <code>SmartcarError</code>
-    * [.AuthenticationError(message)](#module_errors.AuthenticationError) ⇐ <code>SmartcarError</code>
-    * [.PermissionError(message)](#module_errors.PermissionError) ⇐ <code>SmartcarError</code>
-    * [.ResourceNotFoundError(message)](#module_errors.ResourceNotFoundError) ⇐ <code>SmartcarError</code>
-    * [.VehicleStateError(message, code)](#module_errors.VehicleStateError) ⇐ <code>SmartcarError</code>
-    * [.RateLimitingError(message)](#module_errors.RateLimitingError) ⇐ <code>SmartcarError</code>
-    * [.MonthlyLimitExceeded(message)](#module_errors.MonthlyLimitExceeded) ⇐ <code>SmartcarError</code>
-    * [.ServerError(message)](#module_errors.ServerError) ⇐ <code>SmartcarError</code>
-    * [.VehicleNotCapableError(message)](#module_errors.VehicleNotCapableError) ⇐ <code>SmartcarError</code>
-    * [.SmartcarNotCapableError(message)](#module_errors.SmartcarNotCapableError) ⇐ <code>SmartcarError</code>
-    * [.GatewayTimeoutError(message)](#module_errors.GatewayTimeoutError)
-
-<a name="module_errors.SmartcarErrorV2"></a>
-
-### errors.SmartcarErrorV2
-Enhanced errors from API v2.0
-Please see our [v2.0 error guides](https://smartcar.com/docs/errors/v2.0/billing) to see a list of all the possible error types and codes
-
-**Kind**: static class of [<code>errors</code>](#module_errors)
-
-* [.SmartcarErrorV2](#module_errors.SmartcarErrorV2)
-    * [new errors.SmartcarErrorV2(error)](#new_module_errors.SmartcarErrorV2_new)
-    * [.type](#module_errors.SmartcarErrorV2+type) : <code>string</code>
-    * [.code](#module_errors.SmartcarErrorV2+code) : <code>string</code>
-    * [.description](#module_errors.SmartcarErrorV2+description) : <code>string</code>
-    * [.statusCode](#module_errors.SmartcarErrorV2+statusCode) : <code>number</code>
-    * [.requestId](#module_errors.SmartcarErrorV2+requestId) : <code>string</code>
-    * [.resolution](#module_errors.SmartcarErrorV2+resolution) : <code>string</code>
-    * [.docURL](#module_errors.SmartcarErrorV2+docURL) : <code>string</code>
-    * [.detail](#module_errors.SmartcarErrorV2+detail) : <code>Array.&lt;object&gt;</code>
-
-<a name="new_module_errors.SmartcarErrorV2_new"></a>
-
-#### new errors.SmartcarErrorV2(error)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| error | <code>Object</code> \| <code>String</code> | response body from a v2.0 request |
-
-<a name="module_errors.SmartcarErrorV2+type"></a>
-
-#### smartcarErrorV2.type : <code>string</code>
-Type of error
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+code"></a>
-
-#### smartcarErrorV2.code : <code>string</code>
-Error code
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+description"></a>
-
-#### smartcarErrorV2.description : <code>string</code>
-Description of meaning of the error
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+statusCode"></a>
-
-#### smartcarErrorV2.statusCode : <code>number</code>
-HTTP status code
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+requestId"></a>
-
-#### smartcarErrorV2.requestId : <code>string</code>
-Unique identifier for request
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+resolution"></a>
-
-#### smartcarErrorV2.resolution : <code>string</code>
-Possible resolution for fixing the error
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+docURL"></a>
-
-#### smartcarErrorV2.docURL : <code>string</code>
-Reference to Smartcar documentation
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarErrorV2+detail"></a>
-
-#### smartcarErrorV2.detail : <code>Array.&lt;object&gt;</code>
-Further detail about the error
-
-**Kind**: instance property of [<code>SmartcarErrorV2</code>](#module_errors.SmartcarErrorV2)
-**Access**: public
-<a name="module_errors.SmartcarError"></a>
-
-### errors.SmartcarError(message) ⇐ <code>Error</code>
-Superclass for all sdk errors.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>Error</code>
-
-| Param | Description |
+| Name | Type |
 | --- | --- |
-| message | an error description to set |
+| compatible | <code>Boolean</code> |
+| meta | <code>module:smartcar.Vehicle.Meta</code> |
 
-<a name="module_errors.ValidationError"></a>
-
-### errors.ValidationError(message) ⇐ <code>SmartcarError</code>
-Error thrown by request validation.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.AuthenticationError"></a>
-
-### errors.AuthenticationError(message) ⇐ <code>SmartcarError</code>
-Error thrown by an invalid parameter when authenticating.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.PermissionError"></a>
-
-### errors.PermissionError(message) ⇐ <code>SmartcarError</code>
-Error thrown due to insufficient permissions.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.ResourceNotFoundError"></a>
-
-### errors.ResourceNotFoundError(message) ⇐ <code>SmartcarError</code>
-Error thrown when the requested resource is not found.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.VehicleStateError"></a>
-
-### errors.VehicleStateError(message, code) ⇐ <code>SmartcarError</code>
-Error thrown when the vehicle is not capable of performing the request in
-the current vehicle state.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-| code | a vehicle state error code (https://smartcar.com/docs/api#errors) |
-
-<a name="module_errors.RateLimitingError"></a>
-
-### errors.RateLimitingError(message) ⇐ <code>SmartcarError</code>
-Error thrown when an application makes too many requests and is throttled.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.MonthlyLimitExceeded"></a>
-
-### errors.MonthlyLimitExceeded(message) ⇐ <code>SmartcarError</code>
-Error thrown when an application requests more resources than its allowed
-limit, e.g., gone over their allotted monthly request limit.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.ServerError"></a>
-
-### errors.ServerError(message) ⇐ <code>SmartcarError</code>
-Error thrown when the server throws an unexpected error.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.VehicleNotCapableError"></a>
-
-### errors.VehicleNotCapableError(message) ⇐ <code>SmartcarError</code>
-Error thrown when vehicle is not capable of performing the request.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.SmartcarNotCapableError"></a>
-
-### errors.SmartcarNotCapableError(message) ⇐ <code>SmartcarError</code>
-Error thrown when Smartcar is not capable of performing the request.
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-**Extends**: <code>SmartcarError</code>
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
-<a name="module_errors.GatewayTimeoutError"></a>
-
-### errors.GatewayTimeoutError(message)
-Error thrown when gateway to Smartcar times out
-
-**Kind**: static method of [<code>errors</code>](#module_errors)
-
-| Param | Description |
-| --- | --- |
-| message | an error description to set |
-
+**Example**
+```js
+{
+  compatible: false,
+  meta: {
+    requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
+  }
+}
+```
 <a name="Promise"></a>
 
 ## Promise
@@ -447,10 +311,9 @@ Error thrown when gateway to Smartcar times out
 
 * [AuthClient](#AuthClient)
     * [new AuthClient(options)](#new_AuthClient_new)
-    * [.getAuthUrl([options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
-    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
-    * [.isCompatible(vin, scope, [country])](#AuthClient+isCompatible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.getAuthUrl([scope], [options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
+    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Access</code>](#Access)
+    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Access</code>](#Access)
 
 <a name="new_AuthClient_new"></a>
 
@@ -464,13 +327,11 @@ Create a Smartcar OAuth client for your application.
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
-| [options.scope] | <code>Array.&lt;String&gt;</code> | <code>all</code> | List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
 | [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
-| [options.development] | <code>Boolean</code> | <code>false</code> | DEPRECATED: Launch Smartcar auth in development mode to enable mock vehicle brands. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
-### authClient.getAuthUrl([options]) ⇒ <code>String</code>
+### authClient.getAuthUrl([scope], [options]) ⇒ <code>String</code>
 Generate the Smartcar Connect URL.
 
 By default users are not shown the permission dialog if they have already
@@ -480,21 +341,16 @@ approval_prompt to `force`.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
 **Returns**: <code>String</code> - Smartcar Connect URL to direct user to.
-**Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
-See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-for all possible errors.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [options] | <code>Object</code> |  |  |
-| [options.state] | <code>String</code> |  | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
-| [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
-| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`. An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
-| [options.flags] | <code>Array.&lt;String&gt;</code> |  | List of feature flags that your application has early access to. |
+| Param | Type | Description |
+| --- | --- | --- |
+| [scope] | <code>Array.&lt;String&gt;</code> | List of permissions your application requires. The valid permission names are found in the [API Reference](https://smartcar.com/docs/guides/scope/) |
+| [options] | <code>Object</code> |  |
+| [options.forcePrompt] | <code>Boolean</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
+| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> | An optional value that sets the behavior of the grant dialog displayed to the user. Object can contain two keys :  - enabled - Boolean value, if set to `true`, `single_select` limits the user to    selecting only one vehicle.  - vin - String vin, if set, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
+| [options.state] | <code>String</code> | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| [options.makeBypass] | <code>Object</code> | An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
 
 **Example**
 ```js
@@ -511,14 +367,14 @@ response_type=code
 ```
 <a name="AuthClient+exchangeCode"></a>
 
-### authClient.exchangeCode(code) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+### authClient.exchangeCode(code) ⇒ [<code>Access</code>](#Access)
 Exchange an authorization code for an access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - Access and Refresh tokens.
+**Returns**: [<code>Access</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
 See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
 for all possible errors.
 
@@ -526,17 +382,18 @@ for all possible errors.
 | Param | Type | Description |
 | --- | --- | --- |
 | code | <code>String</code> | Authorization code to exchange for a Smartcar access token and refresh token. |
+| [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
 
 <a name="AuthClient+exchangeRefreshToken"></a>
 
-### authClient.exchangeRefreshToken(token) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+### authClient.exchangeRefreshToken(token) ⇒ [<code>Access</code>](#Access)
 Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
+**Returns**: [<code>Access</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
 See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
 for all possible errors.
 
@@ -544,34 +401,129 @@ for all possible errors.
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>String</code> | Refresh token to exchange for a new set of Access and Refresh tokens. |
+| [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
 
-<a name="AuthClient+isCompatible"></a>
+<a name="SmartcarError"></a>
 
-### authClient.isCompatible(vin, scope, [country]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Determine whether a vehicle is compatible with Smartcar.
+## SmartcarError
+Class to handle all errors from Smartcar API
+Please see our [error guides](https://smartcar.com/docs) to see a list
+of all the possible error types and codes of both v2.0 and v1.0 requests.
 
-A compatible vehicle is a vehicle that:
-1. has the hardware required for internet connectivity,
-2. belongs to the makes and models Smartcar supports, and
-3. supports the permissions.
+**Kind**: global class
 
-_To use this function, please contact us!_
+* [SmartcarError](#SmartcarError)
+    * [new SmartcarError(status, body, headers)](#new_SmartcarError_new)
+    * [.error](#SmartcarError.error) : <code>string</code>
+    * [.message](#SmartcarError.message) : <code>string</code>
+    * [.description](#SmartcarError.description) : <code>string</code>
+    * [.type](#SmartcarError.type) : <code>string</code>
+    * [.code](#SmartcarError.code) : <code>string</code>
+    * [.statusCode](#SmartcarError.statusCode) : <code>number</code>
+    * [.requestId](#SmartcarError.requestId) : <code>string</code>
+    * [.resolution](#SmartcarError.resolution) : [<code>Resolution</code>](#SmartcarError.Resolution)
+    * [.docURL](#SmartcarError.docURL) : <code>string</code>
+    * [.details](#SmartcarError.details) : <code>Array.&lt;object&gt;</code>
+    * [.Resolution](#SmartcarError.Resolution) : <code>Object</code>
 
-**Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - false if the vehicle is not compatible. true if the
-  vehicle is likely compatible.
-**Throws**:
+<a name="new_SmartcarError_new"></a>
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
+### new SmartcarError(status, body, headers)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| status | <code>number</code> | response status |
+| body | <code>object</code> | response body |
+| headers | <code>object</code> | response headers |
+
+<a name="SmartcarError.error"></a>
+
+### SmartcarError.error : <code>string</code>
+Legacy field from V1 error depicting a category/type/description
+of the error.
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.message"></a>
+
+### SmartcarError.message : <code>string</code>
+Error message field inherited from StandardError
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.description"></a>
+
+### SmartcarError.description : <code>string</code>
+Description of meaning of the error.
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.type"></a>
+
+### SmartcarError.type : <code>string</code>
+Type of error
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.code"></a>
+
+### SmartcarError.code : <code>string</code>
+Error code
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.statusCode"></a>
+
+### SmartcarError.statusCode : <code>number</code>
+HTTP status code
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.requestId"></a>
+
+### SmartcarError.requestId : <code>string</code>
+Unique identifier for request
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.resolution"></a>
+
+### SmartcarError.resolution : [<code>Resolution</code>](#SmartcarError.Resolution)
+Possible resolution for fixing the error
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.docURL"></a>
+
+### SmartcarError.docURL : <code>string</code>
+Reference to Smartcar documentation
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.details"></a>
+
+### SmartcarError.details : <code>Array.&lt;object&gt;</code>
+Further detail about the error in form of array of objects
+
+**Kind**: static property of [<code>SmartcarError</code>](#SmartcarError)
+<a name="SmartcarError.Resolution"></a>
+
+### SmartcarError.Resolution : <code>Object</code>
+**Kind**: static typedef of [<code>SmartcarError</code>](#SmartcarError)
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| type | <code>String</code> | Possible hint to fixing the issue |
+| url | <code>String</code> | A URL to help resolve the issue or resume the operation |
+
+<a name="SmartcarService"></a>
+
+## SmartcarService
+**Kind**: global class
+<a name="new_SmartcarService_new"></a>
+
+### new SmartcarService([options])
+Initializes a new Service object to make requests to the Smartcar API.
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| vin | <code>String</code> |  | the VIN of the vehicle |
-| scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
-| [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>Object</code> |  |
+| [options.baseUrl] | <code>String</code> | Host/Base URL for the requests |
+| [options.auth] | <code>Object</code> | authorization options |
+| [options.headers] | <code>Object</code> | headers to add |
 
 <a name="Vehicle"></a>
 
@@ -579,307 +531,323 @@ _To use this function, please contact us!_
 **Kind**: global class
 
 * [Vehicle](#Vehicle)
-    * [new Vehicle(id, token, [unitSystem])](#new_Vehicle_new)
-    * [.setUnitSystem(unitSystem)](#Vehicle+setUnitSystem)
-    * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>Promise</code>](#Promise)
-    * [.permissions()](#Vehicle+permissions) ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
-    * [.hasPermissions(permissions)](#Vehicle+hasPermissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-    * [.info()](#Vehicle+info) ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
-    * [.location()](#Vehicle+location) ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
-    * [.odometer()](#Vehicle+odometer) ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
-    * [.oil()](#Vehicle+oil) ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
-    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
-    * [.fuel()](#Vehicle+fuel) ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
-    * [.battery()](#Vehicle+battery) ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
-    * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
-    * [.charge()](#Vehicle+charge) ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
-    * [.vin()](#Vehicle+vin) ⇒ <code>Promise.&lt;String&gt;</code>
-    * [.lock()](#Vehicle+lock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.unlock()](#Vehicle+unlock) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
+    * [new Vehicle(id, token, [options])](#new_Vehicle_new)
+    * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
+    * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Object</code>
+    * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Meta</code>](#Meta)
+    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Batch</code>](#Batch)
+    * [.vin()](#Vehicle+vin) ⇒ [<code>Vin</code>](#Vin)
+    * [.charge()](#Vehicle+charge) ⇒ [<code>Charge</code>](#Charge)
+    * [.battery()](#Vehicle+battery) ⇒ [<code>Battery</code>](#Battery)
+    * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ [<code>BatteryCapacity</code>](#BatteryCapacity)
+    * [.fuel()](#Vehicle+fuel) ⇒ [<code>Fuel</code>](#Fuel)
+    * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>TirePressure</code>](#TirePressure)
+    * [.engineOil()](#Vehicle+engineOil) ⇒ [<code>EngineOil</code>](#EngineOil)
+    * [.odometer()](#Vehicle+odometer) ⇒ [<code>Odometer</code>](#Odometer)
+    * [.location()](#Vehicle+location) ⇒ [<code>Location</code>](#Location)
+    * [.attributes()](#Vehicle+attributes) ⇒ [<code>Attributes</code>](#Attributes)
+    * [.lock()](#Vehicle+lock) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+    * [.unlock()](#Vehicle+unlock) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+    * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+    * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+    * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>ActionResponse</code>](#ActionResponse)
 
 <a name="new_Vehicle_new"></a>
 
-### new Vehicle(id, token, [unitSystem])
+### new Vehicle(id, token, [options])
 Initializes a new Vehicle to use for making requests to the Smartcar API.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| id | <code>String</code> |  | The vehicle's unique identifier. Retrieve a user's vehicle id using [getVehicleIds](#module_smartcar.getVehicleIds). |
+| id | <code>String</code> |  | The vehicle's unique identifier. Retrieve a user's vehicle id using [getVehicles](#module_smartcar.getVehicles). |
 | token | <code>String</code> |  | A valid access token |
-| [unitSystem] | <code>String</code> | <code>metric</code> | The unit system to use for vehicle data , must be either `metric` or `imperial`. |
-
-<a name="Vehicle+setUnitSystem"></a>
-
-### vehicle.setUnitSystem(unitSystem)
-Update the unit system to use in requests to the Smartcar API.
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| unitSystem | <code>String</code> | The unit system to use, must be either `metric` or `imperial`. |
-
-<a name="Vehicle+disconnect"></a>
-
-### vehicle.disconnect() ⇒ [<code>Promise</code>](#Promise)
-Disconnect this vehicle from the connected application.
-
-Note: Calling this method will invalidate your token's access to the vehicle.
-You will have to reauthorize the user to your application again if you wish
-to make requests to it again.
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise</code>](#Promise) - A promise resolved on successful disconnect.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
+| [options] | <code>Object</code> |  |  |
+| [options.unitSystem] | <code>String</code> | <code>metric</code> | The unit system to use for vehicle data must be either `metric` or `imperial`. |
+| [options.version] | <code>Object</code> |  | API version to use |
 
 <a name="Vehicle+permissions"></a>
 
-### vehicle.permissions() ⇒ <code>Promise.&lt;Array.&lt;String&gt;&gt;</code>
-Fetch the list of permissions that this application has been granted for
-this vehicle.
+### vehicle.permissions([paging]) ⇒ [<code>Permissions</code>](#Permissions)
+Fetch the list of permissions that this application has been granted
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Array.&lt;String&gt;&gt;</code> - An array of permissions names.
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
-**Example**
-```js
-['read_vehicle_info', 'read_odometer', 'control_security']
-```
-<a name="Vehicle+hasPermissions"></a>
-
-### vehicle.hasPermissions(permissions) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Checks if permissions granted to a vehicle contain the specified permission(s).
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Whether the vehicle has the specified permission(s)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| permissions | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Permission(s) to check |
+| [paging] | <code>Object</code> |  |
+| [paging.limit] | <code>String</code> | number of permissions to return |
+| [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
 
-<a name="Vehicle+info"></a>
+<a name="Vehicle+subscribe"></a>
 
-### vehicle.info() ⇒ [<code>Promise.&lt;Info&gt;</code>](#Info)
-GET Vehicle.info
+### vehicle.subscribe(webhookId) ⇒ <code>Object</code>
+Subscribe the vehicle to given webhook Id
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Info&gt;</code>](#Info) - A promise for info on the vehicle's info
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
-<a name="Vehicle+location"></a>
 
-### vehicle.location() ⇒ [<code>Promise.&lt;Location&gt;</code>](#Location)
-GET Vehicle.location
+| Param | Type | Description |
+| --- | --- | --- |
+| webhookId | <code>String</code> | Webhook Id to subscribe to. |
+
+<a name="Vehicle+unsubscribe"></a>
+
+### vehicle.unsubscribe(amt, webhookId) ⇒ [<code>Meta</code>](#Meta)
+Unsubscribe  the vehicle from given webhook Id
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Location&gt;</code>](#Location) - A promise for info on the vehicle's location.
 **Throws**:
 
-- <code>SmartcarError</code> - an instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
-<a name="Vehicle+odometer"></a>
 
-### vehicle.odometer() ⇒ [<code>Promise.&lt;Odometer&gt;</code>](#Odometer)
-GET Vehicle.odometer
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Odometer&gt;</code>](#Odometer) - A promise for info on the vehicle's odometer.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+oil"></a>
-
-### vehicle.oil() ⇒ [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil)
-GET Vehicle.oil
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;EngineOil&gt;</code>](#EngineOil) - A promise for info on the vehicle's engine oil.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+tirePressure"></a>
-
-### vehicle.tirePressure() ⇒ [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure)
-GET Vehicle.tirePressure
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;TirePressure&gt;</code>](#TirePressure) - A promise for info on the vehicle's tire pressure.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+fuel"></a>
-
-### vehicle.fuel() ⇒ [<code>Promise.&lt;Fuel&gt;</code>](#Fuel)
-GET Vehicle.fuel
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Fuel&gt;</code>](#Fuel) - A promise for info on the vehicle's fuel status.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+battery"></a>
-
-### vehicle.battery() ⇒ [<code>Promise.&lt;Battery&gt;</code>](#Battery)
-GET Vehicle.battery
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Battery&gt;</code>](#Battery) - A promise for info on the vehicle's battery status.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+batteryCapacity"></a>
-
-### vehicle.batteryCapacity() ⇒ [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity)
-GET Vehicle.batteryCapacity
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;BatteryCapacity&gt;</code>](#BatteryCapacity) - A promise for info on the vehicle's battery capacity.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+charge"></a>
-
-### vehicle.charge() ⇒ [<code>Promise.&lt;Charge&gt;</code>](#Charge)
-GET Vehicle.charge
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Charge&gt;</code>](#Charge) - A promise for info on the vehicle's charge status.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+vin"></a>
-
-### vehicle.vin() ⇒ <code>Promise.&lt;String&gt;</code>
-GET Vehicle.vin
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: <code>Promise.&lt;String&gt;</code> - A promise for info on the vehicle's vin.
-**Throws**:
-
-- <code>SmartcarError</code> - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+lock"></a>
-
-### vehicle.lock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-POST Vehicle.lock
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
-**Throws**:
-
-- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+unlock"></a>
-
-### vehicle.unlock() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-POST Vehicle.unlock
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
-**Throws**:
-
-- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+startCharge"></a>
-
-### vehicle.startCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-POST Vehicle.startCharge
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
-**Throws**:
-
-- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-<a name="Vehicle+stopCharge"></a>
-
-### vehicle.stopCharge() ⇒ [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess)
-POST Vehicle.stopCharge
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;ActionSuccess&gt;</code>](#ActionSuccess) - response on successful request
-**Throws**:
-
-- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
+| Param | Type | Description |
+| --- | --- | --- |
+| amt | <code>String</code> | Application management token to be used as authorization |
+| webhookId | <code>String</code> | Webhook Id to unsubscribe from. |
 
 <a name="Vehicle+batch"></a>
 
-### vehicle.batch(paths) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
-POST Vehicle.batch
+### vehicle.batch(paths) ⇒ [<code>Batch</code>](#Batch)
+Make batch requests for supported items
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;Batch&gt;</code>](#Batch) - response on successful request
 **Throws**:
 
-- <code>SmartcarError</code> - on unsuccessful request. An instance of SmartcarError.
+- [<code>SmartcarError</code>](#SmartcarError) - on unsuccessful request. An instance of SmartcarError.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
+**See**: [Smartcar API Doc - Batch Request](https://smartcar.com/docs/api#post-batch-request)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | paths | <code>Array.&lt;String&gt;</code> | A list of paths of endpoints to send requests to. |
 
-<a name="parseAge"></a>
+<a name="Vehicle+vin"></a>
 
-## parseAge(response) ⇒ <code>Date</code> \| <code>null</code>
-**Kind**: global function
-**Returns**: <code>Date</code> \| <code>null</code> - A parsed age or null if no age exists
+### vehicle.vin() ⇒ [<code>Vin</code>](#Vin)
+Returns the vehicle's manufacturer identifier (VIN).
 
-| Param | Type |
-| --- | --- |
-| response | <code>Object</code> |
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
 
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - VIN](https://smartcar.com/docs/api#get-vin)
+<a name="Vehicle+charge"></a>
+
+### vehicle.charge() ⇒ [<code>Charge</code>](#Charge)
+Returns the current charge status of the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - EV charging status](https://smartcar.com/docs/api#get-ev-charging-status)
+<a name="Vehicle+battery"></a>
+
+### vehicle.battery() ⇒ [<code>Battery</code>](#Battery)
+Returns the state of charge (SOC) and remaining range of an electric or
+plug-in hybrid vehicle's battery.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - EV battery level](https://smartcar.com/docs/api#get-ev-battery)
+<a name="Vehicle+batteryCapacity"></a>
+
+### vehicle.batteryCapacity() ⇒ [<code>BatteryCapacity</code>](#BatteryCapacity)
+Returns the capacity of an electric or plug-in hybrid vehicle's battery.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - EV battery capacity](https://smartcar.com/docs/api#get-ev-battery-capacity)
+<a name="Vehicle+fuel"></a>
+
+### vehicle.fuel() ⇒ [<code>Fuel</code>](#Fuel)
+Returns the status of the fuel remaining in the vehicle's gas tank.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Fuel tank](https://smartcar.com/docs/api#get-fuel-tank)
+<a name="Vehicle+tirePressure"></a>
+
+### vehicle.tirePressure() ⇒ [<code>TirePressure</code>](#TirePressure)
+Returns the air pressure of each of the vehicle's tires.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Tire pressure](https://smartcar.com/docs/api#get-tire-pressure)
+<a name="Vehicle+engineOil"></a>
+
+### vehicle.engineOil() ⇒ [<code>EngineOil</code>](#EngineOil)
+Returns the remaining life span of a vehicle's engine oil
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Engine oil life](https://smartcar.com/docs/api#get-engine-oil-life)
+<a name="Vehicle+odometer"></a>
+
+### vehicle.odometer() ⇒ [<code>Odometer</code>](#Odometer)
+Returns the vehicle's last known odometer reading.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Odometer](https://smartcar.com/docs/api#get-odometer)
+<a name="Vehicle+location"></a>
+
+### vehicle.location() ⇒ [<code>Location</code>](#Location)
+Returns the last known location of the vehicle in geographic coordinates.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Location](https://smartcar.com/docs/api#get-location)
+<a name="Vehicle+attributes"></a>
+
+### vehicle.attributes() ⇒ [<code>Attributes</code>](#Attributes)
+Returns make model year and id of the vehicle
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Vehicle attributes](https://smartcar.com/docs/api#get-vehicle-attributes)
+<a name="Vehicle+lock"></a>
+
+### vehicle.lock() ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Attempts to lock the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Lock](https://smartcar.com/docs/api#post-lockunlock)
+<a name="Vehicle+unlock"></a>
+
+### vehicle.unlock() ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Attempts to lock the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Unlock](https://smartcar.com/docs/api#post-lockunlock)
+<a name="Vehicle+startCharge"></a>
+
+### vehicle.startCharge() ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Attempts to start charging the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - EV start charge](https://smartcar.com/docs/api#post-ev-startstop-charge)
+<a name="Vehicle+stopCharge"></a>
+
+### vehicle.stopCharge() ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Attempts to stop charging the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - EV stop charge](https://smartcar.com/docs/api#post-ev-startstop-charge)
+<a name="Vehicle+disconnect"></a>
+
+### vehicle.disconnect() ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Disconnect this vehicle from the connected application.
+Note: Calling this method will invalidate your token's access to the vehicle.
+You will have to reauthorize the user to your application again if you wish
+to make requests to it again.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Disconnect](https://smartcar.com/docs/api#delete-disconnect)
+<a name="METHODS_MAP"></a>
+
+## METHODS\_MAP : <code>object.&lt;String, Object&gt;</code>
+Every key here is the function name on vehicle
+This map is used to generate the methods dynamically. Every value is an object of
+the following fields :
+- requestType: http request type, defaults to 'get' if not mentioned.
+- path: url path to hit, defaults to the method name
+- body: body for post requests.
+
+**Kind**: global constant
 <a name="Access"></a>
 
 ## Access : <code>Object</code>
@@ -902,236 +870,53 @@ POST Vehicle.batch
   refreshExpiration: new Date('2017-05-26T01:21:27.070Z'),
 }
 ```
-<a name="Info"></a>
+<a name="Permissions"></a>
 
-## Info : <code>Object</code>
+## Permissions : <code>Object</code>
 **Kind**: global typedef
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| id | <code>String</code> | The vehicle's unique Smartcar identifier. |
-| make | <code>String</code> | The brand of the vehicle. |
-| model | <code>String</code> | The specific model of the vehicle. |
-| year | <code>Number</code> | The model year of the vehicle. |
+| permissions | <code>Array.&lt;String&gt;</code> | An array of permissions names. |
+| [paging] | <code>Object</code> |  |
+| [paging.count] | <code>Number</code> | The total number of elements for the entire query (not just the given page). |
+| [options.offset] | <code>Number</code> | The current start index of the returned list of elements. |
+| meta | [<code>Meta</code>](#Meta) |  |
 
 **Example**
 ```js
 {
-  id: '19c0cc8c-80e0-4182-9372-6ef903c7599c',
-  make: 'TESLA',
-  model: 'S',
-  year: 2017,
-}
-```
-<a name="Location"></a>
-
-## Location : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.latitude | <code>Number</code> | The vehicle latitude (in degrees). |
-| data.longitude | <code>Number</code> | The vehicle longitude (in degrees). |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-
-**Example**
-```js
-{
-  data: {
-    latitude: 37.400880,
-    longitude: -122.057804,
+  permissions: ['read_vehicle_info'],
+  paging: {
+     count: 25,
+     offset: 10
+  },
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
-  age: new Date('2018-05-04T07:20:50.844Z'),
 }
 ```
-<a name="Odometer"></a>
+<a name="WebhookSubscription"></a>
 
-## Odometer : <code>Object</code>
+## WebhookSubscription : <code>Object</code>
 **Kind**: global typedef
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.distance | <code>Number</code> | The reading of the vehicle's odometer (in   kms or miles). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned odometer reading. `metric` signifies kilometers, `imperial` signifies miles. To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
+| webhookId | <code>String</code> | Webhook Id that the vehicle was subscribed to |
+| vehicleId | <code>String</code> | Current vehicle id that was subscribed to the webhook |
+| meta | [<code>Meta</code>](#Meta) |  |
 
 **Example**
 ```js
 {
-  data: {
-    distance: 1234.12,
+  webhookId: 'dd214915-0c26-13c5-8e42-7edfc2ab320a',
+  vehicleId: '19c0cc8c-80e0-4182-9372-6ef903c7599c',
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'imperial',
-}
-```
-<a name="EngineOil"></a>
-
-## EngineOil : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.lifeRemaining | <code>Number</code> | The engine oil's remaining life span (as a percentage). Oil life is based on the current quality of the oil. |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-
-**Example**
-```js
-{
-  data: {
-    lifeRemaining: 0.86,
-  }
-  age: new Date('2018-05-04T07:20:50.844Z')
-}
-```
-<a name="TirePressure"></a>
-
-## TirePressure : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.frontLeft | <code>Number</code> | The current air pressure of the front left tire |
-| data.frontRight | <code>Number</code> | The current air pressure of the back right tire |
-| data.backLeft | <code>Number</code> | The current air pressure of the back left tire |
-| data.backRight | <code>Number</code> | The current air pressure of the back right tire |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned odometer reading. `metric` signifies kilopascals (kpa), `imperial` signifies pounds per square inch (psi). To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
-
-**Example**
-```js
-{
-  data: {
-    frontleft: 33,
-    frontRight: 34,
-    backLeft: 34,
-    backRight: 33
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'imperial'
-}
-```
-<a name="Fuel"></a>
-
-## Fuel : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
-| data.amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
-
-**Example**
-```js
-{
-  data: {
-    range: 40.5,
-    percentRemaining: 0.3,
-    amountRemaining: 40.5,
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'imperial',
-}
-```
-<a name="Battery"></a>
-
-## Battery : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). To set unit, see [setUnitSystem](#Vehicle+setUnitSystem). |
-| data.percentRemaining | <code>Number</code> | The remaining level of charge in   the battery (in percent). |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
-
-**Example**
-```js
-{
-  data: {
-    range: 40.5,
-    percentRemaining: 0.3,
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'imperial',
-}
-```
-<a name="BatteryCapacity"></a>
-
-## BatteryCapacity : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.capacity | <code>Number</code> | The total capacity of the  vehicle's battery (in kilowatt-hours) |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-| unitSystem | <code>String</code> | The unit system of the returned data.   To set, see [setUnitSystem](#Vehicle+setUnitSystem). |
-
-**Example**
-```js
-{
-  data: {
-    capacity: 24,
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-  unitSystem: 'metric',
-}
-```
-<a name="Charge"></a>
-
-## Charge : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The returned vehicle data. |
-| data.isPluggedIn | <code>Number</code> | Indicates whether charging cable is   plugged in. |
-| data.state | <code>Number</code> | Indicates the current state of the charge   system. Can be `FULLY_CHARGED`, `CHARGING`, or `NOT_CHARGING`. |
-| age | <code>Date</code> | The timestamp of when the data was recorded. |
-
-**Example**
-```js
-{
-  data: {
-    isPluggedIn: false,
-    state: "FULLY_CHARGED",
-  }
-  age: new Date('2018-05-04T07:20:50.844Z'),
-}
-```
-<a name="ActionSuccess"></a>
-
-## ActionSuccess : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| status | <code>String</code> | set to `success` on successful request |
-
-**Example**
-```js
-{
-  status: 'success',
 }
 ```
 <a name="Batch"></a>
@@ -1142,34 +927,288 @@ POST Vehicle.batch
 
 | Name | Type | Description |
 | --- | --- | --- |
-| responses | <code>Object</code> | The object containing multiple HTTP responses. |
-| data.ENDPOINT | <code>Object</code> | The HTTP response for a given endpoint. ENDPOINT is a Smartcar endpoint (i.e. /odometer, /fuel). |
-| data.ENDPOINT.code | <code>Number</code> | The HTTP status code for this response. |
-| data.ENDPOINT.headers | <code>Object</code> | The HTTP headers for this response. |
-| data.ENDPOINT.body | <code>Object</code> | The body for this response. |
+| ENDPOINT | <code>function</code> | The response object for a given ENDPOINT where ENDPOINT is a Smartcar endpoint (i.e. /odometer, /fuel) or throws SmartcarError if the endpoint resulted in an error. |
 
 **Example**
 ```js
 {
-   "/odometer" : {
-     "body": {
-       "distance": 37829
-     },
-     "code": 200,
-     "headers": {
-       "sc-data-age": "2019-10-24T00:43:46.000Z",
-       "sc-unit-system": "metric"
-      }
-   },
-   "/location" : {
-     "body": {
-       "latitude": 37.4292,
-       "longitude": 122.1381
-     },
-     "code": 200,
-     "headers": {
-       "sc-data-age": "2019-10-24T00:43:46.000Z"
-     }
-   }
+   "odometer" : function() => returns odometer object or throws SmartcarError,
+   "location" : function() => returns odometer location or throws SmartcarError,
+}
+```
+<a name="Meta"></a>
+
+## Meta : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dataAge | <code>Date</code> | The timestamp of when the data was recorded; returned if applicable. |
+| requestId | <code>String</code> | The smartcar request ID for debugging |
+| unitSystem | <code>String</code> | Unit system used, metric or imperial; returned if applicable. |
+
+**Example**
+```js
+{
+  requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
+  dataAge: new Date('2018-05-04T07:20:50.844Z'),
+  unitSystem: 'imperial',
+}
+```
+<a name="Vin"></a>
+
+## Vin : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| vin | <code>String</code> | VIN of the vehicle |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  vin: '12345678901234567',
+  meta: {
+    requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
+  }
+}
+```
+<a name="Charge"></a>
+
+## Charge : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| isPluggedIn | <code>Boolean</code> | Indicates whether charging cable is   plugged in. |
+| state | <code>String</code> | Indicates the current state of the charge   system. Can be `FULLY_CHARGED`, `CHARGING`, or `NOT_CHARGING`. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  isPluggedIn: false,
+  state: "FULLY_CHARGED",
+  meta: {
+    dataAge: new Date('2018-05-04T07:20:50.844Z'),
+  }
+}
+```
+<a name="Battery"></a>
+
+## Battery : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). Unit is passed as a parameter in vehicle constructor. |
+| percentRemaining | <code>Number</code> | The remaining level of charge in   the battery (in percent). |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  range: 40.5,
+  percentRemaining: 0.3,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="BatteryCapacity"></a>
+
+## BatteryCapacity : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| capacity | <code>Number</code> | The total capacity of the vehicle's battery (in kilowatt-hours) |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  capacity: 24,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="Fuel"></a>
+
+## Fuel : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). Unit is passed as a parameter in vehicle constructor. |
+| percentRemaining | <code>Number</code> | The remaining level of fuel in   the tank (in percent). |
+| amountRemaining | <code>Number</code> | The amount of fuel in the tank (in  liters or gallons (US)). Unit is passed as a parameter in vehicle constructor. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  range: 40.5,
+  percentRemaining: 0.3,
+  amountRemaining: 40.5,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="TirePressure"></a>
+
+## TirePressure : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| frontLeft | <code>Number</code> | The current air pressure of the front left tire |
+| frontRight | <code>Number</code> | The current air pressure of the back right tire |
+| backLeft | <code>Number</code> | The current air pressure of the back left tire |
+| backRight | <code>Number</code> | The current air pressure of the back right tire |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  frontleft: 33,
+  frontRight: 34,
+  backLeft: 34,
+  backRight: 33
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="EngineOil"></a>
+
+## EngineOil : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| lifeRemaining | <code>Number</code> | The engine oil's remaining life span (as a percentage). Oil life is based on the current quality of the oil. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  lifeRemaining: 0.86,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="Odometer"></a>
+
+## Odometer : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| distance | <code>Number</code> | The reading of the vehicle's odometer (in   kms or miles). Unit is passed as a parameter in vehicle constructor. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  distance: 1234.12,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="Location"></a>
+
+## Location : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| latitude | <code>Number</code> | The vehicle latitude (in degrees). |
+| longitude | <code>Number</code> | The vehicle longitude (in degrees). |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  latitude: 37.400880,
+  longitude: -122.057804,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="Attributes"></a>
+
+## Attributes : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>String</code> | The vehicle's unique Smartcar identifier. |
+| make | <code>String</code> | The brand of the vehicle. |
+| model | <code>String</code> | The specific model of the vehicle. |
+| year | <code>Number</code> | The model year of the vehicle. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  id: '19c0cc8c-80e0-4182-9372-6ef903c7599c',
+  make: 'TESLA',
+  model: 'S',
+  year: 2017,
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="ActionResponse"></a>
+
+## ActionResponse : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| status | <code>String</code> | set to `success` on successful request |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  status: 'success',
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
 }
 ```
