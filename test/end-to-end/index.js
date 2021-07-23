@@ -64,25 +64,20 @@ test('getCompatibility', async(t) => {
     null,
     {clientId, clientSecret},
   );
-
-  t.deepEqual(
-    _.xor(_.keys(teslaComp), [
-      'compatible',
-      'meta',
-    ]),
-    [],
-  );
-
-  t.deepEqual(
-    _.xor(_.keys(audiComp), [
-      'compatible',
-      'meta',
-    ]),
-    [],
-  );
-
-  t.truthy(teslaComp.compatible);
-  t.deepEqual(teslaComp.meta.requestId.length, 36);
-  t.falsy(audiComp.compatible);
-  t.deepEqual(audiComp.meta.requestId.length, 36);
+  [teslaComp, audiComp].forEach((response) => {
+    t.deepEqual(
+      _.xor(_.keys(response), [
+        'compatible',
+        'reason',
+        'capabilities',
+        'meta',
+      ]),
+      [],
+    );
+    t.truthy(response.compatible);
+    t.deepEqual(response.meta.requestId.length, 36);
+    t.deepEqual(response.capabilities.length, 2);
+  });
+  t.truthy(_.every(audiComp.capabilities, ['capable', false]));
+  t.truthy(_.every(teslaComp.capabilities, ['capable', true]));
 });
