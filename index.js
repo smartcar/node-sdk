@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const SmartcarService = require('./lib/smartcar-service');
 const util = require('./lib/util');
-const config = require('./lib/config');
+const config = require('./lib/config.json');
 
 /* eslint-disable global-require */
 /** @exports smartcar */

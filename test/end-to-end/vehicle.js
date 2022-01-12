@@ -20,16 +20,16 @@ const getVehicle = async function(brand, scope) {
 };
 
 test.before(async(t) => {
-  const [volt, tesla] = await Promise.all([
+  const [volt, ford] = await Promise.all([
     getVehicle('CHEVROLET', DEFAULT_SCOPES),
-    getVehicle('TESLA', [
+    getVehicle('FORD', [
       'required:control_charge',
       'required:control_security',
     ]),
   ]);
 
   smartcar.setApiVersion('1.0');
-  t.context = {volt, tesla};
+  t.context = {volt, ford};
 });
 
 test('vehicle vin', async(t) => {
@@ -278,7 +278,7 @@ test('vehicle unsubscribe - error', async(t) => {
 });
 
 test('vehicle lock', async(t) => {
-  const response = await t.context.tesla.lock();
+  const response = await t.context.ford.lock();
   t.deepEqual(
     _.xor(_.keys(response), [
       'status',
@@ -294,7 +294,7 @@ test('vehicle lock', async(t) => {
 });
 
 test('vehicle unlock', async(t) => {
-  const response = await t.context.tesla.unlock();
+  const response = await t.context.ford.unlock();
   t.deepEqual(
     _.xor(_.keys(response), [
       'status',
@@ -310,7 +310,7 @@ test('vehicle unlock', async(t) => {
 });
 
 test('vehicle startCharge', async(t) => {
-  const response = await t.context.tesla.startCharge();
+  const response = await t.context.ford.startCharge();
   t.deepEqual(
     _.xor(_.keys(response), [
       'status',
@@ -326,7 +326,7 @@ test('vehicle startCharge', async(t) => {
 });
 
 test('vehicle stopCharge', async(t) => {
-  const response = await t.context.tesla.stopCharge();
+  const response = await t.context.ford.stopCharge();
   t.deepEqual(
     _.xor(_.keys(response), [
       'status',
