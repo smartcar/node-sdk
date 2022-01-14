@@ -10,9 +10,12 @@ language:
   - node_js
 
 node_js:
+  - '16'
   - '14'
   - '12'
-  - '10'
+
+before_install:
+  - npm install -g npm@8.3.0
 
 cache:
   directories:
@@ -45,5 +48,5 @@ after_success:
 jobs:
   include:
     - stage: publish
-      node_js: 10
+      node_js: 12
       script: npx semantic-release

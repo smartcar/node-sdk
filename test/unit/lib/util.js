@@ -8,7 +8,9 @@ const {env} = require('process');
 
 const util = require('../../../lib/util');
 const smartcar = require('../../../');
-const config = require('../../../lib.json');
+
+const config = require('../../../lib/config.json');
+
 const SmartcarError = require('../../../lib/smartcar-error');
 
 const API_URL = config.api + '/v' + config.version;
