@@ -374,6 +374,69 @@ test('vehicle batch', async(t) => {
   t.is(location.meta.requestId.length, 36);
 });
 
+test('vehicle request - odometer', async(t) => {
+  const response = await t.context.volt.request(
+    'get',
+    'odometer',
+    {},
+    {
+      'sc-unit-system': 'imperial',
+    }
+  );
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'distance',
+      'meta',
+    ]),
+    [],
+  );
+
+  t.truthy(typeof response.distance === 'number');
+  t.truthy(response.meta.dataAge instanceof Date);
+  t.is(response.meta.requestId.length, 36);
+  t.is(response.meta.unitSystem, 'imperial');
+});
+
+test('vehicle request - lock', async(t) => {
+  const response = await t.context.volt.request('post', 'security', {
+    action: 'LOCK',
+  });
+
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'status',
+      'message',
+      'meta',
+    ]),
+    [],
+  );
+
+  t.is(response.status, 'success');
+  t.is(response.message, 'Successfully sent request to vehicle');
+  t.is(response.meta.requestId.length, 36);
+});
+
+test('vehicle request - override auth header', async(t) => {
+  const errorMessage = 'The authorization header is missing or malformed, '
+    + 'or it contains invalid or expired authentication credentials. Please '
+    + 'check for missing parameters, spelling and casing mistakes, and '
+    + 'other syntax issues.';
+
+  await t.context.volt.request('get',
+    'odometer',
+    {},
+    {
+      'sc-unit-system': 'imperial',
+      Authorization: 'Bearer abc',
+    }
+  ).catch((err) => {
+    t.is(err.statusCode, 401);
+    t.is(err.type, 'AUTHENTICATION');
+    t.is(err.description, errorMessage);
+    t.is(err.docURL, 'https://smartcar.com/docs/errors/v2.0/other-errors/#authentication');
+  });
+});
+
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.volt.disconnect();
   t.deepEqual(
