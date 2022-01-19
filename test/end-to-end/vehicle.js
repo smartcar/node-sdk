@@ -149,11 +149,10 @@ test('vehicle engine oil', async(t) => {
 test('vehicle odometer', async(t) => {
   const response = await t.context.volt.odometer();
   t.deepEqual(
-    _.xor(_.keys(response), [
+    _.keys(response), [
       'distance',
       'meta',
-    ]),
-    [],
+    ]
   );
 
   t.truthy(typeof response.distance === 'number');
@@ -384,11 +383,10 @@ test('vehicle request - odometer', async(t) => {
     }
   );
   t.deepEqual(
-    _.xor(_.keys(response), [
+    _.keys(response), [
       'distance',
       'meta',
-    ]),
-    [],
+    ],
   );
 
   t.truthy(typeof response.distance === 'number');
@@ -397,23 +395,42 @@ test('vehicle request - odometer', async(t) => {
   t.is(response.meta.unitSystem, 'imperial');
 });
 
-test('vehicle request - lock', async(t) => {
-  const response = await t.context.volt.request('post', 'security', {
-    action: 'LOCK',
+test('vehicle request - batch', async(t) => {
+  const response = await t.context.volt.request('post', 'batch', {
+    requests: [
+      {path: '/odometer'},
+      {path: '/tires/pressure'},
+    ],
   });
 
   t.deepEqual(
-    _.xor(_.keys(response), [
-      'status',
-      'message',
+    _.keys(response), [
+      'responses',
       'meta',
-    ]),
-    [],
+    ]
   );
 
-  t.is(response.status, 'success');
-  t.is(response.message, 'Successfully sent request to vehicle');
-  t.is(response.meta.requestId.length, 36);
+  t.truthy(response.meta.requestId.length, 36);
+
+  t.truthy(response.responses[0].path === '/odometer');
+  t.truthy(response.responses[0].code === 200);
+  t.truthy(response.responses[0].headers['sc-unit-system'] === 'metric');
+  t.truthy(new Date(
+    response.responses[0].headers['sc-data-age']
+  ) instanceof Date);
+  t.truthy(typeof response.responses[0].body.distance === 'number');
+
+  t.truthy(response.responses[1].path === '/tires/pressure');
+  t.truthy(response.responses[1].code === 200);
+  t.truthy(response.responses[1].headers['sc-unit-system'] === 'metric');
+  t.truthy(new Date(
+    response.responses[1].headers['sc-data-age']
+  ) instanceof Date);
+  t.truthy(typeof response.responses[1].body.frontLeft === 'number');
+  t.truthy(typeof response.responses[1].body.frontRight === 'number');
+  t.truthy(typeof response.responses[1].body.backLeft === 'number');
+  t.truthy(typeof response.responses[1].body.backRight === 'number');
+
 });
 
 test('vehicle request - override auth header', async(t) => {
