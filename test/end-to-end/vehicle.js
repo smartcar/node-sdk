@@ -149,10 +149,11 @@ test('vehicle engine oil', async(t) => {
 test('vehicle odometer', async(t) => {
   const response = await t.context.volt.odometer();
   t.deepEqual(
-    _.keys(response), [
+    _.xor(_.keys(response), [
       'distance',
       'meta',
-    ]
+    ]),
+    []
   );
 
   t.truthy(typeof response.distance === 'number');
@@ -177,7 +178,6 @@ test('vehicle location', async(t) => {
   t.truthy(response.meta.dataAge instanceof Date);
   t.is(response.meta.requestId.length, 36);
 });
-
 
 test('vehicle attributes', async(t) => {
   const response = await t.context.volt.attributes();
@@ -382,14 +382,16 @@ test('vehicle request - odometer', async(t) => {
       'sc-unit-system': 'imperial',
     }
   );
+
   t.deepEqual(
-    _.keys(response), [
-      'distance',
+    _.xor(_.keys(response), [
+      'body',
       'meta',
-    ],
+    ]),
+    []
   );
 
-  t.truthy(typeof response.distance === 'number');
+  t.truthy(typeof response.body.distance === 'number');
   t.truthy(response.meta.dataAge instanceof Date);
   t.is(response.meta.requestId.length, 36);
   t.is(response.meta.unitSystem, 'imperial');
@@ -404,32 +406,33 @@ test('vehicle request - batch', async(t) => {
   });
 
   t.deepEqual(
-    _.keys(response), [
-      'responses',
+    _.xor(_.keys(response), [
+      'body',
       'meta',
-    ]
+    ]),
+    []
   );
 
   t.truthy(response.meta.requestId.length, 36);
 
-  t.truthy(response.responses[0].path === '/odometer');
-  t.truthy(response.responses[0].code === 200);
-  t.truthy(response.responses[0].headers['sc-unit-system'] === 'metric');
+  t.truthy(response.body.responses[0].path === '/odometer');
+  t.truthy(response.body.responses[0].code === 200);
+  t.truthy(response.body.responses[0].headers['sc-unit-system'] === 'metric');
   t.truthy(new Date(
-    response.responses[0].headers['sc-data-age']
+    response.body.responses[0].headers['sc-data-age']
   ) instanceof Date);
-  t.truthy(typeof response.responses[0].body.distance === 'number');
+  t.truthy(typeof response.body.responses[0].body.distance === 'number');
 
-  t.truthy(response.responses[1].path === '/tires/pressure');
-  t.truthy(response.responses[1].code === 200);
-  t.truthy(response.responses[1].headers['sc-unit-system'] === 'metric');
+  t.truthy(response.body.responses[1].path === '/tires/pressure');
+  t.truthy(response.body.responses[1].code === 200);
+  t.truthy(response.body.responses[1].headers['sc-unit-system'] === 'metric');
   t.truthy(new Date(
-    response.responses[1].headers['sc-data-age']
+    response.body.responses[1].headers['sc-data-age']
   ) instanceof Date);
-  t.truthy(typeof response.responses[1].body.frontLeft === 'number');
-  t.truthy(typeof response.responses[1].body.frontRight === 'number');
-  t.truthy(typeof response.responses[1].body.backLeft === 'number');
-  t.truthy(typeof response.responses[1].body.backRight === 'number');
+  t.truthy(typeof response.body.responses[1].body.frontLeft === 'number');
+  t.truthy(typeof response.body.responses[1].body.frontRight === 'number');
+  t.truthy(typeof response.body.responses[1].body.backLeft === 'number');
+  t.truthy(typeof response.body.responses[1].body.backRight === 'number');
 
 });
 
