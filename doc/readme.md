@@ -54,6 +54,8 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#Response">Response</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Meta">Meta</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Vin">Vin</a> : <code>Object</code></dt>
@@ -536,6 +538,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Object</code>
     * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Meta</code>](#Meta)
     * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Batch</code>](#Batch)
+    * [.request(method, path, body, headers)](#Vehicle+request) ⇒ [<code>Response</code>](#Response)
     * [.vin()](#Vehicle+vin) ⇒ [<code>Vin</code>](#Vin)
     * [.charge()](#Vehicle+charge) ⇒ [<code>Charge</code>](#Charge)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Battery</code>](#Battery)
@@ -637,6 +640,26 @@ Make batch requests for supported items
 | Param | Type | Description |
 | --- | --- | --- |
 | paths | <code>Array.&lt;String&gt;</code> | A list of paths of endpoints to send requests to. |
+
+<a name="Vehicle+request"></a>
+
+### vehicle.request(method, path, body, headers) ⇒ [<code>Response</code>](#Response)
+General purpose method to make a request to a Smartcar endpoint.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| method | <code>String</code> | The HTTP request method to use. |
+| path | <code>String</code> | The path to make the request to. |
+| body | <code>Object</code> | The request body. |
+| headers | <code>Object</code> | The headers to inlcude in the request. |
 
 <a name="Vehicle+vin"></a>
 
@@ -934,6 +957,28 @@ the following fields :
 {
    "odometer" : function() => returns odometer object or throws SmartcarError,
    "location" : function() => returns odometer location or throws SmartcarError,
+}
+```
+<a name="Response"></a>
+
+## Response : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| body | <code>String</code> | The response body |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+ body: { distance: 59801.6373441601 },
+ meta: {
+   dataAge: 2022-01-20T02:55:25.041Z,
+   unitSystem: 'imperial',
+   requestId: 'f787849d-d228-482d-345f-459a5154sg73'
+ }
 }
 ```
 <a name="Meta"></a>
