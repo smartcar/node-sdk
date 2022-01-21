@@ -202,21 +202,21 @@ test('batch - error', async function(t) {
   t.is(error.type, 'monkeys_on_mars');
 });
 
-test("request - override non-sc headers", async function (t) {
+test('request - override non-sc headers', async function(t) {
   t.context.n = nock(
     `https://api.smartcar.com/v${vehicle.version}/vehicles/${VID}`
   )
-    .matchHeader("User-Agent", "monkeys_on_mars")
-    .matchHeader("Authorization", `Bearer ${TOKEN}`)
-    .matchHeader("Origin", "monkeys_on_pluto")
-    .get("/odometer")
-    .reply(200, { distance: 10 }, { "sc-request-id": "requestId" });
+    .matchHeader('User-Agent', 'monkeys_on_mars')
+    .matchHeader('Authorization', `Bearer ${TOKEN}`)
+    .matchHeader('Origin', 'monkeys_on_pluto')
+    .get('/odometer')
+    .reply(200, {distance: 10}, {'sc-request-id': 'requestId'});
 
-  const response = await vehicle.request("get", "odometer", undefined, {
-    "User-Agent": "monkeys_on_mars",
-    Origin: "monkeys_on_pluto",
+  const response = await vehicle.request('get', 'odometer', undefined, {
+    'User-Agent': 'monkeys_on_mars',
+    Origin: 'monkeys_on_pluto',
   });
 
   t.is(response.body.distance, 10);
-  t.is(response.meta.requestId, "requestId");
+  t.is(response.meta.requestId, 'requestId');
 });
