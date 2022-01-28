@@ -153,7 +153,7 @@ test('vehicle odometer', async(t) => {
       'distance',
       'meta',
     ]),
-    [],
+    []
   );
 
   t.truthy(typeof response.distance === 'number');
@@ -178,7 +178,6 @@ test('vehicle location', async(t) => {
   t.truthy(response.meta.dataAge instanceof Date);
   t.is(response.meta.requestId.length, 36);
 });
-
 
 test('vehicle attributes', async(t) => {
   const response = await t.context.volt.attributes();
@@ -372,6 +371,90 @@ test('vehicle batch', async(t) => {
   t.truthy(typeof location.latitude === 'number');
   t.truthy(location.meta.dataAge instanceof Date);
   t.is(location.meta.requestId.length, 36);
+});
+
+test('vehicle request - odometer', async(t) => {
+  const response = await t.context.volt.request(
+    'get',
+    'odometer',
+    {},
+    {
+      'sc-unit-system': 'imperial',
+    }
+  );
+
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'body',
+      'meta',
+    ]),
+    []
+  );
+
+  t.truthy(typeof response.body.distance === 'number');
+  t.truthy(response.meta.dataAge instanceof Date);
+  t.is(response.meta.requestId.length, 36);
+  t.is(response.meta.unitSystem, 'imperial');
+});
+
+test('vehicle request - batch', async(t) => {
+  const response = await t.context.volt.request('post', 'batch', {
+    requests: [
+      {path: '/odometer'},
+      {path: '/tires/pressure'},
+    ],
+  });
+
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'body',
+      'meta',
+    ]),
+    []
+  );
+
+  t.truthy(response.meta.requestId.length, 36);
+
+  t.truthy(response.body.responses[0].path === '/odometer');
+  t.truthy(response.body.responses[0].code === 200);
+  t.truthy(response.body.responses[0].headers['sc-unit-system'] === 'metric');
+  t.truthy(new Date(
+    response.body.responses[0].headers['sc-data-age']
+  ) instanceof Date);
+  t.truthy(typeof response.body.responses[0].body.distance === 'number');
+
+  t.truthy(response.body.responses[1].path === '/tires/pressure');
+  t.truthy(response.body.responses[1].code === 200);
+  t.truthy(response.body.responses[1].headers['sc-unit-system'] === 'metric');
+  t.truthy(new Date(
+    response.body.responses[1].headers['sc-data-age']
+  ) instanceof Date);
+  t.truthy(typeof response.body.responses[1].body.frontLeft === 'number');
+  t.truthy(typeof response.body.responses[1].body.frontRight === 'number');
+  t.truthy(typeof response.body.responses[1].body.backLeft === 'number');
+  t.truthy(typeof response.body.responses[1].body.backRight === 'number');
+
+});
+
+test('vehicle request - override auth header', async(t) => {
+  const errorMessage = 'The authorization header is missing or malformed, '
+    + 'or it contains invalid or expired authentication credentials. Please '
+    + 'check for missing parameters, spelling and casing mistakes, and '
+    + 'other syntax issues.';
+
+  await t.context.volt.request('get',
+    'odometer',
+    {},
+    {
+      'sc-unit-system': 'imperial',
+      Authorization: 'Bearer abc',
+    }
+  ).catch((err) => {
+    t.is(err.statusCode, 401);
+    t.is(err.type, 'AUTHENTICATION');
+    t.is(err.description, errorMessage);
+    t.is(err.docURL, 'https://smartcar.com/docs/errors/v2.0/other-errors/#authentication');
+  });
 });
 
 test.after.always('vehicle disconnect', async(t) => {
