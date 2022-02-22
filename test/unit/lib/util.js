@@ -83,14 +83,25 @@ test('getUrl - version 2.0', function(t) {
   t.is(url, 'https://api.smartcar.com/v2.0/vehicles/VID/odometer');
 });
 
-test('wrap', async function(t) {
+test('wrap - ignores non-StatusCodeErrors', async function(t) {
+  const error = new Error('blah');
 
-  const not = util.wrap(Promise.reject(new Error('blah')));
-  await t.throwsAsync(not, /blah/);
+  const not = util.wrap(Promise.reject(error));
 
-  const should = util.wrap(Promise.reject(new StatusCodeError('h')));
-  await t.throwsAsync(should);
+  await t.throwsAsync(not, {
+    is: error,
+  });
+});
 
+
+test('wrap - wraps StatusCodeErrors', async function(t) {
+  const error = new StatusCodeError('h');
+
+  const should = util.wrap(Promise.reject(error));
+
+  await t.throwsAsync(should, {
+    instanceOf: SmartcarError,
+  });
 });
 
 test('handleError - non-json', function(t) {

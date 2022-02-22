@@ -28,7 +28,7 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ava test/unit",
-    "test:e2e": "ava test/end-to-end",
+    "test:e2e": "ava --timeout=30s test/end-to-end",
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
@@ -43,7 +43,7 @@
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
+    "ava": "^4.0.1",
     "cross-env": "^5.1.3",
     "eslint": "^5.16.0",
     "eslint-config-smartcar": "^3.0.0",

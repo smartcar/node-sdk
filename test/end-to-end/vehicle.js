@@ -413,7 +413,7 @@ test('vehicle request - batch', async(t) => {
     []
   );
 
-  t.truthy(response.meta.requestId.length, 36);
+  t.is(response.meta.requestId.length, 36);
 
   t.truthy(response.body.responses[0].path === '/odometer');
   t.truthy(response.body.responses[0].code === 200);
