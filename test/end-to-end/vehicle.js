@@ -153,7 +153,7 @@ test('vehicle odometer', async(t) => {
       'distance',
       'meta',
     ]),
-    []
+    [],
   );
 
   t.truthy(typeof response.distance === 'number');
@@ -380,7 +380,7 @@ test('vehicle request - odometer', async(t) => {
     {},
     {
       'sc-unit-system': 'imperial',
-    }
+    },
   );
 
   t.deepEqual(
@@ -388,7 +388,7 @@ test('vehicle request - odometer', async(t) => {
       'body',
       'meta',
     ]),
-    []
+    [],
   );
 
   t.truthy(typeof response.body.distance === 'number');
@@ -410,7 +410,7 @@ test('vehicle request - batch', async(t) => {
       'body',
       'meta',
     ]),
-    []
+    [],
   );
 
   t.is(response.meta.requestId.length, 36);
@@ -419,7 +419,7 @@ test('vehicle request - batch', async(t) => {
   t.truthy(response.body.responses[0].code === 200);
   t.truthy(response.body.responses[0].headers['sc-unit-system'] === 'metric');
   t.truthy(new Date(
-    response.body.responses[0].headers['sc-data-age']
+    response.body.responses[0].headers['sc-data-age'],
   ) instanceof Date);
   t.truthy(typeof response.body.responses[0].body.distance === 'number');
 
@@ -427,7 +427,7 @@ test('vehicle request - batch', async(t) => {
   t.truthy(response.body.responses[1].code === 200);
   t.truthy(response.body.responses[1].headers['sc-unit-system'] === 'metric');
   t.truthy(new Date(
-    response.body.responses[1].headers['sc-data-age']
+    response.body.responses[1].headers['sc-data-age'],
   ) instanceof Date);
   t.truthy(typeof response.body.responses[1].body.frontLeft === 'number');
   t.truthy(typeof response.body.responses[1].body.frontRight === 'number');
@@ -448,7 +448,7 @@ test('vehicle request - override auth header', async(t) => {
     {
       'sc-unit-system': 'imperial',
       Authorization: 'Bearer abc',
-    }
+    },
   ).catch((err) => {
     t.is(err.statusCode, 401);
     t.is(err.type, 'AUTHENTICATION');

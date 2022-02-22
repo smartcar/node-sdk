@@ -58,7 +58,7 @@ const getCodeFromUri = function(uri) {
 helpers.runAuthFlow = async function(
   authUrl,
   brand = 'CHEVROLET',
-  email = ''
+  email = '',
 ) {
   const firefoxOptions = new firefox.Options();
   const chromeOptions = new chrome.Options()

@@ -40,7 +40,7 @@ test('exchangeRefreshToken', async(t) => {
   );
 
   const error = await t.throwsAsync(
-    client.exchangeRefreshToken(oldAccess.refreshToken)
+    client.exchangeRefreshToken(oldAccess.refreshToken),
   );
   const expectedMessage =
     'invalid_grant:undefined - Invalid or expired refresh token.';

@@ -11,7 +11,7 @@ const getVehicleObject = async function(email, version = '') {
   const code = await runAuthFlow(
     client.getAuthUrl(['read_odometer'], {forcePrompt: true}),
     'CHEVROLET',
-    email
+    email,
   );
   const {accessToken} = await client.exchangeCode(code);
   const {vehicles} = await smartcar.getVehicles(accessToken);
@@ -24,7 +24,7 @@ test('handleError - SmartcarError V2 resolution string', async function(t) {
     + ' due to an unknown issue.';
 
   const vehicle = await getVehicleObject(
-    'VEHICLE_STATE.UNKNOWN@smartcar.com'
+    'VEHICLE_STATE.UNKNOWN@smartcar.com',
   );
   const error = await t.throwsAsync(vehicle.odometer());
 
@@ -45,7 +45,7 @@ test('handleError - SmartcarError V2 resolution null', async function(t) {
     + ' the vehicle to their account.';
 
   const vehicle = await getVehicleObject(
-    'CONNECTED_SERVICES_ACCOUNT.VEHICLE_MISSING@smartcar.com'
+    'CONNECTED_SERVICES_ACCOUNT.VEHICLE_MISSING@smartcar.com',
   );
   const error = await t.throwsAsync(vehicle.odometer());
 
@@ -58,7 +58,7 @@ test('handleError - SmartcarError V2 resolution null', async function(t) {
   t.is(error.code, 'VEHICLE_MISSING');
   t.is(error.requestId.length, 36);
   t.is(error.message,
-    `CONNECTED_SERVICES_ACCOUNT:VEHICLE_MISSING - ${description}`
+    `CONNECTED_SERVICES_ACCOUNT:VEHICLE_MISSING - ${description}`,
   );
 });
 
