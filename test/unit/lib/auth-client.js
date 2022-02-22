@@ -84,7 +84,7 @@ test('getAuthUrl - with optional arguments', function(t) {
       state: 'fakestate',
       forcePrompt: true,
       flags: {country: 'DE', flag: 'suboption'},
-    }
+    },
   );
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += `response_type=code&client_id=${CLIENT_ID}`;

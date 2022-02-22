@@ -204,7 +204,7 @@ test('batch - error', async function(t) {
 
 test('request - override non-sc headers', async function(t) {
   t.context.n = nock(
-    `https://api.smartcar.com/v${vehicle.version}/vehicles/${VID}`
+    `https://api.smartcar.com/v${vehicle.version}/vehicles/${VID}`,
   )
     .matchHeader('User-Agent', 'monkeys_on_mars')
     .matchHeader('Authorization', `Bearer ${TOKEN}`)
