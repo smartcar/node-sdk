@@ -13,8 +13,6 @@ Smartcar Node SDK documentation.
 ## Classes
 
 <dl>
-<dt><a href="#Promise">Promise</a></dt>
-<dd></dd>
 <dt><a href="#AuthClient">AuthClient</a></dt>
 <dd></dd>
 <dt><a href="#SmartcarError">SmartcarError</a></dt>
@@ -301,11 +299,6 @@ Verify webhook payload with AMT and signature.
   }
 }
 ```
-<a name="Promise"></a>
-
-## Promise
-**Kind**: global class
-**See**: http://bluebirdjs.com/docs/api-reference.html
 <a name="AuthClient"></a>
 
 ## AuthClient
