@@ -48,5 +48,5 @@ after_success:
 jobs:
   include:
     - stage: publish
-      node_js: 12
+      node_js: 14
       script: npx semantic-release
