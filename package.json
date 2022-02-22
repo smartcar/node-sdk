@@ -54,6 +54,6 @@
     "nyc": "^14.1.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "semantic-release": "^19.0.2",
-    "uuid": "^3.3.2"
+    "uuid": "^8.3.2"
   }
 }

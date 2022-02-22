@@ -3,7 +3,7 @@
 const chrome = require('selenium-webdriver/chrome');
 const firefox = require('selenium-webdriver/firefox');
 const isCI = require('is-ci');
-const uuid = require('uuid');
+const {v4: uuid} = require('uuid');
 const {Builder, By, until} = require('selenium-webdriver');
 const {URL} = require('url');
 
