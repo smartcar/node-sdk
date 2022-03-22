@@ -93,7 +93,7 @@ the following fields :</p>
         * [.getApiVersion()](#module_smartcar.getApiVersion) ⇒ <code>String</code>
         * [.getUser(accessToken)](#module_smartcar.getUser) ⇒ [<code>User</code>](#module_smartcar..User)
         * [.getVehicles(accessToken, [paging])](#module_smartcar.getVehicles) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
-        * [.getCompatibility(vin, scope, [country], [options])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+        * [.getCompatibility(vin, scope, [country])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
         * [.hashChallenge(amt, challenge)](#module_smartcar.hashChallenge) ⇒ <code>String</code>
         * [.verifyPayload(amt, signature, body)](#module_smartcar.verifyPayload) ⇒ <code>Boolean</code>
     * _inner_
@@ -173,7 +173,7 @@ Return list of the user's vehicles ids.
 
 <a name="module_smartcar.getCompatibility"></a>
 
-### smartcar.getCompatibility(vin, scope, [country], [options]) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+### smartcar.getCompatibility(vin, scope, [country]) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
 Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
@@ -196,11 +196,6 @@ _To use this function, please contact us!_
 | vin | <code>String</code> |  | the VIN of the vehicle |
 | scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
 | [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
-| [options] | <code>Object</code> |  |  |
-| [options.clientId] | <code>String</code> |  | client ID to use for basic auth. |
-| [options.clientSecret] | <code>String</code> |  | client secret to use for basic auth. |
-| [options.flags] | <code>Object</code> |  | Object of flags where key is the name of the flag value is string or boolean value. |
-| [options.version] | <code>Object</code> |  | API version to use |
 
 <a name="module_smartcar.hashChallenge"></a>
 
@@ -288,15 +283,36 @@ Verify webhook payload with AMT and signature.
 | Name | Type |
 | --- | --- |
 | compatible | <code>Boolean</code> |
+| reason | <code>VEHICLE\_NOT\_COMPATIBLE</code> \| <code>MAKE\_NOT\_COMPATIBLE</code> \| <code>null</code> |
+| capabilities | <code>Array.&lt;String&gt;</code> |
+| capabilities[].permission | <code>String</code> |
+| capabilities[].endpoint | <code>String</code> |
+| capabilities[].capable | <code>Boolean</code> |
+| capabilities[].reason | <code>VEHICLE\_NOT\_COMPATIBLE</code> \| <code>MAKE\_NOT\_COMPATIBLE</code> \| <code>null</code> |
 | meta | <code>module:smartcar.Vehicle.Meta</code> |
 
 **Example**
 ```js
 {
-  compatible: false,
-  meta: {
-    requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
-  }
+ compatible: true,
+ reason: null,
+ capabilities: [
+   {
+     capable: false,
+     endpoint: '/engine/oil',
+     permission: 'read_engine_oil',
+     reason: 'SMARTCAR_NOT_CAPABLE',
+   },
+   {
+     capable: true,
+     endpoint: '/vin',
+     permission: 'read_vin',
+     reason: null,
+   },
+ ],
+ meta: {
+   'requestId':'6d4226e7-a7dd-44e0-b29c-9eed26be249d'
+ }
 }
 ```
 <a name="AuthClient"></a>

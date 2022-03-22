@@ -146,14 +146,35 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * @type {Object}
  * @typedef Compatibility
  * @property {Boolean} compatible
+ * @property {(VEHICLE_NOT_COMPATIBLE|MAKE_NOT_COMPATIBLE|null)} reason
+ * @property {Array.<String>} capabilities
+ * @property {String} capabilities[].permission
+ * @property {String} capabilities[].endpoint
+ * @property {Boolean} capabilities[].capable
+ * @property {(VEHICLE_NOT_COMPATIBLE|MAKE_NOT_COMPATIBLE|null)} capabilities[].reason
  * @property {module:smartcar.Vehicle.Meta} meta
  *
  * @example
  * {
- *   compatible: false,
- *   meta: {
- *     requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
- *   }
+ *  compatible: true,
+ *  reason: null,
+ *  capabilities: [
+ *    {
+ *      capable: false,
+ *      endpoint: '/engine/oil',
+ *      permission: 'read_engine_oil',
+ *      reason: 'SMARTCAR_NOT_CAPABLE',
+ *    },
+ *    {
+ *      capable: true,
+ *      endpoint: '/vin',
+ *      permission: 'read_vin',
+ *      reason: null,
+ *    },
+ *  ],
+ *  meta: {
+ *    'requestId':'6d4226e7-a7dd-44e0-b29c-9eed26be249d'
+ *  }
  * }
  */
 
@@ -170,12 +191,6 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * @param {String} vin - the VIN of the vehicle
  * @param {String[]} scope - list of permissions to check compatibility for
  * @param {String} [country='US'] - an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
- * @param {Object} [options]
- * @param {String} [options.clientId] - client ID to use for basic auth.
- * @param {String} [options.clientSecret] - client secret to use for basic auth.
- * @param {Object} [options.flags] - Object of flags where key is the name of the flag
- * value is string or boolean value.
- * @param {Object} [options.version] - API version to use
  * @return {module:smartcar~Compatibility}
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
