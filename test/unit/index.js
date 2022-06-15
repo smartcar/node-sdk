@@ -125,7 +125,7 @@ test('getCompatibility - with flags, testModeCompatibilityLevel and override ver
   t.true(n.isDone());
 });
 
-test('getCompatibility - with testMode true', async function(t) {
+test('getCompatibility - with mode=test', async function(t) {
   const vin = 'fake_vin';
   const scope = ['read_location', 'read_odometer'];
   const path = '/compatibility?vin=fake_vin&'
@@ -141,7 +141,7 @@ test('getCompatibility - with testMode true', async function(t) {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
     version: '6.6',
-    testMode: true,
+    mode: 'test',
   });
 
   t.is(response.pizza, 'pasta');

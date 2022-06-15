@@ -39,7 +39,7 @@ helpers.getAuthClientParams = () => ({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   redirectUri: 'https://example.com/auth',
-  testMode: true,
+  mode: 'test',
 });
 
 const getCodeFromUri = function(uri) {

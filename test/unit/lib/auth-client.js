@@ -19,7 +19,7 @@ test('constructor', function(t) {
   t.is(client.clientId, CLIENT_ID);
   t.is(client.clientSecret, CLIENT_SECRET);
   t.is(client.redirectUri, 'https://insurance.co/callback');
-  t.is(client.testMode, false);
+  t.is(client.mode, 'live');
   t.true('service' in client);
 });
 
@@ -74,7 +74,7 @@ test('getAuthUrl - with optional arguments', function(t) {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
-    testMode: true,
+    mode: 'test',
   });
 
   const actual = client.getAuthUrl(
