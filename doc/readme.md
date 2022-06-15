@@ -338,7 +338,7 @@ Create a Smartcar OAuth client for your application.
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.mode] | <code>String</code> | <code>false</code> | Launch Smartcar Connect in live mode, [test mode](https://smartcar.com/docs/guides/testing/), or [simulated mode](https://smartcar.com/docs/guides/testing/) |
 
 <a name="AuthClient+getAuthUrl"></a>
 

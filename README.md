@@ -73,7 +73,7 @@ const client = new smartcar.AuthClient({
   clientId: '<Smartcar Client Id>', // fallback to SMARTCAR_CLIENT_ID ENV variable
   clientSecret: '<Smartcar Client Secret>', // fallback to SMARTCAR_CLIENT_SECRET ENV variable
   redirectUri: '<Your callback URI>', // fallback to SMARTCAR_REDIRECT_URI ENV variable
-  testMode: true, // launch Smartcar Connect in test mode
+  mode: 'test', // launch Smartcar Connect in test mode
 });
 
 // Redirect to Smartcar Connect
