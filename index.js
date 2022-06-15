@@ -28,8 +28,8 @@ const buildQueryParams = function(vin, scope, country, options) {
     parameters.flags = util.getFlagsString(options.flags);
   }
 
-  if (options.hasOwnProperty('testMode')) {
-    parameters.mode = options.testMode ? 'test' : 'live';
+  if (options.hasOwnProperty('mode')) {
+    parameters.mode = options.mode || 'live';
   }
 
   if (options.testModeCompatibilityLevel) {
