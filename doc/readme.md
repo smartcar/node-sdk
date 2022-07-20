@@ -338,7 +338,8 @@ Create a Smartcar OAuth client for your application.
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). testMode is now deprecated. Use mode instead. |
+| [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Mode to Launch the Smartcar auth flow is one of [test|live|simulated]. Defaults to live. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
@@ -577,6 +578,7 @@ Initializes a new Vehicle to use for making requests to the Smartcar API.
 | [options] | <code>Object</code> |  |  |
 | [options.unitSystem] | <code>String</code> | <code>metric</code> | The unit system to use for vehicle data must be either `metric` or `imperial`. |
 | [options.version] | <code>Object</code> |  | API version to use |
+| [options.flags] | <code>Object</code> |  | Feature Flags (early access) |
 
 <a name="Vehicle+permissions"></a>
 

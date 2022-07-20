@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 
+const {emitWarning} = require('node:process');
 const SmartcarService = require('./lib/smartcar-service');
 const util = require('./lib/util');
 const config = require('./lib/config.json');
@@ -27,11 +28,23 @@ const buildQueryParams = function(vin, scope, country, options) {
   if (options.flags) {
     parameters.flags = util.getFlagsString(options.flags);
   }
-
   if (options.hasOwnProperty('testMode')) {
-    parameters.mode = options.testMode ? 'test' : 'live';
+    /* eslint-disable max-len */
+    emitWarning(
+      'The "testMode" parameter is deprecated, please use the "mode" parameter instead.',
+    );
+    /* eslint-enable max-len */
+    parameters.mode = options.testMode === true ? 'test' : 'live';
+  } else if (options.hasOwnProperty('mode')) {
+    parameters.mode = options.mode;
+    if (!['test', 'live', 'simulated'].includes(parameters.mode)) {
+      /* eslint-disable max-len */
+      throw new Error(
+        'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
+      );
+      /* eslint-enable max-len */
+    }
   }
-
   if (options.testModeCompatibilityLevel) {
     // eslint-disable-next-line camelcase
     parameters.test_mode_compatibility_level =
@@ -191,6 +204,14 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * @param {String} vin - the VIN of the vehicle
  * @param {String[]} scope - list of permissions to check compatibility for
  * @param {String} [country='US'] - an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+ * @param {Object} [options]
+ * @param {Boolean} [options.testMode] - Deprecated, please use `mode` instead.
+ * Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/).
+ * @param {String} [options.mode] - Determine what mode Smartcar Connect should be
+ * launched in. Should be one of test, live or simulated.
+ * @param {String} [options.testModeCompatibilityLevel] - This string determines which permissions
+ * the simulated vehicle is capable of. Possible Values can be found at this link:
+ * (https://smartcar.com/docs/integration-guide/test-your-integration/test-requests/#test-successful-api-requests-with-specific-vins)
  * @return {module:smartcar~Compatibility}
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
