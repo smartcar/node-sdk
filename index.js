@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 
-const {emitWarning} = require('node:process');
+const {emitWarning} = require('process');
 const SmartcarService = require('./lib/smartcar-service');
 const util = require('./lib/util');
 const config = require('./lib/config.json');
