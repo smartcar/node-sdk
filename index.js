@@ -29,20 +29,16 @@ const buildQueryParams = function(vin, scope, country, options) {
     parameters.flags = util.getFlagsString(options.flags);
   }
   if (options.hasOwnProperty('testMode')) {
-    /* eslint-disable max-len */
-    emitWarning(
+    emitWarning(// eslint-disable-next-line max-len
       'The "testMode" parameter is deprecated, please use the "mode" parameter instead.',
     );
-    /* eslint-enable max-len */
     parameters.mode = options.testMode === true ? 'test' : 'live';
   } else if (options.hasOwnProperty('mode')) {
     parameters.mode = options.mode;
     if (!['test', 'live', 'simulated'].includes(parameters.mode)) {
-      /* eslint-disable max-len */
-      throw new Error(
+      throw new Error(// eslint-disable-next-line max-len
         'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
       );
-      /* eslint-enable max-len */
     }
   }
   if (options.testModeCompatibilityLevel) {
