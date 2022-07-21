@@ -78,9 +78,8 @@ test('constructor - mode invalid input errors', function(t) {
   );
   t.is(
     err.message,
-    /* eslint-disable max-len */
+    // eslint-disable-next-line max-len
     'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
-    /* eslint-enable max-len */
   );
 });
 
