@@ -93,7 +93,7 @@ the following fields :</p>
         * [.getApiVersion()](#module_smartcar.getApiVersion) ⇒ <code>String</code>
         * [.getUser(accessToken)](#module_smartcar.getUser) ⇒ [<code>User</code>](#module_smartcar..User)
         * [.getVehicles(accessToken, [paging])](#module_smartcar.getVehicles) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
-        * [.getCompatibility(vin, scope, [country])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+        * [.getCompatibility(vin, scope, [country], [options])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
         * [.hashChallenge(amt, challenge)](#module_smartcar.hashChallenge) ⇒ <code>String</code>
         * [.verifyPayload(amt, signature, body)](#module_smartcar.verifyPayload) ⇒ <code>Boolean</code>
     * _inner_
@@ -173,7 +173,7 @@ Return list of the user's vehicles ids.
 
 <a name="module_smartcar.getCompatibility"></a>
 
-### smartcar.getCompatibility(vin, scope, [country]) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+### smartcar.getCompatibility(vin, scope, [country], [options]) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
 Determine whether a vehicle is compatible with Smartcar.
 
 A compatible vehicle is a vehicle that:
@@ -196,6 +196,10 @@ _To use this function, please contact us!_
 | vin | <code>String</code> |  | the VIN of the vehicle |
 | scope | <code>Array.&lt;String&gt;</code> |  | list of permissions to check compatibility for |
 | [country] | <code>String</code> | <code>&#x27;US&#x27;</code> | an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). |
+| [options] | <code>Object</code> |  |  |
+| [options.testMode] | <code>Boolean</code> |  | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.mode] | <code>String</code> |  | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
+| [options.testModeCompatibilityLevel] | <code>String</code> |  | This string determines which permissions the simulated vehicle is capable of. Possible Values can be found at this link: (https://smartcar.com/docs/integration-guide/test-your-integration/test-requests/#test-successful-api-requests-with-specific-vins) |
 
 <a name="module_smartcar.hashChallenge"></a>
 
@@ -338,7 +342,8 @@ Create a Smartcar OAuth client for your application.
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
 | options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 
 <a name="AuthClient+getAuthUrl"></a>
 
@@ -577,6 +582,7 @@ Initializes a new Vehicle to use for making requests to the Smartcar API.
 | [options] | <code>Object</code> |  |  |
 | [options.unitSystem] | <code>String</code> | <code>metric</code> | The unit system to use for vehicle data must be either `metric` or `imperial`. |
 | [options.version] | <code>Object</code> |  | API version to use |
+| [options.flags] | <code>Object</code> |  | Object of flags where key is the name of the flag and value is string or boolean value. |
 
 <a name="Vehicle+permissions"></a>
 

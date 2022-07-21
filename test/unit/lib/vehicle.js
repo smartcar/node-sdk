@@ -61,6 +61,21 @@ test('constructor - non default unit and version', async function(t) {
   t.is(res.pizza, 'pasta');
 });
 
+test('constructor - with optional flags', async function(t) {
+  const vehicle = new Vehicle(VID, TOKEN, {
+    flags: {country: 'DE', flag: 'suboption'},
+  });
+  t.context.n = nocks
+    .base(vehicle.version)
+    .matchHeader('sc-unit-system', 'metric')
+    .get('/default?flags=country%3ADE%20flag%3Asuboption')
+    .reply(200, '{"pizza": "pasta"}');
+
+  t.deepEqual(vehicle.query, {flags: 'country:DE flag:suboption'});
+  const res = await vehicle.service.request('get', 'default');
+  t.is(res.pizza, 'pasta');
+});
+
 test('vehicle webhook subscribe', async(t) => {
   const responseBody = {webhookId: 'webhookID', vehicleId: 'vehicleId'};
   t.context.n = nocks

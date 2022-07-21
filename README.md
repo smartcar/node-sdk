@@ -73,7 +73,7 @@ const client = new smartcar.AuthClient({
   clientId: '<Smartcar Client Id>', // fallback to SMARTCAR_CLIENT_ID ENV variable
   clientSecret: '<Smartcar Client Secret>', // fallback to SMARTCAR_CLIENT_SECRET ENV variable
   redirectUri: '<Your callback URI>', // fallback to SMARTCAR_REDIRECT_URI ENV variable
-  testMode: true, // launch Smartcar Connect in test mode
+  mode: 'test', // launch Smartcar Connect in test mode
 });
 
 // Redirect to Smartcar Connect
@@ -94,11 +94,14 @@ app.get('/callback', async function(req, res, next) {
   }
 
   // exchange auth code for access token
-  const tokens = await client.exchangeCode(req.query.code)
+  const tokens = await client.exchangeCode(req.query.code);
   // get the user's vehicles
   const vehicles = await smartcar.getVehicles(tokens.accessToken);
   // instantiate first vehicle in vehicle list
-  const vehicle = new smartcar.Vehicle(vehicles.vehicles[0], tokens.accessToken);
+  const vehicle = new smartcar.Vehicle(
+    vehicles.vehicles[0],
+    tokens.accessToken
+  );
   // get identifying information about a vehicle
   const attributes = await vehicle.attributes();
   console.log(attributes);
@@ -135,20 +138,22 @@ To test:
 npm run test
 ```
 
-Note: In order to run tests locally the following environment variables would have to be set : 
+Note: In order to run tests locally the following environment variables would have to be set :
+
 - `E2E_SMARTCAR_CLIENT_ID` - Client ID to be used.
 - `E2E_SMARTCAR_CLIENT_SECRET` - Client secret to be used.
-- `E2E_SMARTCAR_REDIRECT_URI` - Redirect URI for the auth flow.
 - `E2E_SMARTCAR_AMT` - AMT from dashboard for webhooks tests.
 - `E2E_SMARTCAR_WEBHOOK_ID` - Webhook ID use in the webhook tests success case.
+
+Your application needs to have https://example.com/auth set as a valid redirect URI
 
 [ci-url]: https://travis-ci.com/smartcar/node-sdk
 [ci-image]: https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
 [npm-url]: https://badge.fury.io/js/smartcar
 [npm-image]: https://badge.fury.io/js/smartcar.svg
 
-## Supported Node.js Versions 
+## Supported Node.js Versions
 
 Smartcar aims to support the SDK on all Node.js versions that have a status of "Maintenance" or "Active LTS" as defined in the [Node.js Release schedule](https://github.com/nodejs/Release#release-schedule).
- 
+
 In accordance with the Semantic Versioning specification, the addition of support for new Node.js versions would result in a MINOR version bump and the removal of support for Node.js versions would result in a MAJOR version bump.

@@ -125,11 +125,54 @@ test('getCompatibility - with flags, testModeCompatibilityLevel and override ver
   t.true(n.isDone());
 });
 
-test('getCompatibility - with testMode true', async function(t) {
+test('getCompatibility - mode invalid input errors', async function(t) {
+  const vin = 'fake_vin';
+  const scope = ['read_location', 'read_odometer'];
+
+
+  const err = await t.throwsAsync(smartcar.getCompatibility(vin, scope, 'US', {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    mode: 'pizzapasta',
+  }));
+  t.is(
+    err.message,
+    // eslint-disable-next-line max-len
+    'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
+  );
+});
+
+test('getCompatibility - with mode simulated', async function(t) {
   const vin = 'fake_vin';
   const scope = ['read_location', 'read_odometer'];
   const path = '/compatibility?vin=fake_vin&'
-    + 'scope=read_location%20read_odometer&country=US&mode=test';
+    + 'scope=read_location%20read_odometer&country=US&'
+    + 'mode=simulated';
+  const n = nock('https://api.smartcar.com/v6.6/')
+    .get(path)
+    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+    .reply(200, {
+      pizza: 'pasta',
+    });
+
+  const response = await smartcar.getCompatibility(vin, scope, 'US', {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    mode: 'simulated',
+  });
+
+  t.is(response.pizza, 'pasta');
+  t.true(n.isDone());
+});
+
+test('getCompatibility - with test_mode true [deprecated]', async function(t) {
+  const vin = 'fake_vin';
+  const scope = ['read_location', 'read_odometer'];
+  const path = '/compatibility?vin=fake_vin&'
+    + 'scope=read_location%20read_odometer&country=US&'
+    + 'mode=test';
   const n = nock('https://api.smartcar.com/v6.6/')
     .get(path)
     .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')

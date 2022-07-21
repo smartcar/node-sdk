@@ -19,7 +19,7 @@ test('constructor', function(t) {
   t.is(client.clientId, CLIENT_ID);
   t.is(client.clientSecret, CLIENT_SECRET);
   t.is(client.redirectUri, 'https://insurance.co/callback');
-  t.is(client.testMode, false);
+  t.is(client.mode, 'live');
   t.true('service' in client);
 });
 
@@ -51,6 +51,38 @@ test('constructor - client id, secret and redirect url errors', function(t) {
   t.is(error.message, message);
 });
 
+test('constructor - test_mode true [deprecated]', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    testMode: true,
+  });
+
+  t.is(client.clientId, CLIENT_ID);
+  t.is(client.clientSecret, CLIENT_SECRET);
+  t.is(client.redirectUri, 'https://insurance.co/callback');
+  t.is(client.mode, 'test');
+  t.true('service' in client);
+});
+
+test('constructor - mode invalid input errors', function(t) {
+  const err = t.throws(
+    () =>
+      new AuthClient({
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        redirectUri: 'https://insurance.co/callback',
+        mode: 'pizzapasta',
+      }),
+  );
+  t.is(
+    err.message,
+    // eslint-disable-next-line max-len
+    'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
+  );
+});
+
 test('getAuthUrl - simple', function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
@@ -74,7 +106,7 @@ test('getAuthUrl - with optional arguments', function(t) {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
-    testMode: true,
+    mode: 'test',
   });
 
   const actual = client.getAuthUrl(
