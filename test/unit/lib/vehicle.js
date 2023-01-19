@@ -116,6 +116,9 @@ test('vehicle permissions', async(t) => {
 });
 
 test('batch - success', async function(t) {
+  // We are intentionally testing multiple routes here to make sure dynamic mapping
+  // of function name is working for all cases. Please do not remove the paths being
+  // asserted here.
   const paths = [
     '/', '/odometer', '/engine/oil', 'tires/pressure', 'tesla/speedometer',
   ];

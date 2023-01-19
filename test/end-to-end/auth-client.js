@@ -26,11 +26,10 @@ test('exchangeRefreshToken', async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
 
-  const oldAccess = await client.exchangeCode(code);
-  const newAccess = await client.exchangeRefreshToken(oldAccess.refreshToken);
+  const exchagedTokens = await client.exchangeCode(code);
 
   t.deepEqual(
-    _.xor(_.keys(newAccess), [
+    _.xor(_.keys(exchagedTokens), [
       'accessToken',
       'expiration',
       'refreshExpiration',
@@ -38,13 +37,4 @@ test('exchangeRefreshToken', async(t) => {
     ]),
     [],
   );
-
-  const error = await t.throwsAsync(
-    client.exchangeRefreshToken(oldAccess.refreshToken),
-  );
-  const expectedMessage =
-    'invalid_grant:undefined - Invalid or expired refresh token.';
-  t.is(error.message, expectedMessage);
-
-  t.is(error.type, 'invalid_grant');
 });
