@@ -116,9 +116,14 @@ test('vehicle permissions', async(t) => {
 });
 
 test('batch - success', async function(t) {
-  const paths = ['/odometer', '/engine/oil', '/location'];
+  const paths = [
+    '/', '/odometer', '/engine/oil', 'tires/pressure', 'tesla/speedometer',
+  ];
   const requestBody = {
     requests: [
+      {
+        path: '/',
+      },
       {
         path: '/odometer',
       },
@@ -126,12 +131,29 @@ test('batch - success', async function(t) {
         path: '/engine/oil',
       },
       {
-        path: '/location',
+        path: 'tires/pressure',
+      },
+      {
+        path: 'tesla/speedometer',
       },
     ],
   };
   const mockResponse = {
     responses: [
+      {
+        headers: {
+          'sc-unit-system': 'imperial',
+          'sc-data-age': '2018-05-04T07:20:50.844Z',
+        },
+        path: '/',
+        code: 200,
+        body: {
+          id: '36ab27d0-fd9d-4455-823a-ce30af709ffc',
+          make: 'TESLA',
+          model: 'Model S',
+          year: 2014,
+        },
+      },
       {
         headers: {
           'sc-unit-system': 'imperial',
@@ -144,20 +166,37 @@ test('batch - success', async function(t) {
         },
       },
       {
-        headers: {'sc-data-age': '2018-05-04T07:20:50.844Z'},
-        path: '/engine/oil',
-        code: 200,
-        body: {
-          lifeRemaining: 0.1123,
-        },
-      },
-      {
         headers: {'sc-unit-system': 'imperial'},
-        path: '/location',
+        path: '/engine/oil',
         code: 501,
         body: {
           error: 'vehicle_not_capable_error',
           message: 'Vehicle is not capable of performing request.',
+        },
+      },
+      {
+        headers: {
+          'sc-unit-system': 'imperial',
+          'sc-data-age': '2018-05-04T07:20:50.844Z',
+        },
+        path: '/tires/pressure',
+        code: 200,
+        body: {
+          backLeft: 219.3,
+          backRight: 219.3,
+          frontLeft: 219.3,
+          frontRight: 219.3,
+        },
+      },
+      {
+        headers: {
+          'sc-unit-system': 'imperial',
+          'sc-data-age': '2018-05-04T07:20:50.844Z',
+        },
+        path: '/tesla/speedometer',
+        code: 200,
+        body: {
+          speed: 84.32,
         },
       },
     ],
@@ -175,15 +214,34 @@ test('batch - success', async function(t) {
   t.is(odometer.meta.unitSystem, 'imperial');
   t.is(odometer.meta.dataAge.valueOf(), 1525418450844);
 
-  const engineOil = response.engineOil();
-  t.is(engineOil.lifeRemaining, 0.1123);
-  t.is(engineOil.meta.dataAge.valueOf(), 1525418450844);
+  const attributes = response.attributes();
+  t.is(attributes.make, 'TESLA');
+  t.is(attributes.model, 'Model S');
+  t.is(attributes.year, 2014);
+  t.is(attributes.meta.requestId, 'requestId');
+  t.is(attributes.meta.unitSystem, 'imperial');
+  t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
 
   const expectedMessage = 'vehicle_not_capable_error:undefined - '
     + 'Vehicle is not capable of performing request.';
-  const error = t.throws(() => response.location());
+  const error = t.throws(() => response.engineOil());
   t.is(error.message, expectedMessage);
   t.is(error.type, 'vehicle_not_capable_error');
+
+  const tirePressure = response.tirePressure();
+  t.is(tirePressure.backLeft, 219.3);
+  t.is(tirePressure.backRight, 219.3);
+  t.is(tirePressure.frontLeft, 219.3);
+  t.is(tirePressure.frontRight, 219.3);
+  t.is(attributes.meta.requestId, 'requestId');
+  t.is(attributes.meta.unitSystem, 'imperial');
+  t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
+
+  const speedometer = response.teslaSpeedometer();
+  t.is(speedometer.speed, 84.32);
+  t.is(attributes.meta.requestId, 'requestId');
+  t.is(attributes.meta.unitSystem, 'imperial');
+  t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
 });
 
 test('batch - error', async function(t) {
