@@ -51,8 +51,8 @@ test('constructor - client id, secret and redirect url errors', function(t) {
   t.is(error.message, message);
 });
 
-test('constructor - test_mode true [deprecated]', function(t) {
-  const client = new AuthClient({
+test('constructor - test_mode attribute [deprecated]', function(t) {
+  let client = new AuthClient({
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     redirectUri: 'https://insurance.co/callback',
@@ -64,6 +64,15 @@ test('constructor - test_mode true [deprecated]', function(t) {
   t.is(client.redirectUri, 'https://insurance.co/callback');
   t.is(client.mode, 'test');
   t.true('service' in client);
+
+  client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    testMode: false,
+  });
+
+  t.is(client.mode, 'live');
 });
 
 test('constructor - mode invalid input errors', function(t) {

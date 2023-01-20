@@ -190,3 +190,27 @@ test('getCompatibility - with test_mode true [deprecated]', async function(t) {
   t.is(response.pizza, 'pasta');
   t.true(n.isDone());
 });
+
+test('getCompatibility - with test_mode false [deprecated]', async function(t) {
+  const vin = 'fake_vin';
+  const scope = ['read_location', 'read_odometer'];
+  const path = '/compatibility?vin=fake_vin&'
+    + 'scope=read_location%20read_odometer&country=US&'
+    + 'mode=live';
+  const n = nock('https://api.smartcar.com/v6.6/')
+    .get(path)
+    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+    .reply(200, {
+      pizza: 'pasta',
+    });
+
+  const response = await smartcar.getCompatibility(vin, scope, 'US', {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    testMode: false,
+  });
+
+  t.is(response.pizza, 'pasta');
+  t.true(n.isDone());
+});
