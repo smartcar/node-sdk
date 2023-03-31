@@ -78,19 +78,33 @@ helpers.runAuthFlow = async function(
     .build();
 
   await driver.get(authUrl);
+
   // Preamble
-  await driver.findElement(By.css('button#continue-button')).click();
+  const continueButton = await driver.wait(
+    until.elementLocated(
+      By.css('button#continue-button'),
+    ),
+  );
+  await continueButton.click();
 
   // Brand Selector
-  await driver
-    .findElement(By.css(`button.brand-selector-button[data-make="${brand}"]`))
-    .click();
+  const brandButton = await driver.wait(
+    until.elementLocated(
+      By.css(`button#${brand.toUpperCase()}.brand-list-item`),
+    ),
+  );
+  brandButton.click();
 
   // Login
+  const signInButton = await driver.wait(
+    until.elementLocated(
+      By.id('sign-in-button'),
+    ),
+  );
   email = email || `${uuid()}@email.com`;
   await driver.findElement(By.css('input[id=username]')).sendKeys(email);
   await driver.findElement(By.css('input[id=password')).sendKeys('password');
-  await driver.findElement(By.css('button[id=sign-in-button]')).click();
+  await signInButton.click();
 
   // Permissions
   await driver.sleep(5000);
