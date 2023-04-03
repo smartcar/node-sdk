@@ -304,7 +304,7 @@ test('request - rate limit ', async function(t) {
   )
     .matchHeader('Authorization', `Bearer ${TOKEN}`)
     .get('/odometer')
-    .reply(502, {error: 'RATE_LIMIT'}, {'retry-after': retryAfter});
+    .reply(429, {error: 'RATE_LIMIT'}, {'retry-after': retryAfter});
 
   const error = await t.throwsAsync(vehicle.odometer());
   t.is(error.retryAfter, String(retryAfter));
