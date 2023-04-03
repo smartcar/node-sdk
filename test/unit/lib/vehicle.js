@@ -296,3 +296,16 @@ test('request - override non-sc headers', async function(t) {
   t.is(response.body.distance, 10);
   t.is(response.meta.requestId, 'requestId');
 });
+
+test('request - rate limit ', async function(t) {
+  const retryAfter = new Date().valueOf();
+  t.context.n = nock(
+    `https://api.smartcar.com/v${vehicle.version}/vehicles/${VID}`,
+  )
+    .matchHeader('Authorization', `Bearer ${TOKEN}`)
+    .get('/odometer')
+    .reply(502, {error: 'RATE_LIMIT'}, {'retry-after': retryAfter});
+
+  const error = await t.throwsAsync(vehicle.odometer());
+  t.is(error.retryAfter, String(retryAfter));
+});
