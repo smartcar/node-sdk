@@ -20,16 +20,20 @@ const getVehicle = async function(brand, scope) {
 };
 
 test.before(async(t) => {
-  const [volt, ford] = await Promise.all([
+  const [volt, ford, kia] = await Promise.all([
     getVehicle('CHEVROLET', DEFAULT_SCOPES),
     getVehicle('FORD', [
       'required:control_charge',
       'required:control_security',
     ]),
+    getVehicle('KIA', [
+      'required:read_charge',
+      'required:control_charge',
+    ]),
   ]);
 
   smartcar.setApiVersion('1.0');
-  t.context = {volt, ford};
+  t.context = {volt, ford, kia};
 });
 
 test('vehicle vin', async(t) => {

@@ -49,3 +49,6 @@ Package Control.cache/
 Package Control.ca-certs/
 bh_unicode_properties.cache
 GitHub.sublime-settings
+
+## env
+.env
