@@ -2,6 +2,7 @@
 
 const nock = require('nock');
 const test = require('ava');
+const sinon = require('sinon');
 
 const Vehicle = require('../../../lib/vehicle');
 const {USER_AGENT} = require('../../../lib/util');
@@ -23,6 +24,8 @@ test.afterEach(function(t) {
   if (t.context.n) {
     t.true(t.context.n.isDone());
   }
+
+  sinon.restore();
 });
 
 test('constructor - default parameters check', async function(t) {
@@ -297,7 +300,7 @@ test('request - override non-sc headers', async function(t) {
   t.is(response.meta.requestId, 'requestId');
 });
 
-test('request - rate limit ', async function(t) {
+test('request - rate limit', async function(t) {
   const retryAfter = new Date().valueOf();
   t.context.n = nock(
     `https://api.smartcar.com/v${vehicle.version}/vehicles/${VID}`,
@@ -308,4 +311,37 @@ test('request - rate limit ', async function(t) {
 
   const error = await t.throwsAsync(vehicle.odometer());
   t.is(error.retryAfter, String(retryAfter));
+});
+
+test('request - get charge limit', async function (t) {
+  t.context.n = nocks
+    .base()
+    .get('/charge/limit')
+    .reply(200, {limit: 0.7}, {'sc-request-id': 'requestId'});
+
+  const response = await vehicle.getChargeLimit();
+
+  t.is(response.meta.requestId, 'requestId');
+  t.is(response.limit, 0.7);
+  t.true(t.context.n.isDone());
+});
+
+test('request - set charge limit', async function(t) {
+  t.context.n = nocks
+    .base()
+    .post('/charge/limit')
+    .reply(200, {}, {'sc-request-id': 'requestId'});
+
+  const chargeLimit = 0.6;
+  const serviceRequestSpy = sinon.spy(vehicle.service, 'request');
+  const response = await vehicle.setChargeLimit(chargeLimit);
+
+  t.is(response.meta.requestId, 'requestId');
+  t.true(serviceRequestSpy.calledOnce);
+  t.true(
+    serviceRequestSpy.calledWith(
+      'post', 'charge/limit', sinon.match({limit: chargeLimit}),
+    ),
+  );
+  t.true(t.context.n.isDone());
 });
