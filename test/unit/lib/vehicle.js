@@ -24,8 +24,6 @@ test.afterEach(function(t) {
   if (t.context.n) {
     t.true(t.context.n.isDone());
   }
-
-  sinon.restore();
 });
 
 test('constructor - default parameters check', async function(t) {
@@ -314,19 +312,26 @@ test('request - rate limit', async function(t) {
 });
 
 test('request - get charge limit', async function(t) {
+  sinon.restore(); // clear all spys
+
   t.context.n = nocks
     .base()
     .get('/charge/limit')
     .reply(200, {limit: 0.7}, {'sc-request-id': 'requestId'});
 
+  const serviceRequestSpy = sinon.spy(vehicle.service, 'request');
+
   const response = await vehicle.getChargeLimit();
 
+  t.true(serviceRequestSpy.calledOnceWith('get', 'charge/limit'));
   t.is(response.meta.requestId, 'requestId');
   t.is(response.limit, 0.7);
   t.true(t.context.n.isDone());
 });
 
 test('request - set charge limit', async function(t) {
+  sinon.restore(); // clear all spys
+
   t.context.n = nocks
     .base()
     .post('/charge/limit')
