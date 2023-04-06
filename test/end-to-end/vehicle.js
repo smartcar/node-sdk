@@ -461,6 +461,12 @@ test('vehicle request - override auth header', async(t) => {
   });
 });
 
+test('vehicle request - get charge limit', async(t) => {
+  const response = await t.context.kia.getChargeLimit();
+
+  t.is(typeof response.limit, 'number');
+});
+
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.volt.disconnect();
   t.deepEqual(
