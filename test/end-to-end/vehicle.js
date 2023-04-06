@@ -467,6 +467,14 @@ test('vehicle request - get charge limit', async(t) => {
   t.is(typeof response.limit, 'number');
 });
 
+test('vehicle request - set charge limit', async(t) => {
+  await t.context.kia.setChargeLimit(0.9);
+
+  const response = await t.context.kia.getChargeLimit();
+
+  t.is(response.limit, 0.9);
+});
+
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.volt.disconnect();
   t.deepEqual(
