@@ -313,7 +313,7 @@ test('request - rate limit', async function(t) {
   t.is(error.retryAfter, String(retryAfter));
 });
 
-test('request - get charge limit', async function (t) {
+test('request - get charge limit', async function(t) {
   t.context.n = nocks
     .base()
     .get('/charge/limit')
