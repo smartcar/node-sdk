@@ -470,10 +470,7 @@ test('vehicle request - get charge limit', async(t) => {
 test('vehicle request - set charge limit', async(t) => {
   const response = await t.context.kia.setChargeLimit(0.9);
 
-  // TEMP
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(response));
-  // t.is(response.limit, 0.9);
+  t.is(response.status, 'success');
 });
 
 test.after.always('vehicle disconnect', async(t) => {
