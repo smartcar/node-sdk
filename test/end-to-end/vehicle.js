@@ -20,16 +20,20 @@ const getVehicle = async function(brand, scope) {
 };
 
 test.before(async(t) => {
-  const [volt, ford] = await Promise.all([
+  const [volt, ford, kia] = await Promise.all([
     getVehicle('CHEVROLET', DEFAULT_SCOPES),
     getVehicle('FORD', [
       'required:control_charge',
       'required:control_security',
     ]),
+    getVehicle('KIA', [
+      'required:read_charge',
+      'required:control_charge',
+    ]),
   ]);
 
   smartcar.setApiVersion('1.0');
-  t.context = {volt, ford};
+  t.context = {volt, ford, kia};
 });
 
 test('vehicle vin', async(t) => {
@@ -455,6 +459,18 @@ test('vehicle request - override auth header', async(t) => {
     t.is(err.description, errorMessage);
     t.is(err.docURL, 'https://smartcar.com/docs/errors/v2.0/other-errors/#authentication');
   });
+});
+
+test('vehicle request - get charge limit', async(t) => {
+  const response = await t.context.kia.getChargeLimit();
+
+  t.is(typeof response.limit, 'number');
+});
+
+test('vehicle request - set charge limit', async(t) => {
+  const response = await t.context.kia.setChargeLimit(0.9);
+
+  t.is(response.status, 'success');
 });
 
 test.after.always('vehicle disconnect', async(t) => {

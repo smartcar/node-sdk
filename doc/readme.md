@@ -48,6 +48,8 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Permissions">Permissions</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#ChargeLimit">ChargeLimit</a></dt>
+<dd></dd>
 <dt><a href="#WebhookSubscription">WebhookSubscription</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Batch">Batch</a> : <code>Object</code></dt>
@@ -549,6 +551,8 @@ Initializes a new Service object to make requests to the Smartcar API.
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
+    * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+    * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Object</code>
     * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Meta</code>](#Meta)
     * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Batch</code>](#Batch)
@@ -603,6 +607,53 @@ Fetch the list of permissions that this application has been granted
 | [paging.limit] | <code>String</code> | number of permissions to return |
 | [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
 
+<a name="Vehicle+getChargeLimit"></a>
+
+### vehicle.getChargeLimit() ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+Fetch the charge limit for an electric vehicle
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**Example**
+```js
+{
+  limit: .7,
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="Vehicle+setChargeLimit"></a>
+
+### vehicle.setChargeLimit(limit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+Set the charge limit for an electric vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| limit | <code>number</code> | a number between 0 and 1 |
+
+**Example**
+```js
+{
+  status: string,
+  meta: {
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
 <a name="Vehicle+subscribe"></a>
 
 ### vehicle.subscribe(webhookId) ⇒ <code>Object</code>
@@ -935,6 +986,16 @@ the following fields :
   }
 }
 ```
+<a name="ChargeLimit"></a>
+
+## ChargeLimit
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| limit | <code>number</code> | the charge limit expressed as a decimal value between 0 and 1. |
+
 <a name="WebhookSubscription"></a>
 
 ## WebhookSubscription : <code>Object</code>
