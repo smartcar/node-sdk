@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 'use strict';
 
+const _ = require('lodash');
 const crypto = require('crypto');
 
 const {emitWarning} = require('process');
@@ -264,5 +266,110 @@ smartcar.hashChallenge = function(amt, challenge) {
 smartcar.verifyPayload = (amt, signature, body) => (
   smartcar.hashChallenge(amt, JSON.stringify(body)) === signature
 );
+
+/**
+ * Returns a paged list of all the vehicles that are connected to the application associated
+ * with the management API token used sorted in descending order by connection date.
+ *
+ * @type {Object}
+ * @typedef Connection
+ * @property {String} vehicleId
+ * @property {String} userId
+ * @property {String} createdAt
+ *
+ * @type {Object}
+ * @typedef GetConnections
+ * @property {Connection[]} connections
+ * @property {Object} [paging]
+ * @property {Number} [paging.count] - The total number of elements for the entire query
+ * (not just the given page).
+ * @property {string} [options.cursor]
+ *
+ * @param {String} amt - Application Management Token
+ * @param {object} filter
+ * @param {String} filter.userId
+ * @param {String} filter.vehicleId
+ * @param {object} paging
+ * @param {number} paging.limit
+ * @param {String} paging.cursor
+ * @returns {GetConnections}
+ */
+smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
+  const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
+  const {limit, cursor} = _.pick(paging, ['limit', 'cursor']);
+
+  const qs = {};
+  if (userId) {
+    qs.user_id = userId;
+  }
+  if (vehicleId) {
+    qs.vehicle_id = vehicleId;
+  }
+  if (limit) {
+    qs.limit = limit;
+  }
+  if (cursor) {
+    qs.cursor = cursor;
+  }
+
+  const response = await new SmartcarService({
+    // eslint-disable-next-line max-len
+    baseUrl: util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+    auth: {
+      user: 'default',
+      pass: amt,
+    },
+    qs,
+  }).request('get', '/connections');
+
+  return response;
+};
+
+/**
+ * Deletes all the connections by vehicle or user ID and returns a
+ * list of all connections that were deleted.
+ *
+ * @type {Object}
+ * @typedef Connection
+ * @property {String} vehicleId
+ * @property {String} userId
+ *
+ * @type {Object}
+ * @typedef DeleteConnections
+ * @property {Connection[]} connections
+ *
+ * @param {String} amt - Application Management Token
+ * @param {object} filter
+ * @param {String} filter.userId
+ * @param {String} filter.vehicleId
+ * @returns {DeleteConnections}
+ */
+smartcar.deleteConnections = async function(amt, filter = {}) {
+  const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
+  if (userId && vehicleId) {
+    // eslint-disable-next-line max-len
+    throw new Error('Filter can contain EITHER user_id OR vehicle_id, not both');
+  }
+
+  const qs = {};
+  if (userId) {
+    qs.user_id = userId;
+  }
+  if (vehicleId) {
+    qs.vehicle_id = vehicleId;
+  }
+
+  const response = await new SmartcarService({
+    // eslint-disable-next-line max-len
+    baseUrl: util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+    auth: {
+      user: 'default',
+      pass: amt,
+    },
+    qs,
+  }).request('delete', '/connections');
+
+  return response;
+};
 
 module.exports = smartcar;
