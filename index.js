@@ -372,4 +372,18 @@ smartcar.deleteConnections = async function(amt, filter = {}) {
   return response;
 };
 
+/**
+ * Generate the token for vehicle management APIs using the amt.
+ *
+ * @method
+ * @param {String} amt - Application Management Token
+ * @param {String} username
+ * @return {String} managementToken
+ */
+smartcar.getManagementToken = function(amt, username = 'default') {
+  const credentials = `${username}:${amt}`;
+  return Buffer.from(credentials).toString('base64');
+};
+
+
 module.exports = smartcar;
