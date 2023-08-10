@@ -214,3 +214,16 @@ test('getCompatibility - with test_mode false [deprecated]', async function(t) {
   t.is(response.pizza, 'pasta');
   t.true(n.isDone());
 });
+
+test('deleteConnections - both vehicleId and userId passed', async function(t) {
+  const error = await t.throwsAsync(
+    smartcar.deleteConnections('fake-amt', {
+      vehicleId: 'vehicle id',
+      userId: 'user id',
+    }),
+  );
+  t.is(
+    error.message,
+    'Filter can contain EITHER user_id OR vehicle_id, not both',
+  );
+});
