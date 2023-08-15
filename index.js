@@ -31,15 +31,16 @@ const buildQueryParams = function(vin, scope, country, options) {
     parameters.flags = util.getFlagsString(options.flags);
   }
   if (options.hasOwnProperty('testMode')) {
-    emitWarning(// eslint-disable-next-line max-len
+    emitWarning(
+      // eslint-disable-next-line max-len
       'The "testMode" parameter is deprecated, please use the "mode" parameter instead.',
     );
     parameters.mode = options.testMode === true ? 'test' : 'live';
   } else if (options.hasOwnProperty('mode')) {
     parameters.mode = options.mode;
     if (!['test', 'live', 'simulated'].includes(parameters.mode)) {
-      throw new Error(// eslint-disable-next-line max-len
-        'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
+      throw new Error( // eslint-disable-next-line max-len
+        "The \"mode\" parameter MUST be one of the following: 'test', 'live', 'simulated'",
       );
     }
   }
@@ -67,7 +68,7 @@ smartcar.setApiVersion = function(version) {
  * @method
  * @return {String} version
  */
-smartcar.getApiVersion = () => (config.version);
+smartcar.getApiVersion = () => config.version;
 
 /**
  * @type {Object}
@@ -98,10 +99,7 @@ smartcar.getUser = async function(accessToken) {
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
     auth: {bearer: accessToken},
-  }).request(
-    'get',
-    `/v${config.version}/user`,
-  );
+  }).request('get', `/v${config.version}/user`);
   return response;
 };
 
@@ -215,17 +213,12 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
  */
-smartcar.getCompatibility = async function(
-  vin,
-  scope,
-  country,
-  options = {},
-) {
+smartcar.getCompatibility = async function(vin, scope, country, options = {}) {
   country = country || 'US';
-  const clientId = options.clientId
-    || util.getOrThrowConfig('SMARTCAR_CLIENT_ID');
-  const clientSecret = options.clientSecret
-    || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
+  const clientId =
+    options.clientId || util.getOrThrowConfig('SMARTCAR_CLIENT_ID');
+  const clientSecret =
+    options.clientSecret || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
 
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
@@ -234,10 +227,7 @@ smartcar.getCompatibility = async function(
       pass: clientSecret,
     },
     qs: buildQueryParams(vin, scope, country, options),
-  }).request(
-    'get',
-    `v${options.version || config.version}/compatibility`,
-  );
+  }).request('get', `v${options.version || config.version}/compatibility`);
   return response;
 };
 
@@ -263,9 +253,8 @@ smartcar.hashChallenge = function(amt, challenge) {
  * @param {object} body - webhook response body
  * @return {Boolean} true if signature matches the hex digest of amt and body
  */
-smartcar.verifyPayload = (amt, signature, body) => (
-  smartcar.hashChallenge(amt, JSON.stringify(body)) === signature
-);
+smartcar.verifyPayload = (amt, signature, body) =>
+  smartcar.hashChallenge(amt, JSON.stringify(body)) === signature;
 
 /**
  * Returns a paged list of all the vehicles that are connected to the application associated
@@ -275,15 +264,13 @@ smartcar.verifyPayload = (amt, signature, body) => (
  * @typedef Connection
  * @property {String} vehicleId
  * @property {String} userId
- * @property {String} createdAt
+ * @property {String} connectedAt
  *
  * @type {Object}
  * @typedef GetConnections
  * @property {Connection[]} connections
  * @property {Object} [paging]
- * @property {Number} [paging.count] - The total number of elements for the entire query
- * (not just the given page).
- * @property {string} [options.cursor]
+ * @property {string} [paging.cursor]
  *
  * @param {String} amt - Application Management Token
  * @param {object} filter
@@ -314,7 +301,8 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
 
   const response = await new SmartcarService({
     // eslint-disable-next-line max-len
-    baseUrl: util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+    baseUrl:
+      util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
     auth: {
       user: 'default',
       pass: amt,
@@ -348,7 +336,9 @@ smartcar.deleteConnections = async function(amt, filter = {}) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
   if (userId && vehicleId) {
     // eslint-disable-next-line max-len
-    throw new Error('Filter can contain EITHER user_id OR vehicle_id, not both');
+    throw new Error(
+      'Filter can contain EITHER user_id OR vehicle_id, not both',
+    );
   }
 
   const qs = {};
@@ -361,7 +351,8 @@ smartcar.deleteConnections = async function(amt, filter = {}) {
 
   const response = await new SmartcarService({
     // eslint-disable-next-line max-len
-    baseUrl: util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+    baseUrl:
+      util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
     auth: {
       user: 'default',
       pass: amt,
