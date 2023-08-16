@@ -268,3 +268,8 @@ test('handleError - SmartcarError V2 with all attrbutes', function(t) {
   t.is(boxed.message, 'type:code - description');
   t.is(boxed.detail[0], 'pizza');
 });
+
+test('getManagementToken', function(t) {
+  const res = util.getManagementToken('amt', 'default');
+  t.is(res, 'ZGVmYXVsdDphbXQ=');
+});

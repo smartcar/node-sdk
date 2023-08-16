@@ -103,6 +103,15 @@ test.serial('getConnections - by userId', async(t) => {
   }
 });
 
+test.serial('getConnections - by userId - limit 1', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt,
+    {userId: t.context.userId},
+    {limit: 1},
+  );
+  t.is(res.connections.length, t.context.connectedVehicles.length);
+});
+
 test.serial('deleteConnections - by vehicleId', async(t) => {
   const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
   const testVehicleId = t.context.connectedVehicles[0];

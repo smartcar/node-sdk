@@ -474,7 +474,7 @@ test('vehicle request - set charge limit', async(t) => {
 });
 
 test.after.always('vehicle disconnect', async(t) => {
-  const response = await t.context.volt.disconnect();
+  const response = await t.context.kia.disconnect();
   t.deepEqual(
     _.xor(_.keys(response), [
       'status',

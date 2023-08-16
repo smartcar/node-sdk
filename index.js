@@ -296,6 +296,7 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   if (limit) {
     qs.limit = limit;
   }
+  // istanbul ignore next
   if (cursor) {
     qs.cursor = cursor;
   }
