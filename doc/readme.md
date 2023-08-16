@@ -102,6 +102,8 @@ the following fields :</p>
         * [~User](#module_smartcar..User) : <code>Object</code>
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
         * [~Compatibility](#module_smartcar..Compatibility) : <code>Object</code>
+        * [~GetConnections](#module_smartcar..GetConnections) ⇒ <code>GetConnections</code>
+        * [~DeleteConnections](#module_smartcar..DeleteConnections) ⇒ <code>DeleteConnections</code>
 
 <a name="module_smartcar.SmartcarError"></a>
 
@@ -321,6 +323,58 @@ Verify webhook payload with AMT and signature.
  }
 }
 ```
+<a name="module_smartcar..GetConnections"></a>
+
+### smartcar~GetConnections ⇒ <code>GetConnections</code>
+Returns a paged list of all the vehicles that are connected to the application associated
+with the management API token used sorted in descending order by connection date.
+
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amt | <code>String</code> | Application Management Token |
+| filter | <code>object</code> |  |
+| filter.userId | <code>String</code> |  |
+| filter.vehicleId | <code>String</code> |  |
+| paging | <code>object</code> |  |
+| paging.limit | <code>number</code> |  |
+| paging.cursor | <code>String</code> |  |
+
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| vehicleId | <code>String</code> |
+| userId | <code>String</code> |
+| connectedAt | <code>String</code> |
+| connections | <code>Array.&lt;Connection&gt;</code> |
+| [paging] | <code>Object</code> |
+| [paging.cursor] | <code>string</code> |
+
+<a name="module_smartcar..DeleteConnections"></a>
+
+### smartcar~DeleteConnections ⇒ <code>DeleteConnections</code>
+Deletes all the connections by vehicle or user ID and returns a
+list of all connections that were deleted.
+
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amt | <code>String</code> | Application Management Token |
+| filter | <code>object</code> |  |
+| filter.userId | <code>String</code> |  |
+| filter.vehicleId | <code>String</code> |  |
+
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| vehicleId | <code>String</code> |
+| userId | <code>String</code> |
+| connections | <code>Array.&lt;Connection&gt;</code> |
+
 <a name="AuthClient"></a>
 
 ## AuthClient
