@@ -87,6 +87,16 @@ helpers.runAuthFlow = async function(
   );
   await continueButton.click();
 
+  // Filter
+  if (brand === 'KIA') {
+    const brandInput = await driver.wait(
+      until.elementLocated(
+        By.css('input[id=brand-search]'),
+      ),
+    );
+    await brandInput.sendKeys(brand);
+  }
+
   // Brand Selector
   const brandButton = await driver.wait(
     until.elementLocated(

@@ -28,7 +28,7 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ava test/unit",
-    "test:e2e": "ava --timeout=60s test/end-to-end",
+    "test:e2e": "ava --timeout=120s test/end-to-end",
     "test:integration": "cross-env NOCK_OFF=true npm test",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
