@@ -12,6 +12,8 @@ test.before(async(t) => {
   const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
   const {accessToken} = await client.exchangeCode(code);
   const {vehicles} = await smartcar.getVehicles(accessToken);
+  const {id: userId} = await smartcar.getUser(accessToken);
+  t.context.userId = userId;
   t.context.accessToken = accessToken;
   t.context.connectedVehicles = vehicles;
 });
@@ -84,7 +86,7 @@ test('getCompatibility', async(t) => {
   t.truthy(_.every(teslaComp.capabilities, ['capable', true]));
 });
 
-test('getConnections', async(t) => {
+test.serial('getConnections - by vehicleId', async(t) => {
   const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
   const testVehicleId = t.context.connectedVehicles[0];
   const res = await smartcar.getConnections(amt, {vehicleId: testVehicleId});
@@ -92,10 +94,29 @@ test('getConnections', async(t) => {
   t.is(res.connections[0].vehicleId, testVehicleId);
 });
 
-test('deleteConnections', async(t) => {
+test.serial('getConnections - by userId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt, {userId: t.context.userId});
+  t.is(res.connections.length, t.context.connectedVehicles.length);
+  for (const connection of res.connections) {
+    t.is(connection.userId, t.context.userId);
+  }
+});
+
+test.serial('deleteConnections - by vehicleId', async(t) => {
   const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
   const testVehicleId = t.context.connectedVehicles[0];
   const res = await smartcar.deleteConnections(amt, {vehicleId: testVehicleId});
   t.is(res.connections.length, 1);
   t.is(res.connections[0].vehicleId, testVehicleId);
+});
+
+test.serial('deleteConnections - by userId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.deleteConnections(amt, {userId: t.context.userId});
+  // to account for serial test above
+  t.is(res.connections.length, t.context.connectedVehicles.length - 1);
+  for (const connection of res.connections) {
+    t.is(connection.userId, t.context.userId);
+  }
 });
