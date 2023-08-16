@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 'use strict';
 
@@ -302,13 +303,13 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   const response = await new SmartcarService({
     // eslint-disable-next-line max-len
     baseUrl:
-      util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+      `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
     auth: {
       user: 'default',
       pass: amt,
     },
     qs,
-  }).request('get', '/connections');
+  }).request('get', '/management/connections');
 
   return response;
 };
@@ -350,15 +351,14 @@ smartcar.deleteConnections = async function(amt, filter = {}) {
   }
 
   const response = await new SmartcarService({
-    // eslint-disable-next-line max-len
     baseUrl:
-      util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management,
+      `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
     auth: {
       user: 'default',
       pass: amt,
     },
     qs,
-  }).request('delete', '/connections');
+  }).request('delete', '/management/connections');
 
   return response;
 };
