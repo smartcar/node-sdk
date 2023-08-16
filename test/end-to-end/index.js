@@ -86,6 +86,14 @@ test('getCompatibility', async(t) => {
   t.truthy(_.every(teslaComp.capabilities, ['capable', true]));
 });
 
+test.serial('getConnections', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt);
+  t.truthy(res.connections[0].userId);
+  t.truthy(res.connections[0].vehicleId);
+  t.truthy(res.connections[0].connectedAt);
+});
+
 test.serial('getConnections - by vehicleId', async(t) => {
   const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
   const testVehicleId = t.context.connectedVehicles[0];

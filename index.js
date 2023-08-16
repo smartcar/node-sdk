@@ -334,7 +334,7 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
  * @param {String} filter.vehicleId
  * @returns {DeleteConnections}
  */
-smartcar.deleteConnections = async function(amt, filter = {}) {
+smartcar.deleteConnections = async function(amt, filter) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
   if (userId && vehicleId) {
     // eslint-disable-next-line max-len

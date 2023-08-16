@@ -270,6 +270,8 @@ test('handleError - SmartcarError V2 with all attrbutes', function(t) {
 });
 
 test('getManagementToken', function(t) {
-  const res = util.getManagementToken('amt', 'default');
+  const res = util.getManagementToken('amt');
   t.is(res, 'ZGVmYXVsdDphbXQ=');
+  const res2 = util.getManagementToken('amt', 'default');
+  t.is(res2, 'ZGVmYXVsdDphbXQ=');
 });
