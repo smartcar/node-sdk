@@ -4,14 +4,18 @@ const _ = require('lodash');
 const test = require('ava');
 
 const smartcar = require('../../');
+const util = require('../../lib/util');
 const {getAuthClientParams, runAuthFlow, DEFAULT_SCOPES} = require('./helpers');
 
 test.before(async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
   const {accessToken} = await client.exchangeCode(code);
+  const {vehicles} = await smartcar.getVehicles(accessToken);
+  const {id: userId} = await smartcar.getUser(accessToken);
+  t.context.userId = userId;
   t.context.accessToken = accessToken;
-  // t.context.accessToken = 'f14a1599-b5d9-4fe7-bff0-c890f837b7b4';
+  t.context.connectedVehicles = vehicles;
 });
 
 test('getVehicles', async(t) => {
@@ -80,4 +84,56 @@ test('getCompatibility', async(t) => {
   });
   t.truthy(_.every(audiComp.capabilities, ['capable', false]));
   t.truthy(_.every(teslaComp.capabilities, ['capable', true]));
+});
+
+test.serial('getConnections', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt);
+  t.truthy(res.connections[0].userId);
+  t.truthy(res.connections[0].vehicleId);
+  t.truthy(res.connections[0].connectedAt);
+});
+
+test.serial('getConnections - by vehicleId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const testVehicleId = t.context.connectedVehicles[0];
+  const res = await smartcar.getConnections(amt, {vehicleId: testVehicleId});
+  t.is(res.connections.length, 1);
+  t.is(res.connections[0].vehicleId, testVehicleId);
+});
+
+test.serial('getConnections - by userId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt, {userId: t.context.userId});
+  t.is(res.connections.length, t.context.connectedVehicles.length);
+  for (const connection of res.connections) {
+    t.is(connection.userId, t.context.userId);
+  }
+});
+
+test.serial('getConnections - by userId - limit 1', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.getConnections(amt,
+    {userId: t.context.userId},
+    {limit: 1},
+  );
+  t.is(res.connections.length, t.context.connectedVehicles.length);
+});
+
+test.serial('deleteConnections - by vehicleId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const testVehicleId = t.context.connectedVehicles[0];
+  const res = await smartcar.deleteConnections(amt, {vehicleId: testVehicleId});
+  t.is(res.connections.length, 1);
+  t.is(res.connections[0].vehicleId, testVehicleId);
+});
+
+test.serial('deleteConnections - by userId', async(t) => {
+  const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
+  const res = await smartcar.deleteConnections(amt, {userId: t.context.userId});
+  // to account for serial test above
+  t.is(res.connections.length, t.context.connectedVehicles.length - 1);
+  for (const connection of res.connections) {
+    t.is(connection.userId, t.context.userId);
+  }
 });
