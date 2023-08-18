@@ -40,7 +40,8 @@
     "bluebird": "^3.5.5",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "smartcar": "^9.5.0"
   },
   "devDependencies": {
     "ava": "^4.0.1",
