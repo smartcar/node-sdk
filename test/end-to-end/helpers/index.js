@@ -27,7 +27,6 @@ helpers.DEFAULT_SCOPES = [
   'required:read_location',
   'required:read_odometer',
   'required:control_security',
-  'required:read_security',
   'required:read_vin',
   'required:read_fuel',
   'required:read_battery',
