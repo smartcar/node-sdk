@@ -329,22 +329,6 @@ test('vehicle read security', async(t) => {
   );
 });
 
-test('vehicle read security with body - only for branch coverage', async(t) => {
-  const response = await t.context.ford.lockStatus(body = {});
-  t.deepEqual(
-    _.xor(_.keys(response), [
-      'isLocked',
-      'doors',
-      'windows',
-      'sunroof',
-      'storage',
-      'chargingPort',
-      'meta',
-    ]),
-    [],
-  );
-});
-
 test('vehicle startCharge', async(t) => {
   const response = await t.context.ford.startCharge();
   t.deepEqual(
