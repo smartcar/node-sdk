@@ -25,6 +25,7 @@ test.before(async(t) => {
     getVehicle('FORD', [
       'required:control_charge',
       'required:control_security',
+      'required:read_security',
     ]),
     getVehicle('KIA', [
       'required:read_charge',
@@ -312,6 +313,22 @@ test('vehicle unlock', async(t) => {
   t.is(response.meta.requestId.length, 36);
 });
 
+test('vehicle read security', async(t) => {
+  const response = await t.context.ford.lockStatus();
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'isLocked',
+      'doors',
+      'windows',
+      'sunroof',
+      'storage',
+      'chargingPort',
+      'meta',
+    ]),
+    [],
+  );
+});
+
 test('vehicle startCharge', async(t) => {
   const response = await t.context.ford.startCharge();
   t.deepEqual(
@@ -375,6 +392,26 @@ test('vehicle batch', async(t) => {
   t.truthy(typeof location.latitude === 'number');
   t.truthy(location.meta.dataAge instanceof Date);
   t.is(location.meta.requestId.length, 36);
+});
+
+test('vehicle batch - security', async(t) => {
+  const response = await t.context.ford.batch([
+    '/security',
+  ]);
+
+  const security = response.security();
+  t.deepEqual(
+    _.xor(_.keys(security), [
+      'isLocked',
+      'doors',
+      'windows',
+      'sunroof',
+      'storage',
+      'chargingPort',
+      'meta',
+    ]),
+    [],
+  );
 });
 
 test('vehicle request - odometer', async(t) => {
