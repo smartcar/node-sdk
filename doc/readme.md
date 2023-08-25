@@ -628,7 +628,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>ActionResponse</code>](#ActionResponse)
-    * [.lockStatus()](#Vehicle+lockStatus) ⇒ <code>LockStatus</code>
+    * [.security()](#Vehicle+security) ⇒ [<code>SecurityResponse</code>](#SecurityResponse)
 
 <a name="new_Vehicle_new"></a>
 
@@ -983,9 +983,9 @@ to make requests to it again.
   for all possible errors.
 
 **See**: [Smartcar API Doc - Disconnect](https://smartcar.com/docs/api#delete-disconnect)
-<a name="Vehicle+lockStatus"></a>
+<a name="Vehicle+security"></a>
 
-### vehicle.lockStatus() ⇒ <code>LockStatus</code>
+### vehicle.security() ⇒ [<code>SecurityResponse</code>](#SecurityResponse)
 Returns the lock status of the vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -995,7 +995,7 @@ Returns the lock status of the vehicle.
   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
   for all possible errors.
 
-**See**: [Smartcar API Doc - Lock Status](https://smartcar.com/docs/api#get-security)
+**See**: [Smartcar API Doc - Security](https://smartcar.com/docs/api#get-security)
 <a name="METHODS_MAP"></a>
 
 ## METHODS\_MAP : <code>object.&lt;String, Object&gt;</code>

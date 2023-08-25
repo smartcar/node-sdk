@@ -399,9 +399,9 @@ test('vehicle batch - security', async(t) => {
     '/security',
   ]);
 
-  const lockStatus = response.lockStatus();
+  const security = response.security();
   t.deepEqual(
-    _.xor(_.keys(lockStatus), [
+    _.xor(_.keys(security), [
       'isLocked',
       'doors',
       'windows',
