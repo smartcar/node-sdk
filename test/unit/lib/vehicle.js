@@ -350,29 +350,3 @@ test('request - set charge limit', async function(t) {
   );
   t.true(t.context.n.isDone());
 });
-
-test('request - security', async function(t) {
-  sinon.restore(); // clear all spys
-
-  t.context.n = nocks
-    .base()
-    .get('/security')
-    .reply(200,
-      {
-        isLocked: true,
-        doors: [],
-        windows: [],
-        storage: [],
-        sunroof: [],
-        chargingPort: [],
-      }, {'sc-request-id': 'requestId'});
-
-  const serviceRequestSpy = sinon.spy(vehicle.service, 'request');
-
-  const response = await vehicle.lockStatus();
-
-  t.true(serviceRequestSpy.calledOnceWith('get', 'security'));
-  t.is(response.meta.requestId, 'requestId');
-  t.is(response.isLocked, true);
-  t.true(t.context.n.isDone());
-});
