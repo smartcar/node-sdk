@@ -74,6 +74,8 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Odometer">Odometer</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#SecurityResponse">SecurityResponse</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Location">Location</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Attributes">Attributes</a> : <code>Object</code></dt>
@@ -626,6 +628,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.startCharge()](#Vehicle+startCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+    * [.lockStatus()](#Vehicle+lockStatus) ⇒ <code>LockStatus</code>
 
 <a name="new_Vehicle_new"></a>
 
@@ -980,6 +983,19 @@ to make requests to it again.
   for all possible errors.
 
 **See**: [Smartcar API Doc - Disconnect](https://smartcar.com/docs/api#delete-disconnect)
+<a name="Vehicle+lockStatus"></a>
+
+### vehicle.lockStatus() ⇒ <code>LockStatus</code>
+Returns the lock status of the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - Lock Status](https://smartcar.com/docs/api#get-security)
 <a name="METHODS_MAP"></a>
 
 ## METHODS\_MAP : <code>object.&lt;String, Object&gt;</code>
@@ -1315,6 +1331,90 @@ the following fields :
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
+}
+```
+<a name="SecurityResponse"></a>
+
+## SecurityResponse : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| isLocked | <code>Boolean</code> | Whether the vehicle is locked or not. |
+| doors | <code>Array</code> | The status of each of the vehicle's doors. |
+| windows | <code>Array</code> | The status of each of the vehicle's windows. |
+| sunroof | <code>Array</code> | The status of each of the vehicle's sunroof. |
+| storage | <code>Array</code> | The status of each of the vehicle's storage. |
+| chargingPort | <code>Array</code> | The status of each of the vehicle's chargingPort. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+   isLocked: true,
+   doors: [
+      {
+          type: 'frontLeft',
+          status: 'LOCKED',
+      },
+      {
+          type: 'frontRight',
+          status: 'LOCKED',
+      },
+      {
+          type: 'backLeft',
+          status: 'LOCKED',
+      },
+      {
+          type: 'backRight',
+          status: 'LOCKED',
+      },
+   ],
+   windows: [
+      {
+          type: 'frontLeft',
+          status: 'CLOSED',
+      },
+      {
+          type: 'frontRight',
+          status: 'CLOSED',
+      },
+      {
+          type: 'backLeft',
+          status: 'CLOSED',
+      },
+      {
+          type: 'backRight',
+          status: 'CLOSED',
+      },
+   ],
+   sunroof: [
+      {
+          type: 'sunroof',
+          status: 'CLOSED',
+      },
+   ],
+   storage: [
+      {
+          type: 'rear',
+          status: 'CLOSED',
+      },
+      {
+          type: 'front',
+          status: 'CLOSED',
+      },
+   ],
+   chargingPort: [
+      {
+          type: 'chargingPort',
+          status: 'CLOSED',
+      },
+   ],
+   meta: {
+       dataAge: new Date('2018-05-04T07:20:50.844Z'),
+       requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   },
 }
 ```
 <a name="Location"></a>
