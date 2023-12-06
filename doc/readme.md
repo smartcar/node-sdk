@@ -718,7 +718,7 @@ Set the charge limit for an electric vehicle.
 ### vehicle.sendDestination(latitude, longitude) ⇒ <code>Response</code>
 Send a destination to the vehicle's navigation system.
 
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)  
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
 **Throws**:
 
 - [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
