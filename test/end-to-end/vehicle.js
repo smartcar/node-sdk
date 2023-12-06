@@ -519,6 +519,33 @@ test('vehicle request - send destination', async(t) => {
   t.is(response.status, 'success');
 });
 
+test('vehicle request - send invalid coordinates', async(t) => {
+  // Array of invalid latitude and longitude values
+  const invalidCoordinates = [
+    {lat: 100, lon: -122.4194}, // Latitude out of range (> 90)
+    {lat: -91, lon: -122.4194}, // Latitude out of range (< -90)
+    {lat: 37.7749, lon: 200}, // Longitude out of range (> 180)
+    {lat: 37.7749, lon: -181}, // Longitude out of range (< -180)
+  ];
+
+  for (const {lat, lon} of invalidCoordinates) {
+    // eslint-disable-next-line no-await-in-loop
+    const error = await t.throwsAsync(
+      t.context.ford.sendDestination(lat, lon),
+      {instanceOf: Error},
+    );
+
+    // Check that the error message is correct based on the invalid input
+    if (lat < -90 || lat > 90) {
+      // eslint-disable-next-line max-len
+      t.is(error.message, 'Invalid latitude value. It must be between -90 and 90.');
+    } else if (lon < -180 || lon > 180) {
+      // eslint-disable-next-line max-len
+      t.is(error.message, 'Invalid longitude value. It must be between -180 and 180.');
+    }
+  }
+});
+
 
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.kia.disconnect();
