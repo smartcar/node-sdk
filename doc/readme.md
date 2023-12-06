@@ -1001,7 +1001,7 @@ Returns the lock status of the vehicle.
 
 <a name="Vehicle+sendDestination"></a>
 
-### vehicle.sendDestination(latitude, longitude) ⇒ <code>Response</code>
+### vehicle.sendDestination(latitude, longitude) ⇒ [<code>ActionResponse</code>](#ActionResponse)
 Send a destination to the vehicle's navigation system.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
