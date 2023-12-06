@@ -609,6 +609,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
     * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+    * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Object</code>
     * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Meta</code>](#Meta)
     * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Batch</code>](#Batch)
@@ -711,6 +712,34 @@ Set the charge limit for an electric vehicle.
   }
 }
 ```
+<a name="Vehicle+sendDestination"></a>
+
+### vehicle.sendDestination(latitude, longitude) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+Send a destination to the vehicle's navigation system.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>ActionResponse</code>](#ActionResponse) - - A Response object containing the status and metadata.
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - An instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| latitude | <code>number</code> | Latitude of the destination. Must be a valid latitude                            value between -90 and 90 (inclusive). |
+| longitude | <code>number</code> | Longitude of the destination. Must be a valid longitude                             value between -180 and 180 (inclusive). |
+
+**Example**
+```js
+{
+  status: string,
+  meta: {
+    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
 <a name="Vehicle+subscribe"></a>
 
 ### vehicle.subscribe(webhookId) ⇒ <code>Object</code>
@@ -782,7 +811,7 @@ General purpose method to make a request to a Smartcar endpoint.
 | method | <code>String</code> | The HTTP request method to use. |
 | path | <code>String</code> | The path to make the request to. |
 | body | <code>Object</code> | The request body. |
-| headers | <code>Object</code> | The headers to inlcude in the request. |
+| headers | <code>Object</code> | The headers to include in the request. |
 
 <a name="Vehicle+vin"></a>
 
@@ -1278,7 +1307,7 @@ the following fields :
 **Example**
 ```js
 {
-  frontleft: 33,
+  frontLeft: 33,
   frontRight: 34,
   backLeft: 34,
   backRight: 33
