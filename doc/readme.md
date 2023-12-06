@@ -713,33 +713,6 @@ Set the charge limit for an electric vehicle.
 }
 ```
 
-<a name="Vehicle+sendDestination"></a>
-
-### vehicle.sendDestination(latitude, longitude) ⇒ <code>Response</code>
-Send a destination to the vehicle's navigation system.
-
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Throws**:
-
-- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
-  for all possible errors.
-
-| Param | Type | Description |
-| --- | --- | --- |
-| latitude | <code>number</code> | Latitude of the destination. Must be a valid latitude value between -90 and 90 (inclusive). |
-| longitude | <code>number</code> | Longitude of the destination. Must be a valid longitude value between -180 and 180 (inclusive). |
-
-**Example**
-```js
-{
-  status: string,
-  meta: {
-    requestId: '34b281a2-7e58-4645-bb91-4c9e4b7e8bfe',
-  }
-}
-```
-
 <a name="Vehicle+subscribe"></a>
 
 ### vehicle.subscribe(webhookId) ⇒ <code>Object</code>
@@ -1025,6 +998,34 @@ Returns the lock status of the vehicle.
   for all possible errors.
 
 **See**: [Smartcar API Doc - Lock Status](https://smartcar.com/docs/api#get-security)
+
+<a name="Vehicle+sendDestination"></a>
+
+### vehicle.sendDestination(latitude, longitude) ⇒ <code>Response</code>
+Send a destination to the vehicle's navigation system.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| latitude | <code>number</code> | Latitude of the destination. Must be a valid latitude value between -90 and 90 (inclusive). |
+| longitude | <code>number</code> | Longitude of the destination. Must be a valid longitude value between -180 and 180 (inclusive). |
+
+**Example**
+```js
+{
+  status: string,
+  meta: {
+    requestId: '34b281a2-7e58-4645-bb91-4c9e4b7e8bfe',
+  }
+}
+```
+
 <a name="METHODS_MAP"></a>
 
 ## METHODS\_MAP : <code>object.&lt;String, Object&gt;</code>
