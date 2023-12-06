@@ -31,7 +31,7 @@ test('handleError - SmartcarError V2 resolution string', async function(t) {
   t.true(error instanceof SmartcarError);
   t.is(error.statusCode, 409);
   t.is(error.resolution.type, 'RETRY_LATER');
-  t.is(error.docURL, 'https://smartcar.com/docs/errors/v2.0/vehicle-state/#unknown');
+  t.is(error.docURL, 'https://smartcar.com/docs/errors/api-errors/vehicle-state-errors#unknown');
   t.is(error.description, description);
   t.is(error.type, 'VEHICLE_STATE');
   t.is(error.code, 'UNKNOWN');
@@ -52,7 +52,7 @@ test('handleError - SmartcarError V2 resolution null', async function(t) {
   t.true(error instanceof SmartcarError);
   t.is(error.statusCode, 400);
   t.is(error.resolution.type, null);
-  t.is(error.docURL, 'https://smartcar.com/docs/errors/v2.0/connected-services-account/#vehicle_missing');
+  t.is(error.docURL, 'https://smartcar.com/docs/errors/api-errors/connected-services-account-errors#vehicle-missing');
   t.is(error.description, description);
   t.is(error.type, 'CONNECTED_SERVICES_ACCOUNT');
   t.is(error.code, 'VEHICLE_MISSING');
@@ -90,7 +90,7 @@ test('handleError - SmartcarError V2 code null', async function(t) {
   t.true(error instanceof SmartcarError);
   t.is(error.statusCode, 403);
   t.is(error.resolution.type, 'REAUTHENTICATE');
-  t.is(error.docURL, 'https://smartcar.com/docs/errors/v2.0/other-errors/#permission');
+  t.is(error.docURL, 'https://smartcar.com/docs/errors/api-errors/permission-errors#null');
   t.is(error.description, description);
   t.is(error.type, 'PERMISSION');
   t.is(error.code, undefined);

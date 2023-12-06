@@ -26,6 +26,7 @@ test.before(async(t) => {
       'required:control_charge',
       'required:control_security',
       'required:read_security',
+      'required:control_navigation',
     ]),
     getVehicle('KIA', [
       'required:read_charge',
@@ -494,7 +495,7 @@ test('vehicle request - override auth header', async(t) => {
     t.is(err.statusCode, 401);
     t.is(err.type, 'AUTHENTICATION');
     t.is(err.description, errorMessage);
-    t.is(err.docURL, 'https://smartcar.com/docs/errors/v2.0/other-errors/#authentication');
+    t.is(err.docURL, 'https://smartcar.com/docs/errors/api-errors/authentication-errors#null');
   });
 });
 
@@ -509,6 +510,15 @@ test('vehicle request - set charge limit', async(t) => {
 
   t.is(response.status, 'success');
 });
+
+test('vehicle request - send destination', async(t) => {
+  const latitude = 37.7749;
+  const longitude = -122.4194;
+
+  const response = await t.context.ford.sendDestination(latitude, longitude);
+  t.is(response.status, 'success');
+});
+
 
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.kia.disconnect();
