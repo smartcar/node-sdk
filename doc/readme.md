@@ -629,7 +629,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.stopCharge()](#Vehicle+stopCharge) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.disconnect()](#Vehicle+disconnect) ⇒ [<code>ActionResponse</code>](#ActionResponse)
     * [.lockStatus()](#Vehicle+lockStatus) ⇒ <code>LockStatus</code>
-    * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>SendDestination</code>](#SendDestination)
+    * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>Response</code>](#Response)
 
 <a name="new_Vehicle_new"></a>
 
