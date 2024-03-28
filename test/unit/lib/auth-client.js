@@ -228,14 +228,10 @@ test('getAuthUrl - user', function(t) {
     redirectUri: 'https://insurance.co/callback',
   });
 
-  const singleSelect = {
-    vin: '01234567890123',
-  };
-
   const actual = client.getAuthUrl(['read_odometer', 'read_vehicle_info'], {
     state: 'fakestate',
     forcePrompt: true,
-    user: 'test-user-param'
+    user: 'test-user-param',
   });
 
 
