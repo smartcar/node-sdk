@@ -221,6 +221,36 @@ test('getAuthUrl - single select vin', function(t) {
   t.is(actual, expected);
 });
 
+test('getAuthUrl - user', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+  });
+
+  const singleSelect = {
+    vin: '01234567890123',
+  };
+
+  const actual = client.getAuthUrl(['read_odometer', 'read_vehicle_info'], {
+    state: 'fakestate',
+    forcePrompt: true,
+    user: 'test-user-param'
+  });
+
+
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&state=fakestate';
+  expected += '&user=test-user-param';
+  expected += '&mode=live';
+
+  t.is(actual, expected);
+});
+
 test('exchangeCode', async function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
