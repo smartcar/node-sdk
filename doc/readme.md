@@ -425,6 +425,7 @@ approval_prompt to `force`.
 | [options.state] | <code>String</code> | OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
 | [options.makeBypass] | <code>Object</code> | An optional parameter that allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
+| [options.user] | <code>String</code> | An optional unique identifier for a vehicle owner. This identifier is used to aggregate analytics across Connect sessions for each vehicle owner. |
 
 **Example**
 ```js
@@ -438,6 +439,7 @@ response_type=code
 &single_select=true
 &single_select_vin=5YJSA1E14FF101307
 &flags=country:DE color:00819D
+&user=61a3e3d2-5198-47ba-aabd-4623ce4a4042
 ```
 <a name="AuthClient+exchangeCode"></a>
 
