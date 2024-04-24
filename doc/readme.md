@@ -501,7 +501,6 @@ of all the possible error types and codes of both v2.0 and v1.0 requests.
     * [.docURL](#SmartcarError.docURL) : <code>string</code>
     * [.details](#SmartcarError.details) : <code>Array.&lt;object&gt;</code>
     * [.Resolution](#SmartcarError.Resolution) : <code>Object</code>
-    * [.suggestedUserMessage](#SmartcarError.suggestedUserMessage) : <code>string</code>
 
 <a name="new_SmartcarError_new"></a>
 
