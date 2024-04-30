@@ -305,10 +305,15 @@ test('request - rate limit', async function(t) {
   )
     .matchHeader('Authorization', `Bearer ${TOKEN}`)
     .get('/odometer')
-    .reply(429, {error: 'RATE_LIMIT'}, {'retry-after': retryAfter});
+    .reply(429, {
+      error: 'RATE_LIMIT',
+      suggestedUserMessage: 'This just will not do',
+    },
+    {'retry-after': retryAfter});
 
   const error = await t.throwsAsync(vehicle.odometer());
   t.is(error.retryAfter, String(retryAfter));
+  t.is(error.suggestedUserMessage, 'This just will not do');
 });
 
 test('request - get charge limit', async function(t) {
