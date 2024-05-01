@@ -13,6 +13,8 @@ const helpers = {};
 const HEADLESS = isCI || process.env.HEADLESS;
 const CLIENT_ID = process.env.E2E_SMARTCAR_CLIENT_ID;
 const CLIENT_SECRET = process.env.E2E_SMARTCAR_CLIENT_SECRET;
+const BROWSER = process.env.BROWSER || 'firefox';
+
 /* eslint-enable */
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
@@ -74,7 +76,7 @@ helpers.runAuthFlow = async function(
   const driver = new Builder()
     .setChromeOptions(chromeOptions)
     .setFirefoxOptions(firefoxOptions)
-    .forBrowser('firefox')
+    .forBrowser(BROWSER)
     .build();
 
   await driver.get(authUrl);

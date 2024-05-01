@@ -144,6 +144,8 @@ Note: In order to run tests locally the following environment variables would ha
 - `E2E_SMARTCAR_CLIENT_SECRET` - Client secret to be used.
 - `E2E_SMARTCAR_AMT` - AMT from dashboard for webhooks tests.
 - `E2E_SMARTCAR_WEBHOOK_ID` - Webhook ID use in the webhook tests success case.
+- `BROWSER` - Web browser for tests (`chrome` or `firefox`, default: `firefox`).
+
 
 Your application needs to have https://example.com/auth set as a valid redirect URI
 
