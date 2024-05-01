@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Smartcar Node SDK <a href="https://travis-ci.com/smartcar/node-sdk"><img src="https://travis-ci.com/smartcar/node-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&amp;branch=master" alt="Build Status"></a> <a href="https://badge.fury.io/js/smartcar"><img src="https://badge.fury.io/js/smartcar.svg" alt="npm version"></a></h1>
+<p>The official Smartcar Node SDK.</p>
+<h2>Overview</h2>
+<p>The <a href="https://smartcar.com/docs">Smartcar API</a> lets you read vehicle data
+(location, odometer) and send commands to vehicles (lock, unlock) using HTTP requests.</p>
+<p>To make requests to a vehicle from a web or mobile application, the end user
+must connect their vehicle using
+<a href="https://smartcar.com/docs/api#smartcar-connect">Smartcar Connect</a>.
+This flow follows the OAuth spec and will return a <code>code</code> which can be used to
+obtain an access token from Smartcar.</p>
+<p>The Smartcar Node SDK provides methods to:</p>
+<ol>
+<li>Generate the link to redirect to Connect.</li>
+<li>Make a request to Smartcar with the <code>code</code> obtained from Connect to obtain an
+access and refresh token</li>
+<li>Make requests to the Smartcar API to read vehicle data and send commands to
+vehicles using the access token obtained in step 2.</li>
+</ol>
+<p>Before integrating with Smartcar's SDK, you'll need to register an application
+in the <a href="https://developer.smartcar.com">Smartcar Developer portal</a>. If you do
+not have access to the dashboard, please
+<a href="https://smartcar.com/subscribe">request access</a>.</p>
+<h3>Flow</h3>
+<ul>
+<li>Create a new <code>AuthClient</code> object with your <code>clientId</code>, <code>clientSecret</code>,
+<code>redirectUri</code>.</li>
+<li>Redirect the user to Smartcar Connect using <code>getAuthUrl</code> with required <code>scope</code> or with one
+of our frontend SDKs.</li>
+<li>The user will login, and then accept or deny your <code>scope</code>'s permissions.</li>
+<li>Handle the get request to <code>redirectUri</code>.
+<ul>
+<li>If the user accepted your permissions, <code>req.query.code</code> will contain an
+authorization code.
+<ul>
+<li>Use <code>exchangeCode</code> with this code to obtain an access object
+containing an access token (lasting 2 hours) and a refresh token
+(lasting 60 days).
+<ul>
+<li>Save this access object.</li>
+</ul>
+</li>
+<li>If the user denied your permissions, <code>req.query.error</code> will be set
+to <code>&quot;access_denied&quot;</code>.</li>
+<li>If you passed a state parameter to <code>getAuthUrl</code>, <code>req.query.state</code> will
+contain the state value.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Get the user's vehicles with <code>getVehicles</code>.</li>
+<li>Create a new <code>Vehicle</code> object using a <code>vehicleId</code> from the previous response,
+and the <code>access_token</code>.</li>
+<li>Make requests to the Smartcar API.</li>
+<li>Use <code>exchangeRefreshToken</code> on your saved <code>refreshToken</code> to retrieve a new token
+when your <code>accessToken</code> expires.</li>
+</ul>
+<h3>Installation</h3>
+<pre class="prettyprint source lang-shell"><code>npm install smartcar --save
+</code></pre>
+<h3>Example</h3>
+<pre class="prettyprint source lang-javascript"><code>'use strict';
+
+const smartcar = require('smartcar');
+const express = require('express');
+
+const app = express();
+
+const port = 4000;
+
+const client = new smartcar.AuthClient({
+  clientId: '&lt;Smartcar Client Id>', // fallback to SMARTCAR_CLIENT_ID ENV variable
+  clientSecret: '&lt;Smartcar Client Secret>', // fallback to SMARTCAR_CLIENT_SECRET ENV variable
+  redirectUri: '&lt;Your callback URI>', // fallback to SMARTCAR_REDIRECT_URI ENV variable
+  mode: 'test', // launch Smartcar Connect in test mode
+});
+
+// Redirect to Smartcar Connect
+app.get('/login', function(req, res) {
+  const link = client.getAuthUrl(['read_vehicle_info']);
+
+  // redirect to the link
+  res.redirect(link);
+});
+
+// Handle Smartcar callback with auth code
+app.get('/callback', async function(req, res, next) {
+  let access;
+
+  if (req.query.error) {
+    // the user denied your requested permissions
+    return next(new Error(req.query.error));
+  }
+
+  // exchange auth code for access token
+  const tokens = await client.exchangeCode(req.query.code);
+  // get the user's vehicles
+  const vehicles = await smartcar.getVehicles(tokens.accessToken);
+  // instantiate first vehicle in vehicle list
+  const vehicle = new smartcar.Vehicle(
+    vehicles.vehicles[0],
+    tokens.accessToken
+  );
+  // get identifying information about a vehicle
+  const attributes = await vehicle.attributes();
+  console.log(attributes);
+  // {
+  //   &quot;id&quot;: &quot;36ab27d0-fd9d-4455-823a-ce30af709ffc&quot;,
+  //   &quot;make&quot;: &quot;TESLA&quot;,
+  //   &quot;model&quot;: &quot;Model S&quot;,
+  //   &quot;year&quot;: 2014
+  //   &quot;meta&quot;: {
+  //     &quot;requestId&quot;: &quot;ada7207c-3c0a-4027-a47f-6215ce6f7b93&quot;
+  //   }
+  // }
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+</code></pre>
+<h2>SDK Reference</h2>
+<p>For detailed documentation on parameters and available methods, please refer to
+the <a href="doc/readme.md">SDK Reference</a>.</p>
+<h2>Contributing</h2>
+<p>To contribute, please:</p>
+<ol>
+<li>Open an issue for the feature (or bug) you would like to resolve.</li>
+<li>Resolve the issue and add tests in your feature branch.</li>
+<li>Open a PR from your feature branch into <code>develop</code> that tags the issue.</li>
+</ol>
+<p>To test:</p>
+<pre class="prettyprint source lang-shell"><code>npm run test
+</code></pre>
+<p>Note: In order to run tests locally the following environment variables would have to be set :</p>
+<ul>
+<li><code>E2E_SMARTCAR_CLIENT_ID</code> - Client ID to be used.</li>
+<li><code>E2E_SMARTCAR_CLIENT_SECRET</code> - Client secret to be used.</li>
+<li><code>E2E_SMARTCAR_AMT</code> - AMT from dashboard for webhooks tests.</li>
+<li><code>E2E_SMARTCAR_WEBHOOK_ID</code> - Webhook ID use in the webhook tests success case.</li>
+<li><code>BROWSER</code> - Web browser for tests (<code>chrome</code> or <code>firefox</code>, default: <code>firefox</code>).</li>
+</ul>
+<p>Your application needs to have https://example.com/auth set as a valid redirect URI</p>
+<h2>Supported Node.js Versions</h2>
+<p>Smartcar aims to support the SDK on all Node.js versions that have a status of &quot;Maintenance&quot; or &quot;Active LTS&quot; as defined in the <a href="https://github.com/nodejs/Release#release-schedule">Node.js Release schedule</a>.</p>
+<p>In accordance with the Semantic Versioning specification, the addition of support for new Node.js versions would result in a MINOR version bump and the removal of support for Node.js versions would result in a MAJOR version bump.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-smartcar.html">smartcar</a></li></ul><h3>Classes</h3><ul><li><a href="AuthClient.html">AuthClient</a></li><li><a href="SmartcarError.html">SmartcarError</a></li><li><a href="SmartcarService.html">SmartcarService</a></li><li><a href="Vehicle.html">Vehicle</a></li></ul><h3>Global</h3><ul><li><a href="global.html#METHODS_MAP">METHODS_MAP</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed May 01 2024 17:02:31 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

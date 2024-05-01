@@ -511,6 +511,13 @@ test('vehicle request - set charge limit', async(t) => {
   t.is(response.status, 'success');
 });
 
+test('vehicle request - service history', async(t) => {
+  const startDate = '2023-05-20';
+  const endDate = '2024-02-10';
+  const response = await t.context.ford.serviceHistory(startDate, endDate);
+  t.is(response.status, 'success');
+});
+
 test('vehicle request - send destination', async(t) => {
   const latitude = 37.7749;
   const longitude = -122.4194;
