@@ -48,6 +48,8 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Permissions">Permissions</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#ServiceHistory">ServiceHistory</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#ChargeLimit">ChargeLimit</a></dt>
 <dd></dd>
 <dt><a href="#WebhookSubscription">WebhookSubscription</a> : <code>Object</code></dt>
@@ -609,6 +611,7 @@ Initializes a new Service object to make requests to the Smartcar API.
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
+    * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
     * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>ActionResponse</code>](#ActionResponse)
@@ -666,6 +669,25 @@ Fetch the list of permissions that this application has been granted
 | [paging] | <code>Object</code> |  |
 | [paging.limit] | <code>String</code> | number of permissions to return |
 | [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
+
+<a name="Vehicle+serviceHistory"></a>
+
+### vehicle.serviceHistory([startDate], [endDate]) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
+Returns a list of all the service records performed on the vehicle,
+filtered by the optional date range. If no dates are specified, records from the
+last year are returned.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError. See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+
+**See**: [Smartcar API Doc - Vehicle Service History](https://smartcar.com/docs/api#get-vehicle-service-history)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [startDate] | <code>String</code> | The start date for the record filter, either in 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM:SS.SSSZ' format. |
+| [endDate] | <code>String</code> | The end date for the record filter, similar format to startDate. |
 
 <a name="Vehicle+getChargeLimit"></a>
 
@@ -1086,6 +1108,51 @@ the following fields :
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
 }
+```
+<a name="ServiceHistory"></a>
+
+## ServiceHistory : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| serviceID | <code>Number</code> \| <code>null</code> | The unique identifier for the service record, or null if not available. |
+| serviceDate | <code>String</code> | The date and time the service was performed. |
+| odometerDistance | <code>Number</code> | The odometer reading at the time of service, in miles or kilometers based on the unit system. |
+| serviceTasks | <code>Array.&lt;ServiceTask&gt;</code> | A list of tasks performed during the service. |
+| serviceDetails | <code>ServiceDetails</code> | Details about the service provider and the type of service. |
+| serviceCost | <code>ServiceCost</code> | The cost of the service with currency. |
+| meta | [<code>Meta</code>](#Meta) | Metadata related to the service record. |
+
+**Example**
+```js
+[
+  {
+    serviceId: 12345,
+    serviceDate: "2022-07-10T16:20:00.000Z",
+    odometerDistance: 50000,
+    serviceTasks: [
+      {
+        taskId: 01,
+        taskDescription: "oil change"
+      }
+    ],
+    serviceDetails: {
+      type: "dealership"  // "manual_entry" could be another possible value
+    },
+    serviceCost: {
+      totalCost: 100,
+      currency: 'USD'
+    },
+    meta: {
+      dataAge: new Date('2023-04-30T07:20:50.844Z'),
+      unitSystem: 'imperial',
+      requestId: 'b3c14915-0c26-43c5-8e42-9edfc2a66b2f'
+    }
+  }
+  // ... additional service records
+]
 ```
 <a name="ChargeLimit"></a>
 
