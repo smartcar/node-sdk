@@ -27,6 +27,7 @@ test.before(async(t) => {
       'required:control_security',
       'required:read_security',
       'required:control_navigation',
+      'required:read_service_history',
     ]),
     getVehicle('KIA', [
       'required:read_charge',
@@ -509,6 +510,13 @@ test('vehicle request - set charge limit', async(t) => {
   const response = await t.context.kia.setChargeLimit(0.9);
 
   t.is(response.status, 'success');
+});
+
+test('vehicle request - service history', async(t) => {
+  const startDate = '2023-05-20';
+  const endDate = '2024-02-10';
+  const response = await t.context.ford.serviceHistory(startDate, endDate);
+  t.true(Array.isArray(response.data));
 });
 
 test('vehicle request - send destination', async(t) => {
