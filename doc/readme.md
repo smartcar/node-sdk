@@ -48,6 +48,10 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Permissions">Permissions</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#DiagnosticSystemStatus">DiagnosticSystemStatus</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticTroubleCodes">DiagnosticTroubleCodes</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#ServiceHistory">ServiceHistory</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#ChargeLimit">ChargeLimit</a></dt>
@@ -611,6 +615,8 @@ Initializes a new Service object to make requests to the Smartcar API.
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
+    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>DiagnosticSystemStatus</code>](#DiagnosticSystemStatus)
+    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>DiagnosticTroubleCodes</code>](#DiagnosticTroubleCodes)
     * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
     * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
@@ -669,6 +675,29 @@ Fetch the list of permissions that this application has been granted
 | [paging] | <code>Object</code> |  |
 | [paging.limit] | <code>String</code> | number of permissions to return |
 | [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
+### vehicle.diagnosticSystemStatus() ⇒ [<code>DiagnosticSystemStatus</code>](#DiagnosticSystemStatus)
+Fetches diagnostic system status information for the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)  
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.  
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+
+**See**: [Smartcar API Doc - Diagnostic System Status](https://smartcar.com/docs/api#get-diagnostic-system-status)
+<a name="Vehicle+diagnosticSystemStatus"></a>
+
+### vehicle.diagnosticTroubleCodes() ⇒ [<code>DiagnosticTroubleCodes</code>](#DiagnosticTroubleCodes)
+Fetches active diagnostic trouble codes (DTCs) for the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)  
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.  
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+
+**See**: [Smartcar API Doc - Diagnostic Trouble Codes](https://smartcar.com/docs/api#get-diagnostic-trouble-codes)
+<a name="Vehicle+diagnosticTroubleCodes"></a>
 
 <a name="Vehicle+serviceHistory"></a>
 
@@ -1106,6 +1135,73 @@ the following fields :
   },
   meta: {
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="DiagnosticSystemStatus"></a>
+
+## DiagnosticSystemStatus : <code>Object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| systems   | <code>Array</code>             | An array of diagnostic system statuses.         |
+| meta      | [<code>Meta</code>](#Meta)     | Metadata about the request.                     |
+
+**Example**
+```js
+{
+  systems: [
+    {
+      systemId: "SYSTEM_TPMS",
+      status: "ALERT",
+      description: "Left rear tire sensor battery low"
+    },
+    {
+      systemId: "SYSTEM_AIRBAG",
+      status: "OK",
+      description: null
+    },
+    {
+      systemId: "SYSTEM_ABS",
+      status: "ALERT",
+      description: null
+    },
+  ],
+  meta: {
+    dataAge: new Date('2018-05-04T07:20:50.844Z'),
+    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+  }
+}
+```
+<a name="DiagnosticTroubleCodes"></a>
+
+## DiagnosticTroubleCodes : <code>Object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| activeCodes  | <code>Array</code>          | An array of active diagnostic trouble codes. |
+| meta         | [<code>Meta</code>](#Meta)  | Metadata about the request.                  |
+
+**Example**
+```js
+{
+  activeCodes: [
+    {
+      code: "P302D",
+      timestamp: "2024-09-05T14:48:00.000Z"
+    },
+    {
+      code: "P303D",
+      timestamp: null
+    },
+  ],
+  meta: {
+    dataAge: new Date('2018-05-04T07:20:50.844Z'),
+    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
 }
 ```
