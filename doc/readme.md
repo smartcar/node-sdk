@@ -50,7 +50,11 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#DiagnosticSystemStatus">DiagnosticSystemStatus</a> : <code>Object</code></dt>
 <dd></dd>
-<dt><a href="#DiagnosticTroubleCodes">DiagnosticTroubleCodes</a> : <code>Object</code></dt>
+<dt><a href="#DiagnosticSystemStatusResponse">DiagnosticSystemStatusResponse</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticTroubleCode">DiagnosticTroubleCode</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticTroubleCodesResponse">DiagnosticTroubleCodesResponse</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#ServiceHistory">ServiceHistory</a> : <code>Object</code></dt>
 <dd></dd>
@@ -615,8 +619,8 @@ Initializes a new Service object to make requests to the Smartcar API.
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
-    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>DiagnosticSystemStatus</code>](#DiagnosticSystemStatus)
-    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>DiagnosticTroubleCodes</code>](#DiagnosticTroubleCodes)
+    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
+    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
     * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
     * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
@@ -675,30 +679,69 @@ Fetch the list of permissions that this application has been granted
 | [paging] | <code>Object</code> |  |
 | [paging.limit] | <code>String</code> | number of permissions to return |
 | [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
-### vehicle.diagnosticSystemStatus() ⇒ [<code>DiagnosticSystemStatus</code>](#DiagnosticSystemStatus)
-Fetches diagnostic system status information for the vehicle.
 
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)  
-**Throws**:
-
-- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.  
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
-
-**See**: [Smartcar API Doc - Diagnostic System Status](https://smartcar.com/docs/api#get-diagnostic-system-status)
 <a name="Vehicle+diagnosticSystemStatus"></a>
 
-### vehicle.diagnosticTroubleCodes() ⇒ [<code>DiagnosticTroubleCodes</code>](#DiagnosticTroubleCodes)
-Fetches active diagnostic trouble codes (DTCs) for the vehicle.
+### vehicle.diagnosticSystemStatus() ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
+Fetches diagnostic system status information for the vehicle.
 
-**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)  
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse) - - The response containing diagnostic system statuses.
 **Throws**:
 
-- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.  
-  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError. See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
 
-**See**: [Smartcar API Doc - Diagnostic Trouble Codes](https://smartcar.com/docs/api#get-diagnostic-trouble-codes)
+**Example**
+```js
+{
+  "systems": [
+    {
+      "systemId": "SYSTEM_TPMS",
+      "status": "ALERT",
+      "description": "Left rear tire sensor battery low"
+    },
+    {
+      "systemId": "SYSTEM_AIRBAG",
+      "status": "OK",
+      "description": null
+    },
+    {
+      "systemId": "SYSTEM_ABS",
+      "status": "ALERT",
+      "description": null
+    },
+    // Additional diagnostic systems
+  ]
+}
+```
 <a name="Vehicle+diagnosticTroubleCodes"></a>
 
+### vehicle.diagnosticTroubleCodes() ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
+Fetches active diagnostic trouble codes (DTCs) for the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse) - - The response containing active
+diagnostic trouble codes.
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - If there is an error with the API request.
+
+**Example**
+```js
+{
+  "activeCodes": [
+    {
+      "code": "P302D",
+      "timestamp": "2024-09-05T14:48:00.000Z"
+    },
+    {
+      "code": "P303D",
+      "timestamp": null
+    },
+    // Additional codes as needed
+  ]
+}
+```
 <a name="Vehicle+serviceHistory"></a>
 
 ### vehicle.serviceHistory([startDate], [endDate]) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
@@ -1141,70 +1184,48 @@ the following fields :
 <a name="DiagnosticSystemStatus"></a>
 
 ## DiagnosticSystemStatus : <code>Object</code>
-**Kind**: global typedef  
+**Kind**: global typedef
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| systems   | <code>Array</code>             | An array of diagnostic system statuses.         |
-| meta      | [<code>Meta</code>](#Meta)     | Metadata about the request.                     |
+| systemId | <code>string</code> | The identifier for the vehicle's system. |
+| status | <code>string</code> | The status of the system, either 'OK' or 'ALERT'. |
+| description | <code>string</code> \| <code>null</code> | Additional details about the system's status, if any. |
 
-**Example**
-```js
-{
-  systems: [
-    {
-      systemId: "SYSTEM_TPMS",
-      status: "ALERT",
-      description: "Left rear tire sensor battery low"
-    },
-    {
-      systemId: "SYSTEM_AIRBAG",
-      status: "OK",
-      description: null
-    },
-    {
-      systemId: "SYSTEM_ABS",
-      status: "ALERT",
-      description: null
-    },
-  ],
-  meta: {
-    dataAge: new Date('2018-05-04T07:20:50.844Z'),
-    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-  }
-}
-```
-<a name="DiagnosticTroubleCodes"></a>
+<a name="DiagnosticSystemStatusResponse"></a>
 
-## DiagnosticTroubleCodes : <code>Object</code>
-**Kind**: global typedef  
+## DiagnosticSystemStatusResponse : <code>Object</code>
+**Kind**: global typedef
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| activeCodes  | <code>Array</code>          | An array of active diagnostic trouble codes. |
-| meta         | [<code>Meta</code>](#Meta)  | Metadata about the request.                  |
+| systems | [<code>Array.&lt;DiagnosticSystemStatus&gt;</code>](#DiagnosticSystemStatus) | An array of diagnostic system statuses. |
+| meta | [<code>Meta</code>](#Meta) | Metadata about the request. |
 
-**Example**
-```js
-{
-  activeCodes: [
-    {
-      code: "P302D",
-      timestamp: "2024-09-05T14:48:00.000Z"
-    },
-    {
-      code: "P303D",
-      timestamp: null
-    },
-  ],
-  meta: {
-    dataAge: new Date('2018-05-04T07:20:50.844Z'),
-    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-  }
-}
-```
+<a name="DiagnosticTroubleCode"></a>
+
+## DiagnosticTroubleCode : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | The diagnostic trouble code identifier. |
+| timestamp | <code>string</code> \| <code>null</code> | ISO 8601 formatted timestamp indicating when the code was triggered, may be null if not available. |
+
+<a name="DiagnosticTroubleCodesResponse"></a>
+
+## DiagnosticTroubleCodesResponse : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| activeCodes | [<code>Array.&lt;DiagnosticTroubleCode&gt;</code>](#DiagnosticTroubleCode) | An array of active diagnostic trouble codes. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
 <a name="ServiceHistory"></a>
 
 ## ServiceHistory : <code>Object</code>

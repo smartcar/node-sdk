@@ -35,6 +35,8 @@ helpers.DEFAULT_SCOPES = [
   'required:read_charge',
   'required:read_engine_oil',
   'required:read_tires',
+  'required:read_user_profile',
+  'required:read_diagnostics',
 ];
 
 helpers.getAuthClientParams = () => ({

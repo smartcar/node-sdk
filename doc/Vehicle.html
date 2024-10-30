@@ -362,7 +362,7 @@ and value is string or boolean value.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line54">line 54</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -470,7 +470,7 @@ and value is string or boolean value.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line861">line 861</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line959">line 959</a>
     </li></ul></dd>
     
 
@@ -665,7 +665,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line405">line 405</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line503">line 503</a>
     </li></ul></dd>
     
 
@@ -812,7 +812,7 @@ plug-in hybrid vehicle's battery.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line562">line 562</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line660">line 660</a>
     </li></ul></dd>
     
 
@@ -958,7 +958,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line592">line 592</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line690">line 690</a>
     </li></ul></dd>
     
 
@@ -1104,7 +1104,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line530">line 530</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line628">line 628</a>
     </li></ul></dd>
     
 
@@ -1198,6 +1198,334 @@ for all possible errors.</li>
     
 
     
+    <h4 class="name" id="diagnosticSystemStatus"><span class="type-signature"></span>diagnosticSystemStatus<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#DiagnosticSystemStatusResponse">DiagnosticSystemStatusResponse</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Fetches diagnostic system status information for the vehicle.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <ul>
+<li>an instance of SmartcarError. See the <a href="https://github.com/smartcar/node-sdk/tree/master/doc#errors">errors section</a> for all possible errors.</li>
+</ul>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><a href="SmartcarError.html">SmartcarError</a></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>The response containing diagnostic system statuses.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#DiagnosticSystemStatusResponse">DiagnosticSystemStatusResponse</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+  "systems": [
+    {
+      "systemId": "SYSTEM_TPMS",
+      "status": "ALERT",
+      "description": "Left rear tire sensor battery low"
+    },
+    {
+      "systemId": "SYSTEM_AIRBAG",
+      "status": "OK",
+      "description": null
+    },
+    {
+      "systemId": "SYSTEM_ABS",
+      "status": "ALERT",
+      "description": null
+    },
+    // Additional diagnostic systems
+  ]
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="diagnosticTroubleCodes"><span class="type-signature"></span>diagnosticTroubleCodes<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#DiagnosticTroubleCodesResponse">DiagnosticTroubleCodesResponse</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Fetches active diagnostic trouble codes (DTCs) for the vehicle.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <ul>
+<li>If there is an error with the API request.</li>
+</ul>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><a href="SmartcarError.html">SmartcarError</a></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>The response containing active
+diagnostic trouble codes.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#DiagnosticTroubleCodesResponse">DiagnosticTroubleCodesResponse</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+  "activeCodes": [
+    {
+      "code": "P302D",
+      "timestamp": "2024-09-05T14:48:00.000Z"
+    },
+    {
+      "code": "P303D",
+      "timestamp": null
+    },
+    // Additional codes as needed
+  ]
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="disconnect"><span class="type-signature"></span>disconnect<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#ActionResponse">ActionResponse</a>}</span></h4>
     
 
@@ -1253,7 +1581,7 @@ to make requests to it again.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line936">line 936</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line1034">line 1034</a>
     </li></ul></dd>
     
 
@@ -1399,7 +1727,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line690">line 690</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line788">line 788</a>
     </li></ul></dd>
     
 
@@ -1545,7 +1873,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line627">line 627</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line725">line 725</a>
     </li></ul></dd>
     
 
@@ -1691,7 +2019,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line239">line 239</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line337">line 337</a>
     </li></ul></dd>
     
 
@@ -1840,7 +2168,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line829">line 829</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line927">line 927</a>
     </li></ul></dd>
     
 
@@ -1986,7 +2314,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line888">line 888</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line986">line 986</a>
     </li></ul></dd>
     
 
@@ -2132,7 +2460,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line951">line 951</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line1049">line 1049</a>
     </li></ul></dd>
     
 
@@ -2278,7 +2606,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line799">line 799</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line897">line 897</a>
     </li></ul></dd>
     
 
@@ -2579,7 +2907,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line135">line 135</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -2836,7 +3164,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line439">line 439</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line537">line 537</a>
     </li></ul></dd>
     
 
@@ -3049,7 +3377,7 @@ value between -180 and 180 (inclusive).</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line302">line 302</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line400">line 400</a>
     </li></ul></dd>
     
 
@@ -3301,7 +3629,7 @@ last year are returned.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line189">line 189</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line285">line 285</a>
     </li></ul></dd>
     
 
@@ -3494,7 +3822,7 @@ last year are returned.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line266">line 266</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line364">line 364</a>
     </li></ul></dd>
     
 
@@ -3643,7 +3971,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line912">line 912</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line1010">line 1010</a>
     </li></ul></dd>
     
 
@@ -3789,7 +4117,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line924">line 924</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line1022">line 1022</a>
     </li></ul></dd>
     
 
@@ -3984,7 +4312,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line354">line 354</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line452">line 452</a>
     </li></ul></dd>
     
 
@@ -4123,7 +4451,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line661">line 661</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line759">line 759</a>
     </li></ul></dd>
     
 
@@ -4269,7 +4597,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line900">line 900</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line998">line 998</a>
     </li></ul></dd>
     
 
@@ -4487,7 +4815,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line370">line 370</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line468">line 468</a>
     </li></ul></dd>
     
 
@@ -4626,7 +4954,7 @@ for all possible errors.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line499">line 499</a>
+        <a href="lib_vehicle.js.html">lib/vehicle.js</a>, <a href="lib_vehicle.js.html#line597">line 597</a>
     </li></ul></dd>
     
 
@@ -4736,7 +5064,7 @@ for all possible errors.</li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed May 01 2024 17:02:31 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Oct 30 2024 10:39:13 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
