@@ -595,7 +595,7 @@ test('vehicle request - service history', async(t) => {
 
 // Send destination tests are not working following a simulated mode merge project
 // skipping for now
-test.skip('vehicle request - send destination', async(t) => {
+test('vehicle request - send destination', async(t) => {
   const latitude = 37.7749;
   const longitude = -122.4194;
 
@@ -603,7 +603,7 @@ test.skip('vehicle request - send destination', async(t) => {
   t.is(response.status, 'success');
 });
 
-test.skip('vehicle request - send invalid coordinates', async(t) => {
+test('vehicle request - send invalid coordinates', async(t) => {
   // Array of invalid latitude and longitude values
   const invalidCoordinates = [
     {lat: 100, lon: -122.4194}, // Latitude out of range (> 90)

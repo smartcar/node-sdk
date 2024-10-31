@@ -22,7 +22,6 @@ const getVehicleObject = async function(email, version = '') {
 // Note: we skip the following 2 tests because the account associated with them
 // began throwing Smartcar Authentication errors. At this time, we have not diagnosed
 // exactly why this is happening, so we skip for now to move projects forward.
-/* istanbul ignore start */
 test.skip('handleError-SmartcarError V2 resolution string', async function(t) {
   const description = 'The vehicle was unable to perform your request'
     + ' due to an unknown issue.';
@@ -65,7 +64,6 @@ test.skip('handleError - SmartcarError V2 resolution null', async function(t) {
     `CONNECTED_SERVICES_ACCOUNT:VEHICLE_MISSING - ${description}`,
   );
 });
-/* istanbul ignore end */
 
 test('handleError - SmartcarError V1 error', async function(t) {
   const vehicle = await getVehicleObject(
