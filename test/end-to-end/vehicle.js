@@ -3,7 +3,7 @@ const _ = require('lodash');
 const test = require('ava');
 
 const smartcar = require('../../');
-// const {getOrThrowConfig} = require('../../lib/util');
+const {getOrThrowConfig} = require('../../lib/util');
 
 const {getAuthClientParams, runAuthFlow, DEFAULT_SCOPES} = require('./helpers');
 
@@ -229,34 +229,34 @@ test('vehicle permissions', async(t) => {
   t.is(response.paging.count, 12);
 });
 
-// test('vehicle subscribe and unsubscribe - success', async(t) => {
-//   const webhookId = getOrThrowConfig('E2E_SMARTCAR_WEBHOOK_ID');
-//   const amt = getOrThrowConfig('E2E_SMARTCAR_AMT');
-//   let response = await t.context.volt.subscribe(webhookId);
-//   t.deepEqual(
-//     _.xor(_.keys(response), [
-//       'webhookId',
-//       'vehicleId',
-//       'meta',
-//     ]),
-//     [],
-//   );
-//   t.is(response.vehicleId, t.context.volt.id);
-//   t.is(response.webhookId, webhookId);
-//   t.is(response.meta.requestId.length, 36);
+test('vehicle subscribe and unsubscribe - success', async(t) => {
+  const webhookId = getOrThrowConfig('E2E_SMARTCAR_WEBHOOK_ID');
+  const amt = getOrThrowConfig('E2E_SMARTCAR_AMT');
+  let response = await t.context.volt.subscribe(webhookId);
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'webhookId',
+      'vehicleId',
+      'meta',
+    ]),
+    [],
+  );
+  t.is(response.vehicleId, t.context.volt.id);
+  t.is(response.webhookId, webhookId);
+  t.is(response.meta.requestId.length, 36);
 
-//   response = await t.context.volt.unsubscribe(amt, webhookId);
-//   t.deepEqual(
-//     _.xor(_.keys(response), [
-//       'status',
-//       'meta',
-//     ]),
-//     [],
-//   );
+  response = await t.context.volt.unsubscribe(amt, webhookId);
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'status',
+      'meta',
+    ]),
+    [],
+  );
 
-//   t.is(response.status, 'success');
-//   t.is(response.meta.requestId.length, 36);
-// });
+  t.is(response.status, 'success');
+  t.is(response.meta.requestId.length, 36);
+});
 
 test('vehicle subscribe - error', async(t) => {
   const errorMessage = 'VALIDATION:null - Request invalid or malformed.'
