@@ -48,6 +48,14 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#Permissions">Permissions</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#DiagnosticSystemStatus">DiagnosticSystemStatus</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticSystemStatusResponse">DiagnosticSystemStatusResponse</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticTroubleCode">DiagnosticTroubleCode</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#DiagnosticTroubleCodesResponse">DiagnosticTroubleCodesResponse</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#ServiceHistory">ServiceHistory</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#ChargeLimit">ChargeLimit</a></dt>
@@ -611,6 +619,8 @@ Initializes a new Service object to make requests to the Smartcar API.
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
     * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
+    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
+    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
     * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
     * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
     * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
@@ -670,6 +680,68 @@ Fetch the list of permissions that this application has been granted
 | [paging.limit] | <code>String</code> | number of permissions to return |
 | [options.offset] | <code>Object</code> | The current start index of the returned list of elements. |
 
+<a name="Vehicle+diagnosticSystemStatus"></a>
+
+### vehicle.diagnosticSystemStatus() ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
+Fetches diagnostic system status information for the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse) - - The response containing diagnostic system statuses.
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError. See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+
+**Example**
+```js
+{
+  "systems": [
+    {
+      "systemId": "SYSTEM_TPMS",
+      "status": "ALERT",
+      "description": "Left rear tire sensor battery low"
+    },
+    {
+      "systemId": "SYSTEM_AIRBAG",
+      "status": "OK",
+      "description": null
+    },
+    {
+      "systemId": "SYSTEM_ABS",
+      "status": "ALERT",
+      "description": null
+    },
+    // Additional diagnostic systems
+  ]
+}
+```
+<a name="Vehicle+diagnosticTroubleCodes"></a>
+
+### vehicle.diagnosticTroubleCodes() ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
+Fetches active diagnostic trouble codes (DTCs) for the vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Returns**: [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse) - - The response containing active
+diagnostic trouble codes.
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - If there is an error with the API request.
+
+**Example**
+```js
+{
+  "activeCodes": [
+    {
+      "code": "P302D",
+      "timestamp": "2024-09-05T14:48:00.000Z"
+    },
+    {
+      "code": "P303D",
+      "timestamp": null
+    },
+    // Additional codes as needed
+  ]
+}
+```
 <a name="Vehicle+serviceHistory"></a>
 
 ### vehicle.serviceHistory([startDate], [endDate]) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
@@ -1109,6 +1181,51 @@ the following fields :
   }
 }
 ```
+<a name="DiagnosticSystemStatus"></a>
+
+## DiagnosticSystemStatus : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| systemId | <code>string</code> | The identifier for the vehicle's system. |
+| status | <code>string</code> | The status of the system, either 'OK' or 'ALERT'. |
+| description | <code>string</code> \| <code>null</code> | Additional details about the system's status, if any. |
+
+<a name="DiagnosticSystemStatusResponse"></a>
+
+## DiagnosticSystemStatusResponse : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| systems | [<code>Array.&lt;DiagnosticSystemStatus&gt;</code>](#DiagnosticSystemStatus) | An array of diagnostic system statuses. |
+| meta | [<code>Meta</code>](#Meta) | Metadata about the request. |
+
+<a name="DiagnosticTroubleCode"></a>
+
+## DiagnosticTroubleCode : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | The diagnostic trouble code identifier. |
+| timestamp | <code>string</code> \| <code>null</code> | ISO 8601 formatted timestamp indicating when the code was triggered, may be null if not available. |
+
+<a name="DiagnosticTroubleCodesResponse"></a>
+
+## DiagnosticTroubleCodesResponse : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| activeCodes | [<code>Array.&lt;DiagnosticTroubleCode&gt;</code>](#DiagnosticTroubleCode) | An array of active diagnostic trouble codes. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
 <a name="ServiceHistory"></a>
 
 ## ServiceHistory : <code>Object</code>

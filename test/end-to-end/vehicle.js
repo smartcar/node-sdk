@@ -226,7 +226,7 @@ test('vehicle permissions', async(t) => {
   );
   t.is(response.meta.requestId.length, 36);
   t.is(response.paging.offset, 0);
-  t.is(response.paging.count, 10);
+  t.is(response.paging.count, 12);
 });
 
 test('vehicle subscribe and unsubscribe - success', async(t) => {
@@ -512,6 +512,80 @@ test('vehicle request - set charge limit', async(t) => {
   t.is(response.status, 'success');
 });
 
+test('vehicle request - diagnostic trouble codes', async(t) => {
+  const response = await t.context.volt.diagnosticTroubleCodes();
+
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'activeCodes',
+      'meta',
+    ]),
+    [],
+  );
+
+  response.activeCodes.forEach((code) => {
+    t.truthy(typeof code.code === 'string');
+    t.truthy(code.timestamp === null
+     || new Date(code.timestamp) instanceof Date);
+  });
+
+  t.truthy(response.meta.dataAge instanceof Date);
+  t.is(response.meta.requestId.length, 36);
+});
+
+test('vehicle batch - diagnostic trouble codes', async(t) => {
+  const response = await t.context.volt.batch([
+    '/diagnostics/dtcs',
+  ]);
+
+  const diagnosticTroubleCodes = response.diagnosticTroubleCodes();
+  t.deepEqual(
+    _.xor(_.keys(diagnosticTroubleCodes), [
+      'activeCodes',
+      'meta',
+    ]),
+    [],
+  );
+});
+
+test('vehicle request - diagnostic system status', async(t) => {
+  const response = await t.context.volt.diagnosticSystemStatus();
+
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'systems',
+      'meta',
+    ]),
+    [],
+  );
+
+  response.systems.forEach((system) => {
+    t.truthy(typeof system.systemId === 'string');
+    t.truthy(['OK', 'ALERT'].includes(system.status));
+    t.truthy(system.description === null
+      || typeof system.description === 'string');
+  });
+
+  t.truthy(response.meta.dataAge instanceof Date);
+  t.is(response.meta.requestId.length, 36);
+});
+
+test('vehicle batch - diagnostic system status', async(t) => {
+  const response = await t.context.volt.batch([
+    '/diagnostics/system_status',
+  ]);
+
+  const diagnosticSystemStatus = response.diagnosticSystemStatus();
+  t.deepEqual(
+    _.xor(_.keys(diagnosticSystemStatus), [
+      'systems',
+      'meta',
+    ]),
+    [],
+  );
+});
+
+
 test('vehicle request - service history', async(t) => {
   const startDate = '2023-05-20';
   const endDate = '2024-02-10';
@@ -519,6 +593,8 @@ test('vehicle request - service history', async(t) => {
   t.true(Array.isArray(response.data));
 });
 
+// Send destination tests are not working following a simulated mode merge project
+// skipping for now
 test('vehicle request - send destination', async(t) => {
   const latitude = 37.7749;
   const longitude = -122.4194;
@@ -553,7 +629,6 @@ test('vehicle request - send invalid coordinates', async(t) => {
     }
   }
 });
-
 
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.kia.disconnect();
