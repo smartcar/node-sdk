@@ -76,6 +76,8 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#BatteryCapacity">BatteryCapacity</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#NominalCapacity">NominalCapacity</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#Fuel">Fuel</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#TirePressure">TirePressure</a> : <code>Object</code></dt>
@@ -633,6 +635,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.charge()](#Vehicle+charge) ⇒ [<code>Charge</code>](#Charge)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Battery</code>](#Battery)
     * [.batteryCapacity()](#Vehicle+batteryCapacity) ⇒ [<code>BatteryCapacity</code>](#BatteryCapacity)
+    * [.nominalCapacity()](#Vehicle+nominalCapacity) ⇒ [<code>NominalCapacity</code>](#NominalCapacity)
     * [.fuel()](#Vehicle+fuel) ⇒ [<code>Fuel</code>](#Fuel)
     * [.tirePressure()](#Vehicle+tirePressure) ⇒ [<code>TirePressure</code>](#TirePressure)
     * [.engineOil()](#Vehicle+engineOil) ⇒ [<code>EngineOil</code>](#EngineOil)
@@ -962,6 +965,19 @@ Returns the capacity of an electric or plug-in hybrid vehicle's battery.
   for all possible errors.
 
 **See**: [Smartcar API Doc - EV battery capacity](https://smartcar.com/docs/api#get-ev-battery-capacity)
+<a name="Vehicle+nominalCapacity"></a>
+
+### vehicle.nominalCapacity() ⇒ [<code>NominalCapacity</code>](#NominalCapacity)
+Returns a list of nominal rated battery capacities for a vehicle.
+
+**Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+**See**: [Smartcar API Doc - nominal capacity](https://smartcar.com/docs/api-reference/get-nominal-capacity)
 <a name="Vehicle+fuel"></a>
 
 ### vehicle.fuel() ⇒ [<code>Fuel</code>](#Fuel)
@@ -1448,6 +1464,40 @@ the following fields :
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
   }
+}
+```
+<a name="NominalCapacity"></a>
+
+## NominalCapacity : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| availableCapacities | <code>Array</code> | A list of the rated nominal capacities available for a vehicle |
+| capacity | <code>Object</code> | The rated nominal capacity for the vehicle's battery in kWh |
+| url | <code>String</code> | A URL that will launch the flow for a vehicle owner to specify the correct battery capacity for a vehicle |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+ "availableCapacities": [
+       {
+           "capacity" :  70.9,
+          "description" : null
+      },
+      {
+          "capacity" :  80.9,
+          "description" : null
+      },
+      {
+          "capacity" :  90.9,
+          "description" : "BEV:Extended Range"
+      }
+  ],
+  "capacity": null,
+  "url" : "https://connect.smartcar.com/battery-capacity?vehicle_id=36ab27d0-fd9d-4455-823a-ce30af709ffc&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07&token=90abecb6-e7ab-4b85-864a-e1c8bf67f2ad&response_type=vehicle_id&redirect_uri="
 }
 ```
 <a name="Fuel"></a>

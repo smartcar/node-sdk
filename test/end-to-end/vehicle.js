@@ -104,6 +104,24 @@ test('vehicle batteryCapacity', async(t) => {
   t.is(response.meta.requestId.length, 36);
 });
 
+test('vehicle nominalCapacity', async(t) => {
+  const response = await t.context.volt.nominalCapacity();
+  t.deepEqual(
+    _.xor(_.keys(response), [
+      'availableCapacities',
+      'capacity',
+      'url',
+      'meta',
+    ]),
+    [],
+  );
+
+  t.truthy(Array.isArray(response.availableCapacities));
+  t.truthy(typeof response.capacity === 'object');
+  t.truthy(response.meta.dataAge instanceof Date);
+  t.is(response.meta.requestId.length, 36);
+});
+
 test('vehicle fuel', async(t) => {
   const response = await t.context.volt.fuel();
   t.deepEqual(
