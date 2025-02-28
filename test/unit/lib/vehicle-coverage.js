@@ -2,7 +2,6 @@
 
 const nock = require('nock');
 const test = require('ava');
-const sinon = require('sinon');
 
 const Vehicle = require('../../../lib/vehicle');
 const {USER_AGENT} = require('../../../lib/util');
@@ -38,7 +37,7 @@ test('request - diagnostic system status', async function(t) {
         systemId: 'BATTERY',
         status: 'WARNING',
       },
-    ]
+    ],
   };
 
   t.context.n = nocks
@@ -67,7 +66,7 @@ test('request - diagnostic trouble codes', async function(t) {
         description: 'Mass or Volume Air Flow Circuit Malfunction',
         timestamp: '2022-01-01T00:00:00.000Z',
       },
-    ]
+    ],
   };
 
   t.context.n = nocks
@@ -114,14 +113,16 @@ test('request - service history', async function(t) {
           currency: 'USD',
         },
       },
-    ]
+    ],
   };
 
   t.context.n = nocks
     .base()
     .get('/service/history')
     .query({
+      // eslint-disable-next-line camelcase
       start_date: startDate,
+      // eslint-disable-next-line camelcase
       end_date: endDate,
     })
     .reply(200, responseBody, {
@@ -150,8 +151,8 @@ test('request - send destination', async function(t) {
   t.context.n = nocks
     .base()
     .post('/navigation/destination', {
-      latitude: latitude,
-      longitude: longitude,
+      latitude,
+      longitude,
     })
     .reply(200, responseBody, {
       'sc-request-id': 'requestId',
@@ -171,25 +172,31 @@ test('request - send destination', async function(t) {
 // Test for sendDestination method with invalid latitude
 test('request - send destination with invalid latitude', async function(t) {
   const error = await t.throwsAsync(
-    async () => {
+    async() => {
       await vehicle.sendDestination(100, -122.4194);
     },
-    {instanceOf: Error}
+    {instanceOf: Error},
   );
 
-  t.is(error.message, 'Invalid latitude value. It must be between -90 and 90.');
+  t.is(
+    error.message,
+    'Invalid latitude value. It must be between -90 and 90.',
+  );
 });
 
 // Test for sendDestination method with invalid longitude
 test('request - send destination with invalid longitude', async function(t) {
   const error = await t.throwsAsync(
-    async () => {
+    async() => {
       await vehicle.sendDestination(37.7749, 200);
     },
-    {instanceOf: Error}
+    {instanceOf: Error},
   );
 
-  t.is(error.message, 'Invalid longitude value. It must be between -180 and 180.');
+  t.is(
+    error.message,
+    'Invalid longitude value. It must be between -180 and 180.',
+  );
 });
 
 // Test the request with a body
@@ -294,17 +301,17 @@ test('request - with string body', async function(t) {
 
   t.context.n = nocks
     .base()
-    .post('/custom/endpoint', {body: "test-string"})
+    .post('/custom/endpoint', {body: 'test-string'})
     .reply(200, responseBody, {
       'sc-request-id': 'requestId',
       'sc-fetched-at': '2018-05-04T07:20:51.844Z',
     });
 
   const response = await vehicle.request('post', 'custom/endpoint', {
-    body: "test-string",
+    body: 'test-string',
   });
 
   t.is(response.body.status, 'success');
   t.is(response.meta.requestId, 'requestId');
   t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
-}); 
+});
