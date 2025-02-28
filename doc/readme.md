@@ -1367,6 +1367,7 @@ the following fields :
 | Name | Type | Description |
 | --- | --- | --- |
 | dataAge | <code>Date</code> | The timestamp of when the data was recorded; returned if applicable. |
+| fetchedAt | <code>Date</code> | The timestamp when the data was fetched from the vehicle |
 | requestId | <code>String</code> | The smartcar request ID for debugging |
 | unitSystem | <code>String</code> | Unit system used, metric or imperial; returned if applicable. |
 
