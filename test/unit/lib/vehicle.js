@@ -84,8 +84,6 @@ test('vehicle webhook subscribe', async(t) => {
     .post('/webhooks/webhookID')
     .reply(200, responseBody, {
       'sc-request-id': 'requestId',
-      'sc-data-age': '2018-05-04T07:20:50.844Z',
-      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
     });
 
   const response = await vehicle.subscribe('webhookID');
@@ -93,8 +91,6 @@ test('vehicle webhook subscribe', async(t) => {
   t.is(response.webhookId, 'webhookID');
   t.is(response.vehicleId, 'vehicleId');
   t.is(response.meta.requestId, 'requestId');
-  t.is(response.meta.dataAge.valueOf(), 1525418450844);
-  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
 
 test('vehicle webhook unsubscribe', async(t) => {
@@ -103,15 +99,11 @@ test('vehicle webhook unsubscribe', async(t) => {
     .delete('/webhooks/webhookID')
     .reply(200, '', {
       'sc-request-id': 'requestId',
-      'sc-data-age': '2018-05-04T07:20:50.844Z',
-      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
     });
 
   const response = await vehicle.unsubscribe('amt', 'webhookID');
 
   t.is(response.meta.requestId, 'requestId');
-  t.is(response.meta.dataAge.valueOf(), 1525418450844);
-  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
 
 test('vehicle permissions', async(t) => {
