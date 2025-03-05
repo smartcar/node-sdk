@@ -1481,9 +1481,9 @@ the following fields :
 
 | Name | Type | Description |
 | --- | --- | --- |
-| availableCapacities | <code>Array</code> | A list of the rated nominal  capacities available for a vehicle |
+| availableCapacities | <code>Array</code> | A list of the rated nominal capacities available for a vehicle |
 | capacity | <code>Object</code> | The rated nominal capacity for the vehicle's battery in kWh |
-| url | <code>String</code> | A URL that will launch the flow for a vehicle owner  to specify the correct battery capacity for a vehicle |
+| url | <code>String</code> | A URL that will launch the flow for a vehicle owner to specify the correct battery capacity for a vehicle |
 | meta | [<code>Meta</code>](#Meta) |  |
 
 **Example**
