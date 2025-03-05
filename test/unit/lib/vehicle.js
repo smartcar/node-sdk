@@ -82,7 +82,9 @@ test('vehicle webhook subscribe', async(t) => {
   t.context.n = nocks
     .base()
     .post('/webhooks/webhookID')
-    .reply(200, responseBody, {'sc-request-id': 'requestId'});
+    .reply(200, responseBody, {
+      'sc-request-id': 'requestId',
+    });
 
   const response = await vehicle.subscribe('webhookID');
 
@@ -95,7 +97,9 @@ test('vehicle webhook unsubscribe', async(t) => {
   t.context.n = nocks
     .base(vehicle.version, VID, 'amt')
     .delete('/webhooks/webhookID')
-    .reply(200, '', {'sc-request-id': 'requestId'});
+    .reply(200, '', {
+      'sc-request-id': 'requestId',
+    });
 
   const response = await vehicle.unsubscribe('amt', 'webhookID');
 
@@ -107,11 +111,17 @@ test('vehicle permissions', async(t) => {
     .base()
     .get('/permissions')
     .query({limit: '1'})
-    .reply(200, {permissions: []}, {'sc-request-id': 'requestId'});
+    .reply(200, {permissions: []}, {
+      'sc-request-id': 'requestId',
+      'sc-data-age': '2018-05-04T07:20:50.844Z',
+      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
+    });
 
   const response = await vehicle.permissions({limit: 1});
 
   t.is(response.meta.requestId, 'requestId');
+  t.is(response.meta.dataAge.valueOf(), 1525418450844);
+  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
   t.is(response.permissions.length, 0);
   t.true(t.context.n.isDone());
 });
@@ -148,6 +158,7 @@ test('batch - success', async function(t) {
         headers: {
           'sc-unit-system': 'imperial',
           'sc-data-age': '2018-05-04T07:20:50.844Z',
+          'sc-fetched-at': '2018-05-04T07:20:51.844Z',
         },
         path: '/',
         code: 200,
@@ -162,6 +173,7 @@ test('batch - success', async function(t) {
         headers: {
           'sc-unit-system': 'imperial',
           'sc-data-age': '2018-05-04T07:20:50.844Z',
+          'sc-fetched-at': '2018-05-04T07:20:51.844Z',
         },
         path: '/odometer',
         code: 200,
@@ -182,6 +194,7 @@ test('batch - success', async function(t) {
         headers: {
           'sc-unit-system': 'imperial',
           'sc-data-age': '2018-05-04T07:20:50.844Z',
+          'sc-fetched-at': '2018-05-04T07:20:51.844Z',
         },
         path: '/tires/pressure',
         code: 200,
@@ -196,6 +209,7 @@ test('batch - success', async function(t) {
         headers: {
           'sc-unit-system': 'imperial',
           'sc-data-age': '2018-05-04T07:20:50.844Z',
+          'sc-fetched-at': '2018-05-04T07:20:51.844Z',
         },
         path: '/tesla/speedometer',
         code: 200,
@@ -217,6 +231,7 @@ test('batch - success', async function(t) {
   t.is(odometer.meta.requestId, 'requestId');
   t.is(odometer.meta.unitSystem, 'imperial');
   t.is(odometer.meta.dataAge.valueOf(), 1525418450844);
+  t.is(odometer.meta.fetchedAt.valueOf(), 1525418451844);
 
   const attributes = response.attributes();
   t.is(attributes.make, 'TESLA');
@@ -225,6 +240,7 @@ test('batch - success', async function(t) {
   t.is(attributes.meta.requestId, 'requestId');
   t.is(attributes.meta.unitSystem, 'imperial');
   t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
+  t.is(attributes.meta.fetchedAt.valueOf(), 1525418451844);
 
   const expectedMessage = 'vehicle_not_capable_error:undefined - '
     + 'Vehicle is not capable of performing request.';
@@ -240,12 +256,14 @@ test('batch - success', async function(t) {
   t.is(attributes.meta.requestId, 'requestId');
   t.is(attributes.meta.unitSystem, 'imperial');
   t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
+  t.is(attributes.meta.fetchedAt.valueOf(), 1525418451844);
 
   const speedometer = response.teslaSpeedometer();
   t.is(speedometer.speed, 84.32);
   t.is(attributes.meta.requestId, 'requestId');
   t.is(attributes.meta.unitSystem, 'imperial');
   t.is(attributes.meta.dataAge.valueOf(), 1525418450844);
+  t.is(attributes.meta.fetchedAt.valueOf(), 1525418451844);
 });
 
 test('batch - error', async function(t) {
@@ -287,7 +305,11 @@ test('request - override non-sc headers', async function(t) {
     .matchHeader('Authorization', `Bearer ${TOKEN}`)
     .matchHeader('Origin', 'monkeys_on_pluto')
     .get('/odometer')
-    .reply(200, {distance: 10}, {'sc-request-id': 'requestId'});
+    .reply(200, {distance: 10}, {
+      'sc-request-id': 'requestId',
+      'sc-data-age': '2018-05-04T07:20:50.844Z',
+      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
+    });
 
   const response = await vehicle.request('get', 'odometer', undefined, {
     'User-Agent': 'monkeys_on_mars',
@@ -296,6 +318,8 @@ test('request - override non-sc headers', async function(t) {
 
   t.is(response.body.distance, 10);
   t.is(response.meta.requestId, 'requestId');
+  t.is(response.meta.dataAge.valueOf(), 1525418450844);
+  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
 
 test('request - rate limit', async function(t) {
@@ -370,7 +394,11 @@ test('request - security', async function(t) {
         storage: [],
         sunroof: [],
         chargingPort: [],
-      }, {'sc-request-id': 'requestId'});
+      }, {
+        'sc-request-id': 'requestId',
+        'sc-data-age': '2018-05-04T07:20:50.844Z',
+        'sc-fetched-at': '2018-05-04T07:20:51.844Z',
+      });
 
   const serviceRequestSpy = sinon.spy(vehicle.service, 'request');
 
@@ -378,6 +406,8 @@ test('request - security', async function(t) {
 
   t.true(serviceRequestSpy.calledOnceWith('get', 'security'));
   t.is(response.meta.requestId, 'requestId');
+  t.is(response.meta.dataAge.valueOf(), 1525418450844);
+  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
   t.is(response.isLocked, true);
   t.true(t.context.n.isDone());
 });

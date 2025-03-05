@@ -1281,7 +1281,8 @@ the following fields :
     meta: {
       dataAge: new Date('2023-04-30T07:20:50.844Z'),
       unitSystem: 'imperial',
-      requestId: 'b3c14915-0c26-43c5-8e42-9edfc2a66b2f'
+      requestId: 'b3c14915-0c26-43c5-8e42-9edfc2a66b2f',
+      fetchedAt: new Date('2023-04-30T07:20:51.844Z'),
     }
   }
   // ... additional service records
@@ -1354,7 +1355,8 @@ the following fields :
  meta: {
    dataAge: 2022-01-20T02:55:25.041Z,
    unitSystem: 'imperial',
-   requestId: 'f787849d-d228-482d-345f-459a5154sg73'
+   requestId: 'f787849d-d228-482d-345f-459a5154sg73',
+   fetchedAt: 2022-01-20T02:55:25.041Z
  }
 }
 ```
@@ -1367,6 +1369,7 @@ the following fields :
 | Name | Type | Description |
 | --- | --- | --- |
 | dataAge | <code>Date</code> | The timestamp of when the data was recorded; returned if applicable. |
+| fetchedAt | <code>Date</code> | The timestamp when the data was fetched from the vehicle |
 | requestId | <code>String</code> | The smartcar request ID for debugging |
 | unitSystem | <code>String</code> | Unit system used, metric or imperial; returned if applicable. |
 
@@ -1376,6 +1379,7 @@ the following fields :
   requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
   dataAge: new Date('2018-05-04T07:20:50.844Z'),
   unitSystem: 'imperial',
+  fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
 }
 ```
 <a name="Vin"></a>
@@ -1417,6 +1421,7 @@ the following fields :
   state: "FULLY_CHARGED",
   meta: {
     dataAge: new Date('2018-05-04T07:20:50.844Z'),
+    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1441,6 +1446,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1463,6 +1469,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1523,6 +1530,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1551,6 +1559,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1573,6 +1582,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1595,6 +1605,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
   }
 }
 ```
@@ -1679,6 +1690,7 @@ the following fields :
    meta: {
        dataAge: new Date('2018-05-04T07:20:50.844Z'),
        requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+       fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
    },
 }
 ```
@@ -1703,6 +1715,7 @@ the following fields :
    dataAge: new Date('2018-05-04T07:20:50.844Z'),
    unitSystem: 'imperial',
    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2022-01-20T02:55:25.041Z'),
   }
 }
 ```
