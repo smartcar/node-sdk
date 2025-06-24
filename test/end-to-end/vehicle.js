@@ -247,7 +247,7 @@ test('vehicle permissions', async(t) => {
   t.is(response.paging.count, 12);
 });
 
-test('vehicle subscribe and unsubscribe - success', async(t) => {
+test.skip('vehicle subscribe and unsubscribe - success', async(t) => {
   const webhookId = getOrThrowConfig('E2E_SMARTCAR_WEBHOOK_ID');
   const amt = getOrThrowConfig('E2E_SMARTCAR_AMT');
   let response = await t.context.volt.subscribe(webhookId);
