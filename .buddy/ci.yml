@@ -6,10 +6,10 @@
     - refs/heads/*
   fail_on_prepare_env_warning: true
   actions:
-  - action: Run tests
+  - action: Run tests - Node 20
     type: BUILD
     docker_image_name: library/node
-    docker_image_tag: 16
+    docker_image_tag: 20
     execute_commands:
     - "# Set Firefox environment variables to help with headless operation"
     - Xvfb :99 -screen 0 1280x1024x24 &
@@ -20,7 +20,52 @@
     - firefox --version
     - firefox -headless &
     - ""
-    - "# Run tests"
+    - npm ci
+    - npm run cover
+    - bash <(curl -s https://codecov.io/bash)
+    setup_commands:
+    - apt-get update
+    - apt-get install -y \
+    - '  libgtk-3-0 \'
+    - '  libasound2 \'
+    - '  libdbus-glib-1-2 \'
+    - '  libx11-xcb1 \'
+    - '  libxt6 \'
+    - '  libnss3 \'
+    - '  libxtst6 \'
+    - '  libxss1 \'
+    - '  libpci3 \'
+    - '  libatk1.0-0 \'
+    - '  libatk-bridge2.0-0 \'
+    - '  libcups2 \'
+    - '  libdrm2 \'
+    - '  libxcomposite1 \'
+    - '  libxdamage1 \'
+    - '  libxfixes3 \'
+    - '  libxkbcommon0 \'
+    - '  libxrandr2 \'
+    - '  xvfb'
+    - ""
+    - ""
+    - "# Download the latest Firefox"
+    - wget -O /tmp/firefox-latest.tar.xz 'https://download.mozilla.org/?product=firefox-latest&lang=en-US&os=linux64'
+    - "mkdir -p ${HOME}/firefox-latest"
+    - "tar -xJf /tmp/firefox-latest.tar.xz -C ${HOME}/firefox-latest"
+    shell: BASH
+  - action: Run tests - Node 22
+    type: BUILD
+    docker_image_name: library/node
+    docker_image_tag: 22
+    execute_commands:
+    - "# Set Firefox environment variables to help with headless operation"
+    - Xvfb :99 -screen 0 1280x1024x24 &
+    - export DISPLAY=:99.0
+    - export MOZ_HEADLESS=1
+    - export MOZ_NO_REMOTE=1
+    - "export PATH=${HOME}/firefox-latest/firefox:$PATH"
+    - firefox --version
+    - firefox -headless &
+    - ""
     - npm ci
     - npm run cover
     - bash <(curl -s https://codecov.io/bash)
