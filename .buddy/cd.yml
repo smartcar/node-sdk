@@ -1,0 +1,19 @@
+- pipeline: cd
+  name: CD
+  events:
+  - type: PUSH
+    refs:
+    - refs/heads/master
+  fail_on_prepare_env_warning: true
+  actions:
+  - action: semantic release
+    type: BUILD
+    docker_image_name: library/node
+    docker_image_tag: 14
+    execute_commands:
+    - npm ci
+    - npx semantic-release
+    volume_mappings:
+    - /:/buddy/retryify
+    shell: BASH
+

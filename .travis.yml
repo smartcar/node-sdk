@@ -41,9 +41,3 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
-jobs:
-  include:
-    - stage: publish
-      node_js: 14
-      script: npx semantic-release
