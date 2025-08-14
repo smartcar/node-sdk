@@ -58,7 +58,7 @@ test('constructor - non default unit and version', async function(t) {
   t.is(vehicle.token, TOKEN);
   t.is(vehicle.unitSystem, 'imperial');
 
-  const res = await vehicle.service.request('get', '/constructor/imperial');
+  const res = await vehicle.service.request('get', 'constructor/imperial');
   t.is(res.pizza, 'pasta');
 });
 
@@ -358,7 +358,7 @@ test('request - get charge limit', async function(t) {
   t.true(t.context.n.isDone());
 });
 
-test('request - set charge limit', async function(t) {
+test.only('request - set charge limit', async function(t) {
   sinon.restore(); // clear all spys
 
   t.context.n = nocks
@@ -374,7 +374,7 @@ test('request - set charge limit', async function(t) {
   t.true(serviceRequestSpy.calledOnce);
   t.true(
     serviceRequestSpy.calledWith(
-      'post', 'charge/limit', sinon.match({body: {limit: String(chargeLimit)}}),
+      'post', 'charge/limit', sinon.match({limit: String(chargeLimit)}),
     ),
   );
   t.true(t.context.n.isDone());

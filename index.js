@@ -99,8 +99,8 @@ smartcar.getApiVersion = () => config.version;
 smartcar.getUser = async function(accessToken) {
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
-    auth: {bearer: accessToken},
-  }).request('get', `/v${config.version}/user`);
+    headers: {Authorization: `Bearer ${accessToken}`},
+  }).request('get', `v${config.version}/user/`);
   return response;
 };
 
@@ -146,7 +146,7 @@ smartcar.getUser = async function(accessToken) {
 smartcar.getVehicles = async function(accessToken, paging = {}) {
   const response = await new SmartcarService({
     baseUrl: util.getUrl(),
-    auth: {bearer: accessToken},
+    headers: {Authorization: `Bearer ${accessToken}`},
     qs: paging,
   }).request('get', '');
   return response;

@@ -39,7 +39,7 @@ test('verifyPayload', function(t) {
 test('getVehicles - simple', async function(t) {
 
   const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/vehicles')
+    .get('/vehicles/')
     .matchHeader('Authorization', 'Bearer simple')
     .reply(200, {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
@@ -53,8 +53,8 @@ test('getVehicles - simple', async function(t) {
 
 test('getVehicles - paging', async function(t) {
 
-  const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/vehicles')
+  const n = nock('https://api.smartcar.com/v2.0')
+    .get('/vehicles/')
     .query({limit: '1'})
     .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
@@ -68,8 +68,8 @@ test('getVehicles - paging', async function(t) {
 });
 
 test('getUser', async function(t) {
-  const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/user')
+  const n = nock('https://api.smartcar.com/v2.0')
+    .get('/user/')
     .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
       id: 'userid',

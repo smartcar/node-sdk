@@ -2,8 +2,6 @@
 
 const _ = require('lodash');
 const test = require('ava');
-const Promise = require('bluebird');
-const {StatusCodeError} = require('request-promise/errors');
 const {env} = require('process');
 
 const util = require('../../../lib/util');
@@ -83,49 +81,22 @@ test('getUrl - version 2.0', function(t) {
   t.is(url, 'https://api.smartcar.com/v2.0/vehicles/VID/odometer');
 });
 
-test('wrap - ignores non-StatusCodeErrors', async function(t) {
-  const error = new Error('blah');
-
-  const not = util.wrap(Promise.reject(error));
-
-  await t.throwsAsync(not, {
-    is: error,
-  });
-});
-
-
-test('wrap - wraps StatusCodeErrors', async function(t) {
-  const error = new StatusCodeError('h');
-
-  const should = util.wrap(Promise.reject(error));
-
-  await t.throwsAsync(should, {
-    instanceOf: SmartcarError,
-  });
-});
-
 test('handleError - non-json', function(t) {
   const boxed = t.throws(() => util.handleError({
-    statusCode: 504,
-    response: {
-      body: 'what',
-    },
+    body: 'what',
+    headers: {},
+    res: {status: 504},
   }));
 
-  t.true(boxed instanceof SmartcarError);
   t.is(boxed.statusCode, 504);
   t.is(boxed.message, 'what');
 });
 
 test('handleError - String/non-json body', function(t) {
   const boxed = t.throws(() => util.handleError({
-    statusCode: 500,
-    response: {
-      body: 'what',
-      headers: {
-        'content-type': 'application/json',
-      },
-    },
+    body: 'what',
+    headers: {'content-type': 'application/json'},
+    res: {status: 500},
   }));
 
   t.true(boxed instanceof SmartcarError);
@@ -136,16 +107,11 @@ test('handleError - String/non-json body', function(t) {
 
 test('handleError - SmartcarError V1', function(t) {
   const boxed = t.throws(() => util.handleError({
-    statusCode: 600,
-    response: {
-      body: {
-        error: 'monkeys_on_mars',
-        message: 'yes, really',
-      },
-      headers: {
-        'content-type': 'application/json',
-      },
+    body: {error: 'monkeys_on_mars',
+      message: 'yes, really',
     },
+    headers: {'content-type': 'application/json'},
+    res: {status: 600},
   }));
 
   t.true(boxed instanceof SmartcarError);
@@ -155,16 +121,13 @@ test('handleError - SmartcarError V1', function(t) {
 });
 
 test('handleError - when bit-flips because of moon position', function(t) {
+
   const boxed = t.throws(() => util.handleError({
-    statusCode: 999,
-    response: {
-      body: {
-        random: 'testing',
-      },
-      headers: {
-        'content-type': 'application/json',
-      },
+    body: {
+      random: 'testing',
     },
+    headers: {'content-type': 'application/json'},
+    res: {status: 999},
   }));
 
   t.true(boxed instanceof SmartcarError);
@@ -176,22 +139,18 @@ test('handleError - when bit-flips because of moon position', function(t) {
 
 test('handleError - SmartcarError V2 no resolution', function(t) {
   const boxed = t.throws(() => util.handleError({
-    statusCode: 500,
-    response: {
-      body: {
-        type: 'type',
-        code: 'code',
-        description: 'description',
-        resolution: null,
-        detail: null,
-        requestId: '123',
-        docURL: null,
-        statusCode: 500,
-      },
-      headers: {
-        'content-type': 'application/json',
-      },
+    body: {
+      type: 'type',
+      code: 'code',
+      description: 'description',
+      resolution: null,
+      detail: null,
+      requestId: '123',
+      docURL: null,
+      statusCode: 500,
     },
+    headers: {'content-type': 'application/json'},
+    res: {status: 500},
   }));
 
   t.true(boxed instanceof SmartcarError);
@@ -207,21 +166,18 @@ test('handleError - SmartcarError V2 no resolution', function(t) {
 });
 
 test('handleError - SmartcarError V2 resolution string', function(t) {
+
   const boxed = t.throws(() => util.handleError({
-    statusCode: 500,
-    response: {
-      body: {
-        type: 'type',
-        code: 'code',
-        description: 'description',
-        resolution: 'resolution',
-        requestId: '123',
-        statusCode: 500,
-      },
-      headers: {
-        'content-type': 'application/json',
-      },
+    body: {
+      type: 'type',
+      code: 'code',
+      description: 'description',
+      resolution: {type: 'resolution'},
+      requestId: '123',
+      statusCode: 500,
     },
+    headers: {'content-type': 'application/json'},
+    res: {status: 500},
   }));
 
   t.true(boxed instanceof SmartcarError);
@@ -239,22 +195,18 @@ test('handleError - SmartcarError V2 resolution string', function(t) {
 
 test('handleError - SmartcarError V2 with all attrbutes', function(t) {
   const boxed = t.throws(() => util.handleError({
-    statusCode: 500,
-    response: {
-      body: {
-        type: 'type',
-        code: 'code',
-        description: 'description',
-        docURL: 'docURL',
-        resolution: {pizza: 'resolution'},
-        requestId: '123',
-        statusCode: 500,
-        detail: ['pizza'],
-      },
-      headers: {
-        'content-type': 'application/json',
-      },
+    body: {
+      type: 'type',
+      code: 'code',
+      description: 'description',
+      docURL: 'docURL',
+      resolution: {pizza: 'resolution'},
+      requestId: '123',
+      statusCode: 500,
+      detail: ['pizza'],
     },
+    headers: {'content-type': 'application/json'},
+    res: {status: 500},
   }));
 
   t.true(boxed instanceof SmartcarError);

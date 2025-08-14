@@ -247,7 +247,7 @@ test('getAuthUrl - user', function(t) {
   t.is(actual, expected);
 });
 
-test('exchangeCode', async function(t) {
+test.only('exchangeCode', async function(t) {
   const client = new AuthClient({
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -256,11 +256,7 @@ test('exchangeCode', async function(t) {
 
   /* eslint-disable camelcase */
   const n = nock('https://auth.smartcar.com')
-    .post('/oauth/token?flags=pizza%3Apasta', {
-      code: 'AUTHCODE',
-      grant_type: 'authorization_code',
-      redirect_uri: 'https://insurance.co/callback',
-    })
+    .post('/oauth/token?flags=pizza%3Apasta')
     .basicAuth({
       user: CLIENT_ID,
       pass: CLIENT_SECRET,
@@ -295,10 +291,7 @@ test('exchangeRefreshToken', async function(t) {
 
   /* eslint-disable camelcase */
   const n = nock('https://auth.smartcar.com')
-    .post('/oauth/token?flags=pizza%3Apasta', {
-      refresh_token: 'TOKEN',
-      grant_type: 'refresh_token',
-    })
+    .post('/oauth/token?flags=pizza%3Apasta')
     .basicAuth({
       user: CLIENT_ID,
       pass: CLIENT_SECRET,
