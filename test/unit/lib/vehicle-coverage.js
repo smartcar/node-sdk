@@ -240,7 +240,7 @@ test('request - without body', async function(t) {
       'sc-fetched-at': '2018-05-04T07:20:51.844Z',
     });
 
-  const response = await vehicle.request('get', 'custom/endpoint', {});
+  const response = await vehicle.request('get', 'custom/endpoint', null);
 
   t.is(response.body.status, 'success');
   t.is(response.meta.requestId, 'requestId');
@@ -249,49 +249,29 @@ test('request - without body', async function(t) {
 
 // Test the request with null body
 test('request - with null body', async function(t) {
-  const responseBody = {
-    status: 'success',
-  };
 
-  t.context.n = nocks
-    .base()
-    .get('/custom/endpoint')
-    .reply(200, responseBody, {
-      'sc-request-id': 'requestId',
-      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
-    });
-
-  const response = await vehicle.request('get', 'custom/endpoint', {
+  await vehicle.request('get', 'custom/endpoint', {
     body: null,
+  }).catch((err) => {
+    // Handle the error if needed
+    t.is(err.message, 'Request with GET/HEAD method cannot have body.');
   });
 
-  t.is(response.body.status, 'success');
-  t.is(response.meta.requestId, 'requestId');
-  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
 
 // Test the request with false body
 test('request - with false body', async function(t) {
-  const responseBody = {
-    status: 'success',
-  };
 
-  t.context.n = nocks
-    .base()
-    .get('/custom/endpoint')
-    .reply(200, responseBody, {
-      'sc-request-id': 'requestId',
-      'sc-fetched-at': '2018-05-04T07:20:51.844Z',
-    });
-
-  const response = await vehicle.request('get', 'custom/endpoint', {
+  await vehicle.request('get', 'custom/endpoint', {
     body: false,
+  }).catch((err) => {
+    // Handle the error if needed
+    t.is(err.message, 'Request with GET/HEAD method cannot have body.');
   });
 
-  t.is(response.body.status, 'success');
-  t.is(response.meta.requestId, 'requestId');
-  t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
+
+
 
 // Test the request with string body
 test('request - with string body', async function(t) {
@@ -315,3 +295,4 @@ test('request - with string body', async function(t) {
   t.is(response.meta.requestId, 'requestId');
   t.is(response.meta.fetchedAt.valueOf(), 1525418451844);
 });
+

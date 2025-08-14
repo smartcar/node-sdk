@@ -374,7 +374,7 @@ test('request - set charge limit', async function(t) {
   t.true(serviceRequestSpy.calledOnce);
   t.true(
     serviceRequestSpy.calledWith(
-      'post', 'charge/limit', sinon.match({body: {limit: String(chargeLimit)}}),
+      'post', 'charge/limit', sinon.match({limit: String(chargeLimit)}),
     ),
   );
   t.true(t.context.n.isDone());

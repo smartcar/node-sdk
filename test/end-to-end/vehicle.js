@@ -438,7 +438,7 @@ test('vehicle request - odometer', async(t) => {
   const response = await t.context.volt.request(
     'get',
     'odometer',
-    {},
+    null,
     {
       'sc-unit-system': 'imperial',
     },
@@ -497,6 +497,29 @@ test('vehicle request - batch', async(t) => {
 
 });
 
+test('vehicle request - override auth', async(t) => {
+  const errorMessage = 'The authorization header is missing or malformed, '
+    + 'or it contains invalid or expired authentication credentials. Please '
+    + 'check for missing parameters, spelling and casing mistakes, and '
+    + 'other syntax issues.';
+
+  await t.context.volt.service.request('get',
+    'odometer',
+    null,
+    {
+      auth: {
+        user: 'abc',
+        pass: 'def',
+      },
+    },
+  ).catch((err) => {
+    t.is(err.statusCode, 401);
+    t.is(err.type, 'AUTHENTICATION');
+    t.is(err.description, errorMessage);
+    t.is(err.docURL, 'https://smartcar.com/docs/errors/api-errors/authentication-errors#null');
+  });
+});
+
 test('vehicle request - override auth header', async(t) => {
   const errorMessage = 'The authorization header is missing or malformed, '
     + 'or it contains invalid or expired authentication credentials. Please '
@@ -505,7 +528,7 @@ test('vehicle request - override auth header', async(t) => {
 
   await t.context.volt.request('get',
     'odometer',
-    {},
+    null,
     {
       'sc-unit-system': 'imperial',
       Authorization: 'Bearer abc',
