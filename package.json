@@ -37,7 +37,6 @@
     "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed -e 's/[ \t]*$//' -e 's/\\[\\ &#x27;//g' -e 's/&#x27;\\ \\]//g' > doc/readme.md"
   },
   "dependencies": {
-    "bluebird": "^3.5.5",
     "lodash": "^4.17.5"
   },
   "devDependencies": {

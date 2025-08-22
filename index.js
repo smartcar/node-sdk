@@ -221,11 +221,12 @@ smartcar.getCompatibility = async function(vin, scope, country, options = {}) {
   const clientSecret =
     options.clientSecret || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
 
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
-    auth: {
-      user: clientId,
-      pass: clientSecret,
+    headers: {
+      Authorization: `Basic ${credentials}`,
     },
     qs: buildQueryParams(vin, scope, country, options),
   }).request('get', `v${options.version || config.version}/compatibility`);
@@ -285,6 +286,8 @@ smartcar.verifyPayload = (amt, signature, body) =>
 smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
   const {limit, cursor} = _.pick(paging, ['limit', 'cursor']);
+  
+  const credentials = Buffer.from(`default:${amt}`).toString('base64');
 
   const qs = {};
   if (userId) {
@@ -305,9 +308,8 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
     // eslint-disable-next-line max-len
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
-    auth: {
-      user: 'default',
-      pass: amt,
+    headers: {
+      'Authorization': `Basic ${credentials}`,
     },
     qs,
   }).request('get', '/management/connections');
@@ -350,13 +352,13 @@ smartcar.deleteConnections = async function(amt, filter) {
   if (vehicleId) {
     qs.vehicle_id = vehicleId;
   }
+  const credentials = Buffer.from(`default:${amt}`).toString('base64');
 
   const response = await new SmartcarService({
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
-    auth: {
-      user: 'default',
-      pass: amt,
+    headers: {
+      'Authorization': `Basic ${credentials}`,
     },
     qs,
   }).request('delete', '/management/connections');

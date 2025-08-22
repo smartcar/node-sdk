@@ -503,13 +503,14 @@ test('vehicle request - override auth', async(t) => {
     + 'check for missing parameters, spelling and casing mistakes, and '
     + 'other syntax issues.';
 
+  const credentials = Buffer.from('abc:def').toString('base64');
+
   await t.context.volt.service.request('get',
     'odometer',
     null,
     {
-      auth: {
-        user: 'abc',
-        pass: 'def',
+      headers: {
+        Authorization: `Basic ${credentials}`,
       },
     },
   ).catch((err) => {
