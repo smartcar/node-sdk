@@ -286,7 +286,7 @@ smartcar.verifyPayload = (amt, signature, body) =>
 smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
   const {limit, cursor} = _.pick(paging, ['limit', 'cursor']);
-  
+
   const credentials = Buffer.from(`default:${amt}`).toString('base64');
 
   const qs = {};
@@ -309,7 +309,7 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
     headers: {
-      'Authorization': `Basic ${credentials}`,
+      Authorization: `Basic ${credentials}`,
     },
     qs,
   }).request('get', '/management/connections');
@@ -358,7 +358,7 @@ smartcar.deleteConnections = async function(amt, filter) {
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
     headers: {
-      'Authorization': `Basic ${credentials}`,
+      Authorization: `Basic ${credentials}`,
     },
     qs,
   }).request('delete', '/management/connections');
