@@ -64,6 +64,7 @@ helpers.runAuthFlow = async function(
   brand = 'CHEVROLET',
   email = '',
 ) {
+
   const firefoxOptions = new firefox.Options();
   const chromeOptions = new chrome.Options()
     .addArguments('disable-infobars')

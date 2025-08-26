@@ -22,7 +22,7 @@
     "index.js"
   ],
   "engines": {
-    "node": ">=10.13.0",
+    "node": ">=18.20.0",
     "npm": ">=8.3.0"
   },
   "scripts": {
@@ -37,20 +37,17 @@
     "docs": "mkdir -p doc && jsdoc2md --example-lang js --template doc/.template.hbs --files .docs.js index.js lib/* | sed -e 's/[ \t]*$//' -e 's/\\[\\ &#x27;//g' -e 's/&#x27;\\ \\]//g' > doc/readme.md"
   },
   "dependencies": {
-    "bluebird": "^3.5.5",
-    "lodash": "^4.17.5",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
     "ava": "^4.0.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.9.0",
+    "eslint": "^8.57.0",
     "eslint-config-smartcar": "^3.0.0",
     "geckodriver": "^3.0.1",
     "is-ci": "^3.0.1",
     "jsdoc-to-markdown": "^7.1.1",
-    "nock": "^13.2.4",
+    "nock": "^14.0.10",
     "nyc": "^15.1.0",
     "selenium-webdriver": "^4.1.1",
     "semantic-release": "^19.0.2",

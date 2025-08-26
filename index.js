@@ -99,8 +99,8 @@ smartcar.getApiVersion = () => config.version;
 smartcar.getUser = async function(accessToken) {
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
-    auth: {bearer: accessToken},
-  }).request('get', `/v${config.version}/user`);
+    headers: {Authorization: `Bearer ${accessToken}`},
+  }).request('get', `v${config.version}/user/`);
   return response;
 };
 
@@ -146,7 +146,7 @@ smartcar.getUser = async function(accessToken) {
 smartcar.getVehicles = async function(accessToken, paging = {}) {
   const response = await new SmartcarService({
     baseUrl: util.getUrl(),
-    auth: {bearer: accessToken},
+    headers: {Authorization: `Bearer ${accessToken}`},
     qs: paging,
   }).request('get', '');
   return response;
@@ -221,11 +221,12 @@ smartcar.getCompatibility = async function(vin, scope, country, options = {}) {
   const clientSecret =
     options.clientSecret || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
 
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
-    auth: {
-      user: clientId,
-      pass: clientSecret,
+    headers: {
+      Authorization: `Basic ${credentials}`,
     },
     qs: buildQueryParams(vin, scope, country, options),
   }).request('get', `v${options.version || config.version}/compatibility`);
@@ -286,6 +287,8 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
   const {limit, cursor} = _.pick(paging, ['limit', 'cursor']);
 
+  const credentials = Buffer.from(`default:${amt}`).toString('base64');
+
   const qs = {};
   if (userId) {
     qs.user_id = userId;
@@ -305,9 +308,8 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
     // eslint-disable-next-line max-len
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
-    auth: {
-      user: 'default',
-      pass: amt,
+    headers: {
+      Authorization: `Basic ${credentials}`,
     },
     qs,
   }).request('get', '/management/connections');
@@ -350,13 +352,13 @@ smartcar.deleteConnections = async function(amt, filter) {
   if (vehicleId) {
     qs.vehicle_id = vehicleId;
   }
+  const credentials = Buffer.from(`default:${amt}`).toString('base64');
 
   const response = await new SmartcarService({
     baseUrl:
       `${util.getConfig('SMARTCAR_MANAGEMENT_API_ORIGIN') || config.management}/v${config.version}`,
-    auth: {
-      user: 'default',
-      pass: amt,
+    headers: {
+      Authorization: `Basic ${credentials}`,
     },
     qs,
   }).request('delete', '/management/connections');

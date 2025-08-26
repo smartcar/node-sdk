@@ -4,6 +4,8 @@ const test = require('ava');
 const nock = require('nock');
 
 const smartcar = require('../../');
+const SmartcarService = require('../../lib/smartcar-service');
+const SmartcarError = require('../../lib/smartcar-error');
 
 test('setApiVersion and getApiVersion', function(t) {
   let vehicle = new smartcar.Vehicle();
@@ -39,7 +41,7 @@ test('verifyPayload', function(t) {
 test('getVehicles - simple', async function(t) {
 
   const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/vehicles')
+    .get('/vehicles/')
     .matchHeader('Authorization', 'Bearer simple')
     .reply(200, {
       vehicles: ['vehicle1', 'vehicle2', 'vehicle3'],
@@ -54,7 +56,7 @@ test('getVehicles - simple', async function(t) {
 test('getVehicles - paging', async function(t) {
 
   const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/vehicles')
+    .get('/vehicles/')
     .query({limit: '1'})
     .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
@@ -69,7 +71,7 @@ test('getVehicles - paging', async function(t) {
 
 test('getUser', async function(t) {
   const n = nock('https://api.smartcar.com/v2.0/')
-    .get('/user')
+    .get('/user/')
     .matchHeader('Authorization', 'Bearer token')
     .reply(200, {
       id: 'userid',
@@ -227,3 +229,42 @@ test('deleteConnections - both vehicleId and userId passed', async function(t) {
     'Filter can contain EITHER user_id OR vehicle_id, not both',
   );
 });
+
+test('timeout', async function(t) {
+
+  nock('https://api.smartcar.com/v6.6/')
+    .get('/custom/endpoint')
+    .delay(1000) // delay the response to simulate timeout
+    .reply(200, {success: true});
+
+  const newService = new SmartcarService({baseUrl: 'https://api.smartcar.com/v6.6', timeout: 1});
+  const error = await t.throwsAsync(
+    newService.request('get', 'custom/endpoint'),
+    {instanceOf: SmartcarError},
+  );
+
+  t.is(error.message, 'Request timed out');
+  t.is(error.statusCode, 408);
+});
+
+
+test('timeout - batch', async function(t) {
+  nock('https://api.smartcar.com/v6.6/')
+    .post('/batch', {
+      requests: [
+        {path: '/custom/endpoint'},
+      ],
+    })
+    .delay(1000) // delay the response to simulate timeout
+    .reply(200, {success: true});
+
+  const newService = new SmartcarService({baseUrl: 'https://api.smartcar.com/v6.6', timeout: 1});
+  const error = await t.throwsAsync(
+    newService.batchRequest(['/custom/endpoint']),
+    {instanceOf: SmartcarError},
+  );
+
+  t.is(error.message, 'Request timed out');
+  t.is(error.statusCode, 408);
+});
+
