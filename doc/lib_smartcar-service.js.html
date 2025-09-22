@@ -28,8 +28,9 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
+
 const _ = require('lodash');
-const requestPromise = require('request-promise');
+const SmartcarError = require('./smartcar-error');
 const config = require('./config.json');
 const util = require('./util');
 const HEADER_TO_META_KEYS = {
@@ -81,7 +82,9 @@ const getNameFromPath = (path) => {
   // converts to 'batteryCapacity', 'engineOil', 'odometer', 'teslaSpeedometer'
   return _.camelCase(path);
 };
-const buildBatchResponse = (body, headers) => {
+const buildBatchResponse = async(res) => {
+
+  const {parsedBody: body, parsedHeaders: headers} = await util.handleRes(res);
   const batchResponse = {};
   body.responses.forEach((response) => {
     const attributeName = getNameFromPath(response.path);
@@ -97,16 +100,7 @@ const buildBatchResponse = (body, headers) => {
       };
     } else {
       batchResponse[attributeName] = () => {
-        util.handleError({
-          statusCode: response.code,
-          response: {
-            body: response.body,
-            headers: {
-              ...headers,
-              ...response.headers,
-            },
-          },
-        });
+        util.handleError({body: response.body, headers: response.headers, res});
       };
     }
   });
@@ -126,48 +120,123 @@ function SmartcarService(options = {}) {
     json: true,
     headers: {
       'User-Agent': util.USER_AGENT,
+      'Content-Type': 'application/json',
     },
     timeout: config.timeout,
   };
-  this.requestObject = requestPromise.defaults(
-    _.merge(defaultOptions, options),
-  );
+  this.baseUrl = options.baseUrl || config.api;
+  this.defaultOptions = _.merge(defaultOptions, options);
+}
+
+function joinUrl(base, path) {
+  return `${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
 }
 
 SmartcarService.prototype.request = async function(
   type,
   path,
-  body = {},
+  body = null,
   options = {},
 ) {
-  body.resolveWithFullResponse = true;
-  const response = await util.wrap(
-    this.requestObject.defaults(options)[type](path, body),
+
+  const requestOptions = _.merge(
+    {},
+    this.defaultOptions,
+    options,
   );
 
-  if (Array.isArray(response.body)) {
-    return {
-      data: response.body,
-      meta: buildMeta(response.headers),
-    };
-  } else {
-    return {
-      ...(response.body || {}),
-      meta: buildMeta(response.headers),
-    };
+  const method = type.toUpperCase();
+  requestOptions.method = method;
+
+  const {qs} = requestOptions;
+
+  const params = new URLSearchParams(qs || {});
+
+  if (body) {
+    const formEncoded = 'application/x-www-form-urlencoded';
+    if (requestOptions.headers['Content-Type'] === formEncoded) {
+      requestOptions.body = new URLSearchParams(body);
+    } else {
+      requestOptions.body = JSON.stringify(body);
+    }
+  }
+
+  // eslint-disable-next-line max-len
+  const requestPath = joinUrl(this.baseUrl, path) + (params.toString() ? `?${params.toString()}` : '');
+
+  const newRequest = new Request(requestPath, requestOptions);
+
+  try {
+    const res = await fetch(newRequest,
+      {signal: AbortSignal.timeout(requestOptions.timeout)},
+    );
+
+    const {parsedBody, parsedHeaders} = await util.handleRes(res);
+
+    if (!res.ok) {
+      util.handleError({body: parsedBody, headers: parsedHeaders, res});
+    }
+
+    if (Array.isArray(parsedBody)) {
+      return {
+        data: parsedBody,
+        meta: buildMeta(parsedHeaders),
+      };
+    } else {
+      return {
+        ...(parsedBody || {}),
+        meta: buildMeta(parsedHeaders),
+      };
+    }
+  } catch (error) {
+    if (error.name === 'TimeoutError') {
+      throw new SmartcarError(
+        408,
+        'Request timed out',
+        {'content-type': 'application/json'},
+      );
+    }
+    throw error;
   }
 };
 
 SmartcarService.prototype.batchRequest = async function(paths) {
   const requests = paths.map((path) => ({path}));
-  const response = await util.wrap(
-    this.requestObject.post('batch', {
-      body: {requests},
-      resolveWithFullResponse: true,
-    }),
-  );
 
-  return buildBatchResponse(response.body, response.headers);
+  const requestPath = joinUrl(this.baseUrl, '/batch');
+
+
+  const requestOptions = {
+    method: 'POST',
+    ...this.defaultOptions,
+    body: JSON.stringify({requests}),
+  };
+
+  const newRequest = new Request(requestPath, requestOptions);
+
+  try {
+    const res = await fetch(newRequest,
+      {signal: AbortSignal.timeout(requestOptions.timeout)},
+    );
+
+    if (!res.ok) {
+      const {parsedBody, parsedHeaders} = await util.handleRes(res);
+      util.handleError({body: parsedBody, headers: parsedHeaders, res});
+    }
+
+    return buildBatchResponse(res);
+  } catch (error) {
+    if (error.name === 'TimeoutError') {
+      throw new SmartcarError(
+        408,
+        'Request timed out',
+        {'content-type': 'application/json'},
+      );
+    }
+    throw error;
+
+  }
+
 };
 
 module.exports = SmartcarService;
@@ -187,7 +256,7 @@ module.exports = SmartcarService;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Mar 03 2025 02:56:02 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Sep 22 2025 10:17:59 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
