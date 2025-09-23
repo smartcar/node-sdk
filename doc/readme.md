@@ -116,8 +116,8 @@ the following fields :</p>
         * [~User](#module_smartcar..User) : <code>Object</code>
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
         * [~Compatibility](#module_smartcar..Compatibility) : <code>Object</code>
-        * [~GetConnections](#module_smartcar..GetConnections) ⇒ <code>GetConnections</code>
-        * [~DeleteConnections](#module_smartcar..DeleteConnections) ⇒ <code>DeleteConnections</code>
+        * [~GetConnections](#module_smartcar..GetConnections) ⇒ <code>Promise.&lt;GetConnections&gt;</code>
+        * [~DeleteConnections](#module_smartcar..DeleteConnections) ⇒ <code>Promise.&lt;DeleteConnections&gt;</code>
 
 <a name="module_smartcar.SmartcarError"></a>
 
@@ -339,7 +339,7 @@ Verify webhook payload with AMT and signature.
 ```
 <a name="module_smartcar..GetConnections"></a>
 
-### smartcar~GetConnections ⇒ <code>GetConnections</code>
+### smartcar~GetConnections ⇒ <code>Promise.&lt;GetConnections&gt;</code>
 Returns a paged list of all the vehicles that are connected to the application associated
 with the management API token used sorted in descending order by connection date.
 
@@ -368,7 +368,7 @@ with the management API token used sorted in descending order by connection date
 
 <a name="module_smartcar..DeleteConnections"></a>
 
-### smartcar~DeleteConnections ⇒ <code>DeleteConnections</code>
+### smartcar~DeleteConnections ⇒ <code>Promise.&lt;DeleteConnections&gt;</code>
 Deletes all the connections by vehicle or user ID and returns a
 list of all connections that were deleted.
 
@@ -397,8 +397,8 @@ list of all connections that were deleted.
 * [AuthClient](#AuthClient)
     * [new AuthClient(options)](#new_AuthClient_new)
     * [.getAuthUrl([scope], [options])](#AuthClient+getAuthUrl) ⇒ <code>String</code>
-    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Access</code>](#Access)
-    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Access</code>](#Access)
+    * [.exchangeCode(code)](#AuthClient+exchangeCode) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
+    * [.exchangeRefreshToken(token)](#AuthClient+exchangeRefreshToken) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 
 <a name="new_AuthClient_new"></a>
 
@@ -455,11 +455,11 @@ response_type=code
 ```
 <a name="AuthClient+exchangeCode"></a>
 
-### authClient.exchangeCode(code) ⇒ [<code>Access</code>](#Access)
+### authClient.exchangeCode(code) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 Exchange an authorization code for an access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Access</code>](#Access) - New set of Access and Refresh tokens.
+**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
 - [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
@@ -474,11 +474,11 @@ for all possible errors.
 
 <a name="AuthClient+exchangeRefreshToken"></a>
 
-### authClient.exchangeRefreshToken(token) ⇒ [<code>Access</code>](#Access)
+### authClient.exchangeRefreshToken(token) ⇒ [<code>Promise.&lt;Access&gt;</code>](#Access)
 Exchange a refresh token for a new access object.
 
 **Kind**: instance method of [<code>AuthClient</code>](#AuthClient)
-**Returns**: [<code>Access</code>](#Access) - New set of Access and Refresh tokens.
+**Returns**: [<code>Promise.&lt;Access&gt;</code>](#Access) - New set of Access and Refresh tokens.
 **Throws**:
 
 - [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
@@ -620,17 +620,17 @@ Initializes a new Service object to make requests to the Smartcar API.
 
 * [Vehicle](#Vehicle)
     * [new Vehicle(id, token, [options])](#new_Vehicle_new)
-    * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Permissions</code>](#Permissions)
-    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
-    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
-    * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
-    * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
-    * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
-    * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>ActionResponse</code>](#ActionResponse)
-    * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Object</code>
-    * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Meta</code>](#Meta)
-    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Batch</code>](#Batch)
-    * [.request(method, path, body, headers)](#Vehicle+request) ⇒ [<code>Response</code>](#Response)
+    * [.permissions([paging])](#Vehicle+permissions) ⇒ [<code>Promise.&lt;Permissions&gt;</code>](#Permissions)
+    * [.diagnosticSystemStatus()](#Vehicle+diagnosticSystemStatus) ⇒ [<code>Promise.&lt;DiagnosticSystemStatusResponse&gt;</code>](#DiagnosticSystemStatusResponse)
+    * [.diagnosticTroubleCodes()](#Vehicle+diagnosticTroubleCodes) ⇒ [<code>Promise.&lt;DiagnosticTroubleCodesResponse&gt;</code>](#DiagnosticTroubleCodesResponse)
+    * [.serviceHistory([startDate], [endDate])](#Vehicle+serviceHistory) ⇒ <code>Promise.&lt;Array.&lt;ServiceHistory&gt;&gt;</code>
+    * [.getChargeLimit()](#Vehicle+getChargeLimit) ⇒ [<code>Promise.&lt;ChargeLimit&gt;</code>](#ChargeLimit)
+    * [.setChargeLimit(limit)](#Vehicle+setChargeLimit) ⇒ [<code>Promise.&lt;ChargeLimit&gt;</code>](#ChargeLimit)
+    * [.sendDestination(latitude, longitude)](#Vehicle+sendDestination) ⇒ [<code>Promise.&lt;ActionResponse&gt;</code>](#ActionResponse)
+    * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Promise.&lt;Meta&gt;</code>](#Meta)
+    * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
+    * [.request(method, path, body, headers)](#Vehicle+request) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.vin()](#Vehicle+vin) ⇒ [<code>Vin</code>](#Vin)
     * [.charge()](#Vehicle+charge) ⇒ [<code>Charge</code>](#Charge)
     * [.battery()](#Vehicle+battery) ⇒ [<code>Battery</code>](#Battery)
@@ -666,7 +666,7 @@ Initializes a new Vehicle to use for making requests to the Smartcar API.
 
 <a name="Vehicle+permissions"></a>
 
-### vehicle.permissions([paging]) ⇒ [<code>Permissions</code>](#Permissions)
+### vehicle.permissions([paging]) ⇒ [<code>Promise.&lt;Permissions&gt;</code>](#Permissions)
 Fetch the list of permissions that this application has been granted
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -685,11 +685,11 @@ Fetch the list of permissions that this application has been granted
 
 <a name="Vehicle+diagnosticSystemStatus"></a>
 
-### vehicle.diagnosticSystemStatus() ⇒ [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse)
+### vehicle.diagnosticSystemStatus() ⇒ [<code>Promise.&lt;DiagnosticSystemStatusResponse&gt;</code>](#DiagnosticSystemStatusResponse)
 Fetches diagnostic system status information for the vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>DiagnosticSystemStatusResponse</code>](#DiagnosticSystemStatusResponse) - - The response containing diagnostic system statuses.
+**Returns**: [<code>Promise.&lt;DiagnosticSystemStatusResponse&gt;</code>](#DiagnosticSystemStatusResponse) - - The response containing diagnostic system statuses.
 **Throws**:
 
 - [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError. See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
@@ -719,11 +719,11 @@ Fetches diagnostic system status information for the vehicle.
 ```
 <a name="Vehicle+diagnosticTroubleCodes"></a>
 
-### vehicle.diagnosticTroubleCodes() ⇒ [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse)
+### vehicle.diagnosticTroubleCodes() ⇒ [<code>Promise.&lt;DiagnosticTroubleCodesResponse&gt;</code>](#DiagnosticTroubleCodesResponse)
 Fetches active diagnostic trouble codes (DTCs) for the vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>DiagnosticTroubleCodesResponse</code>](#DiagnosticTroubleCodesResponse) - - The response containing active
+**Returns**: [<code>Promise.&lt;DiagnosticTroubleCodesResponse&gt;</code>](#DiagnosticTroubleCodesResponse) - - The response containing active
 diagnostic trouble codes.
 **Throws**:
 
@@ -747,7 +747,7 @@ diagnostic trouble codes.
 ```
 <a name="Vehicle+serviceHistory"></a>
 
-### vehicle.serviceHistory([startDate], [endDate]) ⇒ [<code>Array.&lt;ServiceHistory&gt;</code>](#ServiceHistory)
+### vehicle.serviceHistory([startDate], [endDate]) ⇒ <code>Promise.&lt;Array.&lt;ServiceHistory&gt;&gt;</code>
 Returns a list of all the service records performed on the vehicle,
 filtered by the optional date range. If no dates are specified, records from the
 last year are returned.
@@ -766,7 +766,7 @@ last year are returned.
 
 <a name="Vehicle+getChargeLimit"></a>
 
-### vehicle.getChargeLimit() ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+### vehicle.getChargeLimit() ⇒ [<code>Promise.&lt;ChargeLimit&gt;</code>](#ChargeLimit)
 Fetch the charge limit for an electric vehicle
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -787,7 +787,7 @@ Fetch the charge limit for an electric vehicle
 ```
 <a name="Vehicle+setChargeLimit"></a>
 
-### vehicle.setChargeLimit(limit) ⇒ [<code>ChargeLimit</code>](#ChargeLimit)
+### vehicle.setChargeLimit(limit) ⇒ [<code>Promise.&lt;ChargeLimit&gt;</code>](#ChargeLimit)
 Set the charge limit for an electric vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -813,11 +813,11 @@ Set the charge limit for an electric vehicle.
 ```
 <a name="Vehicle+sendDestination"></a>
 
-### vehicle.sendDestination(latitude, longitude) ⇒ [<code>ActionResponse</code>](#ActionResponse)
+### vehicle.sendDestination(latitude, longitude) ⇒ [<code>Promise.&lt;ActionResponse&gt;</code>](#ActionResponse)
 Send a destination to the vehicle's navigation system.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>ActionResponse</code>](#ActionResponse) - - A Response object containing the status and metadata.
+**Returns**: [<code>Promise.&lt;ActionResponse&gt;</code>](#ActionResponse) - - A Response object containing the status and metadata.
 **Throws**:
 
 - [<code>SmartcarError</code>](#SmartcarError) - An instance of SmartcarError.
@@ -841,7 +841,7 @@ Send a destination to the vehicle's navigation system.
 ```
 <a name="Vehicle+subscribe"></a>
 
-### vehicle.subscribe(webhookId) ⇒ <code>Object</code>
+### vehicle.subscribe(webhookId) ⇒ <code>Promise.&lt;Object&gt;</code>
 Subscribe the vehicle to given webhook Id
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -858,7 +858,7 @@ Subscribe the vehicle to given webhook Id
 
 <a name="Vehicle+unsubscribe"></a>
 
-### vehicle.unsubscribe(amt, webhookId) ⇒ [<code>Meta</code>](#Meta)
+### vehicle.unsubscribe(amt, webhookId) ⇒ [<code>Promise.&lt;Meta&gt;</code>](#Meta)
 Unsubscribe  the vehicle from given webhook Id
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -876,7 +876,7 @@ Unsubscribe  the vehicle from given webhook Id
 
 <a name="Vehicle+batch"></a>
 
-### vehicle.batch(paths) ⇒ [<code>Batch</code>](#Batch)
+### vehicle.batch(paths) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
 Make batch requests for supported items
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -894,7 +894,7 @@ Make batch requests for supported items
 
 <a name="Vehicle+request"></a>
 
-### vehicle.request(method, path, body, headers) ⇒ [<code>Response</code>](#Response)
+### vehicle.request(method, path, body, headers) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 General purpose method to make a request to a Smartcar endpoint.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)

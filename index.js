@@ -88,7 +88,7 @@ smartcar.getApiVersion = () => config.version;
 
 /**
  * Return the user's id.
- *
+ * @async
  * @method
  * @param {String} accessToken - access token
  * @return {module:smartcar~User}
@@ -132,7 +132,7 @@ smartcar.getUser = async function(accessToken) {
 
 /**
  * Return list of the user's vehicles ids.
- *
+ * @async
  * @method
  * @param {String} accessToken - access token
  * @param {Object} [paging]
@@ -197,7 +197,7 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * 3. supports the permissions.
  *
  * _To use this function, please contact us!_
- *
+ * @async
  * @param {String} vin - the VIN of the vehicle
  * @param {String[]} scope - list of permissions to check compatibility for
  * @param {String} [country='US'] - an optional country code according to [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -261,7 +261,7 @@ smartcar.verifyPayload = (amt, signature, body) =>
 /**
  * Returns a paged list of all the vehicles that are connected to the application associated
  * with the management API token used sorted in descending order by connection date.
- *
+ * @async
  * @type {Object}
  * @typedef Connection
  * @property {String} vehicleId
@@ -281,7 +281,7 @@ smartcar.verifyPayload = (amt, signature, body) =>
  * @param {object} paging
  * @param {number} paging.limit
  * @param {String} paging.cursor
- * @returns {GetConnections}
+ * @returns {Promise<GetConnections>}
  */
 smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
@@ -320,7 +320,7 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
 /**
  * Deletes all the connections by vehicle or user ID and returns a
  * list of all connections that were deleted.
- *
+ * @async
  * @type {Object}
  * @typedef Connection
  * @property {String} vehicleId
@@ -334,7 +334,7 @@ smartcar.getConnections = async function(amt, filter = {}, paging = {}) {
  * @param {object} filter
  * @param {String} filter.userId
  * @param {String} filter.vehicleId
- * @returns {DeleteConnections}
+ * @returns {Promise<DeleteConnections>}
  */
 smartcar.deleteConnections = async function(amt, filter) {
   const {userId, vehicleId} = _.pick(filter, ['userId', 'vehicleId']);
