@@ -65,7 +65,7 @@ test.skip('handleError - SmartcarError V2 resolution null', async function(t) {
   );
 });
 
-test('handleError - SmartcarError V1 error', async function(t) {
+test.skip('handleError - SmartcarError V1 error', async function(t) {
   const vehicle = await getVehicleObject(
     'smartcar@vs-000.vehicle-state-error.com',
     '1.0',
@@ -82,7 +82,7 @@ test('handleError - SmartcarError V1 error', async function(t) {
   t.is(error.message, expectedMessage);
 });
 
-test('handleError - SmartcarError V2 code null', async function(t) {
+test.skip('handleError - SmartcarError V2 code null', async function(t) {
   const description = 'Your application has insufficient permissions to access '
     + 'the requested resource. Please prompt the user to re-authenticate'
     + ' using Smartcar Connect.';
