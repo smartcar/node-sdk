@@ -6,10 +6,18 @@ const test = require('ava');
 const smartcar = require('../../');
 const {getAuthClientParams, runAuthFlow, DEFAULT_SCOPES} = require('./helpers');
 
-test('exchangeCode', async(t) => {
+// Share auth tokens across tests to reduce auth flow calls
+test.before(async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
-  const access = await client.exchangeCode(code);
+  const tokens = await client.exchangeCode(code);
+  
+  t.context.client = client;
+  t.context.tokens = tokens;
+});
+
+test('exchangeCode', (t) => {
+  const access = t.context.tokens;
 
   t.deepEqual(
     _.xor(_.keys(access), [
@@ -23,10 +31,12 @@ test('exchangeCode', async(t) => {
 });
 
 test('exchangeRefreshToken', async(t) => {
-  const client = new smartcar.AuthClient(getAuthClientParams());
-  const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
+  const client = t.context.client;
+  const initialTokens = t.context.tokens;
 
-  const exchagedTokens = await client.exchangeCode(code);
+  const exchagedTokens = await client.exchangeRefreshToken(
+    initialTokens.refreshToken,
+  );
 
   t.deepEqual(
     _.xor(_.keys(exchagedTokens), [
