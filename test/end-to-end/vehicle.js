@@ -22,10 +22,10 @@ const getVehicle = async function(brand, scope) {
 test.before(async(t) => {
   // Run auth flows sequentially with delays to avoid rate limiting
   const volt = await getVehicle('CHEVROLET', DEFAULT_SCOPES);
-  
+
   // Wait 2 seconds between auth flows to avoid rate limiting
   await new Promise((resolve) => setTimeout(resolve, 2000));
-  
+
   const ford = await getVehicle('FORD', [
     'required:control_charge',
     'required:control_security',
@@ -33,10 +33,10 @@ test.before(async(t) => {
     'required:control_navigation',
     'required:read_service_history',
   ]);
-  
+
   // Wait 2 seconds between auth flows to avoid rate limiting
   await new Promise((resolve) => setTimeout(resolve, 2000));
-  
+
   const kia = await getVehicle('KIA', [
     'required:read_charge',
     'required:control_charge',

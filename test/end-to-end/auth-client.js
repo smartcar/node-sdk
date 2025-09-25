@@ -11,7 +11,7 @@ test.before(async(t) => {
   const client = new smartcar.AuthClient(getAuthClientParams());
   const code = await runAuthFlow(client.getAuthUrl(DEFAULT_SCOPES));
   const tokens = await client.exchangeCode(code);
-  
+
   t.context.client = client;
   t.context.tokens = tokens;
 });
