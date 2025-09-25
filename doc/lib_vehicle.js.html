@@ -95,11 +95,9 @@ function Vehicle(id, token, options = {}) {
 
   this.service = new SmartcarService({
     baseUrl: util.getUrl(this.id, '', this.version),
-    auth: {
-      bearer: this.token,
-    },
     headers: {
       'sc-unit-system': this.unitSystem,
+      Authorization: `Bearer ${this.token}`,
     },
     qs: this.query,
   });
@@ -115,13 +113,13 @@ function Vehicle(id, token, options = {}) {
 
 _.forEach(METHODS_MAP, (attributes, methodName) => {
   Vehicle.prototype[methodName] = async function() {
-    const bodyObject = {};
+    let bodyObject = null;
     if (attributes.body) {
-      bodyObject.body = attributes.body;
+      bodyObject = attributes.body;
     }
     const response = await this.service.request(
       attributes.requestType || 'get',
-      attributes.path || methodName,
+      attributes.path ?? methodName,
       bodyObject,
     );
     return response;
@@ -167,7 +165,7 @@ Vehicle.prototype.permissions = async function(paging = {}) {
   const response = await this.service.request(
     'get',
     'permissions',
-    {},
+    null,
     {qs: paging},
   );
   return response;
@@ -304,7 +302,8 @@ Vehicle.prototype.diagnosticTroubleCodes = async function() {
  *     meta: {
  *       dataAge: new Date('2023-04-30T07:20:50.844Z'),
  *       unitSystem: 'imperial',
- *       requestId: 'b3c14915-0c26-43c5-8e42-9edfc2a66b2f'
+ *       requestId: 'b3c14915-0c26-43c5-8e42-9edfc2a66b2f',
+ *       fetchedAt: new Date('2023-04-30T07:20:51.844Z'),
  *     }
  *   }
  *   // ... additional service records
@@ -329,7 +328,7 @@ Vehicle.prototype.serviceHistory = async function(startDate, endDate) {
   const response = await this.service.request(
     'get',
     'service/history',
-    {},
+    null,
     {
       qs: {
         // eslint-disable-next-line camelcase
@@ -401,7 +400,7 @@ Vehicle.prototype.setChargeLimit = async function(limit) {
   const response = await this.service.request(
     'post',
     'charge/limit',
-    {body},
+    body,
   );
 
   return response;
@@ -447,7 +446,7 @@ Vehicle.prototype.sendDestination = async function(latitude, longitude) {
   const response = await this.service.request(
     'post',
     'navigation/destination',
-    {body},
+    body,
   );
 
   return response;
@@ -501,7 +500,7 @@ Vehicle.prototype.unsubscribe = async function(amt, webhookId) {
     'delete',
     `webhooks/${webhookId}`,
     {},
-    {auth: {bearer: amt}},
+    {headers: {Authorization: `Bearer ${amt}`}},
   );
   return response;
 };
@@ -548,7 +547,8 @@ Vehicle.prototype.batch = async function(paths) {
  *  meta: {
  *    dataAge: 2022-01-20T02:55:25.041Z,
  *    unitSystem: 'imperial',
- *    requestId: 'f787849d-d228-482d-345f-459a5154sg73'
+ *    requestId: 'f787849d-d228-482d-345f-459a5154sg73',
+ *    fetchedAt: 2022-01-20T02:55:25.041Z
  *  }
  * }
  */
@@ -568,7 +568,7 @@ Vehicle.prototype.batch = async function(paths) {
 Vehicle.prototype.request = async function(
   method,
   path,
-  body = {},
+  body = null,
   headers = {},
 ) {
   const options = {
@@ -577,13 +577,13 @@ Vehicle.prototype.request = async function(
   };
 
   if (!headers.Authorization) {
-    options.auth = {bearer: this.token};
+    options.headers.Authorization = `Bearer ${this.token}`;
   }
 
   const rawResponse = await new SmartcarService(options).request(
     method.toLowerCase(),
     path,
-    {body},
+    body,
   );
 
   const response = {
@@ -609,6 +609,7 @@ Vehicle.prototype.request = async function(
  *   requestId: 'b9593682-8515-4f36-8190-bb56cde4c38a',
  *   dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *   unitSystem: 'imperial',
+ *   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  * }
  */
 
@@ -654,6 +655,7 @@ Vehicle.prototype.request = async function(
  *   state: "FULLY_CHARGED",
  *   meta: {
  *     dataAge: new Date('2018-05-04T07:20:50.844Z'),
+ *     fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -686,6 +688,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -716,6 +719,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -734,9 +738,11 @@ Vehicle.prototype.request = async function(
 /**
  * @type {Object}
  * @typedef NominalCapacity
- * @property {Array} availableCapacities - A list of the rated nominal capacities available for a vehicle
+ * @property {Array} availableCapacities - A list of the rated nominal
+ * capacities available for a vehicle
  * @property {Object} capacity - The rated nominal capacity for the vehicle's battery in kWh
- * @property {String} url - A URL that will launch the flow for a vehicle owner to specify the correct battery capacity for a vehicle
+ * @property {String} url - A URL that will launch the flow for a vehicle owner
+ * to specify the correct battery capacity for a vehicle
  * @property {Meta} meta
  *
  * @example
@@ -791,6 +797,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -825,6 +832,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -854,6 +862,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -883,6 +892,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *   }
  * }
  */
@@ -962,6 +972,7 @@ Vehicle.prototype.request = async function(
  *    meta: {
  *        dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *        requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *        fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
  *    },
  * }
  */
@@ -993,6 +1004,7 @@ Vehicle.prototype.request = async function(
  *    dataAge: new Date('2018-05-04T07:20:50.844Z'),
  *    unitSystem: 'imperial',
  *    requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+ *    fetchedAt: new Date('2022-01-20T02:55:25.041Z'),
  *   }
  * }
  */
@@ -1147,7 +1159,7 @@ module.exports = Vehicle;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Mar 03 2025 02:56:02 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Sep 22 2025 10:17:59 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

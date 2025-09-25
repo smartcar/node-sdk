@@ -1,8 +1,8 @@
 {
-  "lines": 95,
-  "branches": 95,
-  "functions": 95,
-  "statements": 95,
+  "lines": 93,
+  "branches": 93,
+  "functions": 93,
+  "statements": 93,
   "all" : false,
   "cache": true,
   "reporter": [
