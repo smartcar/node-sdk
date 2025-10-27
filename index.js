@@ -22,12 +22,25 @@ const smartcar = {
 };
 /* eslint-enable global-require */
 
-const buildQueryParams = function(vin, scope, country, options) {
-  const parameters = {
-    vin,
-    scope: scope.join(' '),
-    country,
-  };
+const spaceSeparatedList = (list) => {
+  if (Array.isArray(list)) {
+    return list.join(' ');
+  }
+  return list;
+};
+
+const buildCredentials = (options) => {
+  const clientId =
+    options.clientId || util.getOrThrowConfig('SMARTCAR_CLIENT_ID');
+  const clientSecret =
+    options.clientSecret || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
+
+  return Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+};
+
+const buildOptionQueryParams = (options) => {
+  const parameters = {};
+
   if (options.flags) {
     parameters.flags = util.getFlagsString(options.flags);
   }
@@ -189,6 +202,98 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  */
 
 /**
+ * @type {Object}
+ * @typedef CompatibilityMatrixEntry
+ * @property {String} model
+ * @property {Number} startYear
+ * @property {Number} endYear
+ * @property {String} type
+ * @property {Array.<String>} endpoints
+ * @property {Array.<String>} permissions
+ *
+ * @example
+ * {
+ *   model: "LEAF",
+ *   startYear: 2018,
+ *   endYear: 2022,
+ *   type: "BEV",
+ *   endpoints: [
+ *     "EV battery",
+ *     "EV charging status",
+ *     "Location",
+ *     "Lock & unlock",
+ *     "Odometer"
+ *   ],
+ *   permissions: [
+ *     "read_battery",
+ *     "read_charge",
+ *     "read_location",
+ *     "control_security",
+ *     "read_odometer"
+ *   ]
+ * }
+ */
+
+/**
+ * @type {Object}
+ * @typedef CompatibilityMatrix
+ * @property {Object.<String, CompatibilityMatrixEntry[]>} makes -
+ * A mapping of make names to arrays of CompatibilityMatrixEntry objects.
+ *
+ * @example
+ * {
+ *   "NISSAN": [
+ *     {
+ *       "model": "LEAF",
+ *       "startYear": 2018,
+ *       "endYear": 2022,
+ *       "type": "BEV",
+ *       "endpoints": [
+ *         "EV battery",
+ *         "EV charging status",
+ *         "Location",
+ *         "Lock & unlock",
+ *         "Odometer"
+ *       ],
+ *       "permissions": [
+ *         "read_battery",
+ *         "read_charge",
+ *         "read_location",
+ *         "control_security",
+ *         "read_odometer"
+ *       ]
+ *     }
+ *   ],
+ *   "TESLA": [
+ *     {
+ *       "model": "3",
+ *       "startYear": 2017,
+ *       "endYear": 2023,
+ *       "type": "BEV",
+ *       "endpoints": [
+ *         "EV battery",
+ *         "EV charging status",
+ *         "EV start & stop charge",
+ *         "Location",
+ *         "Lock & unlock",
+ *         "Odometer",
+ *         "Tire pressure"
+ *       ],
+ *       "permissions": [
+ *         "read_battery",
+ *         "read_charge",
+ *         "control_charge",
+ *         "read_location",
+ *         "control_security",
+ *         "read_odometer",
+ *         "read_tires"
+ *       ]
+ *     }
+ *   ]
+ * }
+ */
+
+/**
  * Determine whether a vehicle is compatible with Smartcar.
  *
  * A compatible vehicle is a vehicle that:
@@ -214,22 +319,88 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
  */
-smartcar.getCompatibility = async function(vin, scope, country, options = {}) {
+smartcar.getCompatibility = async function(vin, scope, countryOrOptions, options = {}) {
+  let country;
+  if (typeof countryOrOptions === 'string') {
+    country = countryOrOptions;
+  } else if (typeof countryOrOptions === 'object' && countryOrOptions !== null) {
+    options = countryOrOptions;
+  }
   country = country || 'US';
-  const clientId =
-    options.clientId || util.getOrThrowConfig('SMARTCAR_CLIENT_ID');
-  const clientSecret =
-    options.clientSecret || util.getOrThrowConfig('SMARTCAR_CLIENT_SECRET');
 
-  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+  const qs = {
+    ...buildOptionQueryParams(options),
+    scope: spaceSeparatedList(scope),
+    country,
+    vin,
+  };
+
+  const credentials = buildCredentials(options);
 
   const response = await new SmartcarService({
     baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
     headers: {
       Authorization: `Basic ${credentials}`,
     },
-    qs: buildQueryParams(vin, scope, country, options),
+    qs,
   }).request('get', `v${options.version || config.version}/compatibility`);
+
+  return response;
+};
+
+/**
+ * Retrieve the Smartcar compatibility matrix for a given region.
+ * Provides the ability to filter by scope, make, and type.
+ *
+ * A compatible vehicle is a vehicle that:
+ * 1. has the hardware required for internet connectivity,
+ * 2. belongs to the makes and models Smartcar supports, and
+ * 3. supports the permissions.
+ *
+ * _To use this function, please contact us!_
+ * @async
+ * @param {String} region - the region to retrieve the compatibility matrix for
+ * @param {Object} [options]
+ * @param {String[]} [options.scope] - list of permissions to filter the matrix by
+ * @param {String[]} [options.make] - list of makes to filter the matrix by
+ * @param {String} [options.type] - Engine type to filter the matrix by
+ * (e.g., "ICE", "HEV", "PHEV", "BEV").
+ * @param {String} [options.mode] - Determine what mode Smartcar Connect should be
+ * launched in. Should be one of test, live or simulated.
+ * @param {String} [options.version] - API version to use for the request
+ * @return {module:smartcar~CompatibilityMatrix}
+ * @throws {SmartcarError} - an instance of SmartcarError.
+ *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+ *   for all possible errors.
+ */
+smartcar.getCompatibilityMatrix = async function(region, options = {}) {
+  const credentials = buildCredentials(options);
+
+  const qs = {
+    ...buildOptionQueryParams(options),
+    region,
+  };
+
+  ['scope', 'make'].forEach((param) => {
+    if (options[param]) {
+      qs[param] = spaceSeparatedList(options[param]);
+    }
+  });
+
+  if (options.type) {
+    qs.type = options.type;
+  }
+
+  const response = await new SmartcarService({
+    baseUrl: util.getConfig('SMARTCAR_API_ORIGIN') || config.api,
+    headers: {
+      Authorization: `Basic ${credentials}`,
+    },
+    qs,
+  }).request(
+    'get', `/v${options.version || config.version}/compatibility/matrix`,
+  );
+
   return response;
 };
 
