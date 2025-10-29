@@ -127,6 +127,31 @@ test('getCompatibility - with flags, testModeCompatibilityLevel and override ver
   t.true(n.isDone());
 });
 
+test('getCompatibility - No country provided', async function(t) {
+  const vin = 'fake_vin';
+  const scope = ['read_location', 'read_odometer'];
+  const path = '/compatibility?vin=fake_vin&'
+    + 'scope=read_location%20read_odometer&country=US&'
+    + 'flags=test%3Atest&test_mode_compatibility_level=pizza&mode=test';
+  const n = nock('https://api.smartcar.com/v6.6/')
+    .get(path)
+    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+    .reply(200, {
+      pizza: 'pasta',
+    });
+
+  const response = await smartcar.getCompatibility(vin, scope, {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    flags: {test: 'test'},
+    testModeCompatibilityLevel: 'pizza',
+  });
+
+  t.is(response.pizza, 'pasta');
+  t.true(n.isDone());
+});
+
 test('getCompatibility - mode invalid input errors', async function(t) {
   const vin = 'fake_vin';
   const scope = ['read_location', 'read_odometer'];

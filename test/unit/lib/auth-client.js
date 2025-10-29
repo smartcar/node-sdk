@@ -24,16 +24,6 @@ test('constructor', function(t) {
 });
 
 test('constructor - client id, secret and redirect url errors', function(t) {
-  // let error = t.throws(
-  //   () =>
-  //     new AuthClient({
-  //       clientId: 'clientId',
-  //       clientSecret: 'clientSecret',
-  //     }),
-  // );
-  // let message = 'SMARTCAR_REDIRECT_URI not set or passed as arguments';
-  // t.is(error.message, message);
-
   let error = t.throws(
     () =>
       new AuthClient({
@@ -111,7 +101,66 @@ test('getAuthUrl - simple', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
+  ]);
+
+  t.is(actualUrl.protocol, expectedUrl.protocol);
+  t.is(actualUrl.host, expectedUrl.host);
+  t.is(actualUrl.pathname, expectedUrl.pathname);
+  searchParamKeys.forEach((key) => {
+    t.is(actualUrl.searchParams.get(key), expectedUrl.searchParams.get(key));
+  });
+});
+
+test('getAuthUrl - no ', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+  });
+
+  const actual = client.getAuthUrl(['read_odometer', 'read_vehicle_info']);
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
+  expected += '&scope=read_odometer%20read_vehicle_info';
+  expected += '&mode=live';
+
+  const actualUrl = URL.parse(actual);
+  const expectedUrl = URL.parse(expected);
+
+  const searchParamKeys = new Set([
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
+  ]);
+
+  t.is(actualUrl.protocol, expectedUrl.protocol);
+  t.is(actualUrl.host, expectedUrl.host);
+  t.is(actualUrl.pathname, expectedUrl.pathname);
+  searchParamKeys.forEach((key) => {
+    t.is(actualUrl.searchParams.get(key), expectedUrl.searchParams.get(key));
+  });
+});
+
+test('getAuthUrl - no scope provided', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+  });
+
+  const actual = client.getAuthUrl();
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=auto';
+  expected += '&mode=live';
+
+  const actualUrl = URL.parse(actual);
+  const expectedUrl = URL.parse(expected);
+
+  const searchParamKeys = new Set([
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
@@ -153,7 +202,47 @@ test('getAuthUrl - with optional arguments', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
+  ]);
+
+  t.is(actualUrl.protocol, expectedUrl.protocol);
+  t.is(actualUrl.host, expectedUrl.host);
+  t.is(actualUrl.pathname, expectedUrl.pathname);
+  searchParamKeys.forEach((key) => {
+    t.is(actualUrl.searchParams.get(key), expectedUrl.searchParams.get(key));
+  });
+});
+
+test('getAuthUrl - with optional arguments - no scope provided', function(t) {
+  const client = new AuthClient({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'https://insurance.co/callback',
+    mode: 'test',
+  });
+
+  const actual = client.getAuthUrl(
+    {
+      makeBypass: 'TESLA',
+      state: 'fakestate',
+      forcePrompt: true,
+      flags: {country: 'DE', flag: 'suboption'},
+    },
+  );
+  let expected = 'https://connect.smartcar.com/oauth/authorize?';
+  expected += `response_type=code&client_id=${CLIENT_ID}`;
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
+  expected += '&approval_prompt=force';
+  expected += '&state=fakestate';
+  expected += '&make=TESLA';
+  expected += '&flags=country%3ADE%20flag%3Asuboption';
+  expected += '&mode=test';
+
+  const actualUrl = URL.parse(actual);
+  const expectedUrl = URL.parse(expected);
+
+  const searchParamKeys = new Set([
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
@@ -190,7 +279,7 @@ test('getAuthUrl - single select enabled true', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
@@ -227,7 +316,7 @@ test('getAuthUrl - single select enabled false', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
@@ -269,7 +358,7 @@ test('getAuthUrl - single select vin', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
@@ -306,7 +395,7 @@ test('getAuthUrl - user', function(t) {
   const expectedUrl = URL.parse(expected);
 
   const searchParamKeys = new Set([
-    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys()
+    ...actualUrl.searchParams.keys(), ...expectedUrl.searchParams.keys(),
   ]);
 
   t.is(actualUrl.protocol, expectedUrl.protocol);
