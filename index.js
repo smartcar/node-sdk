@@ -318,6 +318,23 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
+ *
+ * @example
+ * // Called with country parameter
+ * const compatibility = await smartcar.getCompatibility(
+ *   '5YJ3E1EA7KF317XXX',
+ *   ['read_odometer', 'read_location'],
+ *   'US',
+ *   { mode: 'live' },
+ * );
+ *
+ * @example
+ * // Called without country parameter
+ * const compatibility = await smartcar.getCompatibility(
+ *   '5YJ3E1EA7KF317XXX',
+ *   ['read_odometer', 'read_location'],
+ *   { mode: 'live' },
+ * );
  */
 smartcar.getCompatibility = async function(vin, scope, countryOrOptions, options = {}) {
   let country;

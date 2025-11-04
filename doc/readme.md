@@ -224,6 +224,25 @@ _To use this function, please contact us!_
 | [options.mode] | <code>String</code> |  | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 | [options.testModeCompatibilityLevel] | <code>String</code> |  | This string determines which permissions the simulated vehicle is capable of. Possible Values can be found at this link: (https://smartcar.com/docs/integration-guide/test-your-integration/test-requests/#test-successful-api-requests-with-specific-vins) |
 
+**Example**
+```js
+// Called with country parameter
+const compatibility = await smartcar.getCompatibility(
+  '5YJ3E1EA7KF317XXX',
+  ['read_odometer', 'read_location'],
+  'US',
+  { mode: 'live' },
+);
+```
+**Example**
+```js
+// Called without country parameter
+const compatibility = await smartcar.getCompatibility(
+  '5YJ3E1EA7KF317XXX',
+  ['read_odometer', 'read_location'],
+  { mode: 'live' },
+);
+```
 <a name="module_smartcar.getCompatibilityMatrix"></a>
 
 ### smartcar.getCompatibilityMatrix(region, [options]) ⇒ [<code>CompatibilityMatrix</code>](#module_smartcar..CompatibilityMatrix)
@@ -581,6 +600,20 @@ approval_prompt to `force`.
 | [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
 | [options.user] | <code>String</code> | An optional unique identifier for a vehicle owner. This identifier is used to aggregate analytics across Connect sessions for each vehicle owner. |
 
+**Example**
+```js
+// Called with `scope` parameter.
+authClient.getAuthUrl(['read_odometer', 'read_vehicle_info'], {
+  user: '61a3e3d2-5198-47ba-aabd-4623ce4a4042'
+});
+```
+**Example**
+```js
+// Called with only `options` parameter.
+authClient.getAuthUrl({
+  user: '61a3e3d2-5198-47ba-aabd-4623ce4a4042'
+});
+```
 **Example**
 ```js
 https://connect.smartcar.com/oauth/authorize?
@@ -1765,37 +1798,4 @@ the following fields :
 | isLocked | <code>Boolean</code> | Whether the vehicle is locked or not. |
 | doors | <code>Array</code> | The status of each of the vehicle's doors. |
 | windows | <code>Array</code> | The status of each of the vehicle's windows. |
-| sunroof | <code>Array</code> | The status of each of the vehicle's sunroof. |
-| storage | <code>Array</code> | The status of each of the vehicle's storage. |
-| chargingPort | <code>Array</code> | The status of each of the vehicle's chargingPort. |
-| meta | [<code>Meta</code>](#Meta) |  |
-
-**Example**
-```js
-{
-   isLocked: true,
-   doors: [
-      {
-          type: 'frontLeft',
-          status: 'LOCKED',
-      },
-      {
-          type: 'frontRight',
-          status: 'LOCKED',
-      },
-      {
-          type: 'backLeft',
-          status: 'LOCKED',
-      },
-      {
-          type: 'backRight',
-          status: 'LOCKED',
-      },
-   ],
-   windows: [
-      {
-          type: 'frontLeft',
-          status: 'CLOSED',
-      },
-      {
-          type: 'frontRight
+| sunroof | <code>Array</code> | The status of each of
