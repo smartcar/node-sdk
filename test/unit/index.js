@@ -217,6 +217,138 @@ test('getCompatibility - with test_mode false [deprecated]', async function(t) {
   t.true(n.isDone());
 });
 
+test('getConnections - no filters', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'user1', connectedAt: '2023-01-01'},
+        {vehicleId: 'vehicle2', userId: 'user2', connectedAt: '2023-01-02'},
+      ],
+    });
+
+  const response = await smartcar.getConnections('fake-amt');
+  t.is(response.connections.length, 2);
+  t.is(response.connections[0].vehicleId, 'vehicle1');
+  t.true(n.isDone());
+});
+
+test('getConnections - with userId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({user_id: 'test-user-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {
+          vehicleId: 'vehicle1',
+          userId: 'test-user-123',
+          connectedAt: '2023-01-01',
+        },
+      ],
+    });
+
+  const response = await smartcar.getConnections('fake-amt', {
+    userId: 'test-user-123',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].userId, 'test-user-123');
+  t.true(n.isDone());
+});
+
+test('getConnections - with vehicleId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({vehicle_id: 'test-vehicle-456'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {
+          vehicleId: 'test-vehicle-456',
+          userId: 'user1',
+          connectedAt: '2023-01-01',
+        },
+      ],
+    });
+
+  const response = await smartcar.getConnections('fake-amt', {
+    vehicleId: 'test-vehicle-456',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'test-vehicle-456');
+  t.true(n.isDone());
+});
+
+test('getConnections - with limit parameter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({limit: 10})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'user1', connectedAt: '2023-01-01'},
+      ],
+      paging: {cursor: 'next-page-cursor'},
+    });
+
+  const response = await smartcar.getConnections('fake-amt', {}, {limit: 10});
+  t.is(response.connections.length, 1);
+  t.is(response.paging.cursor, 'next-page-cursor');
+  t.true(n.isDone());
+});
+
+test('getConnections - with cursor parameter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({cursor: 'page-cursor-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle2', userId: 'user2', connectedAt: '2023-01-02'},
+      ],
+    });
+
+  const response = await smartcar.getConnections('fake-amt', {}, {
+    cursor: 'page-cursor-123',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'vehicle2');
+  t.true(n.isDone());
+});
+
+test('getConnections - with all parameters', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({
+      // eslint-disable-next-line camelcase
+      user_id: 'test-user-789',
+      limit: 5,
+      cursor: 'test-cursor',
+    })
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {
+          vehicleId: 'vehicle1',
+          userId: 'test-user-789',
+          connectedAt: '2023-01-01',
+        },
+      ],
+    });
+
+  const response = await smartcar.getConnections(
+    'fake-amt',
+    {userId: 'test-user-789'},
+    {limit: 5, cursor: 'test-cursor'},
+  );
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].userId, 'test-user-789');
+  t.true(n.isDone());
+});
+
 test('deleteConnections - both vehicleId and userId passed', async function(t) {
   const error = await t.throwsAsync(
     smartcar.deleteConnections('fake-amt', {
@@ -228,6 +360,47 @@ test('deleteConnections - both vehicleId and userId passed', async function(t) {
     error.message,
     'Filter can contain EITHER user_id OR vehicle_id, not both',
   );
+});
+
+test('deleteConnections - with userId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .delete('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({user_id: 'test-user-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'test-user-123'},
+        {vehicleId: 'vehicle2', userId: 'test-user-123'},
+      ],
+    });
+
+  const response = await smartcar.deleteConnections('fake-amt', {
+    userId: 'test-user-123',
+  });
+  t.is(response.connections.length, 2);
+  t.is(response.connections[0].userId, 'test-user-123');
+  t.true(n.isDone());
+});
+
+test('deleteConnections - with vehicleId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .delete('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({vehicle_id: 'test-vehicle-456'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'test-vehicle-456', userId: 'user1'},
+      ],
+    });
+
+  const response = await smartcar.deleteConnections('fake-amt', {
+    vehicleId: 'test-vehicle-456',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'test-vehicle-456');
+  t.true(n.isDone());
 });
 
 test('timeout', async function(t) {
