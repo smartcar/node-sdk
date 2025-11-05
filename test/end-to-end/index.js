@@ -86,6 +86,34 @@ test('getCompatibility', async(t) => {
   t.truthy(_.every(teslaComp.capabilities, ['capable', true]));
 });
 
+test.serial('getCompatibilityMatrix', async(t) => {
+  const {clientId, clientSecret} = getAuthClientParams();
+  const response = await smartcar.getCompatibilityMatrix('US', {
+    scope: ['read_battery', 'read_charge'],
+    make: 'NISSAN',
+    type: 'BEV',
+    clientId,
+    clientSecret,
+  });
+  t.truthy(response.NISSAN);
+  response.NISSAN.forEach((vehicle) => {
+    t.deepEqual(
+      _.xor(_.keys(vehicle), [
+        'model',
+        'type',
+        'startYear',
+        'endYear',
+        'endpoints',
+        'permissions',
+      ]),
+      [],
+    );
+    t.is(vehicle.type, 'BEV');
+    t.truthy(vehicle.permissions.includes('read_battery'));
+    t.truthy(vehicle.permissions.includes('read_charge'));
+  });
+});
+
 test.serial('getConnections', async(t) => {
   const amt = util.getOrThrowConfig('E2E_SMARTCAR_AMT');
   const res = await smartcar.getConnections(amt);
