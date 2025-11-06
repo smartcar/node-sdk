@@ -11,9 +11,11 @@ const helpers = {};
 
 /* eslint-disable no-process-env */
 const HEADLESS = isCI || process.env.HEADLESS;
+const SELENIUM_REMOTE_URL = process.env.SELENIUM_REMOTE_URL;
+const SELENIUM_BROWSER = process.env.SELENIUM_BROWSER || 'firefox';
+const BROWSER = process.env.BROWSER || SELENIUM_BROWSER;
 const CLIENT_ID = process.env.E2E_SMARTCAR_CLIENT_ID;
 const CLIENT_SECRET = process.env.E2E_SMARTCAR_CLIENT_SECRET;
-const BROWSER = process.env.BROWSER || 'firefox';
 
 /* eslint-enable */
 
@@ -59,11 +61,12 @@ const getCodeFromUri = function(uri) {
   }
 };
 
-helpers.runAuthFlow = async function(
-  authUrl,
-  brand = 'CHEVROLET',
-  email = '',
-) {
+const getDriver = function() {
+  const builder = new Builder();
+
+  if (SELENIUM_REMOTE_URL) {
+    return builder.build();
+  }
 
   const firefoxOptions = new firefox.Options();
   const chromeOptions = new chrome.Options()
@@ -76,11 +79,19 @@ helpers.runAuthFlow = async function(
     chromeOptions.addArguments('headless');
   }
 
-  const driver = new Builder()
+  return builder
     .setChromeOptions(chromeOptions)
     .setFirefoxOptions(firefoxOptions)
     .forBrowser(BROWSER)
     .build();
+};
+
+helpers.runAuthFlow = async function(
+  authUrl,
+  brand = 'CHEVROLET',
+  email = '',
+) {
+  const driver = getDriver();
 
   await driver.get(authUrl);
 

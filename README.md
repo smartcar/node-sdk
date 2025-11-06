@@ -26,10 +26,12 @@ in the [Smartcar Developer portal](https://developer.smartcar.com). If you do
 not have access to the dashboard, please
 [request access](https://smartcar.com/subscribe).
 
+On the Developer portal, you will need to set your application's `redirectURI`
+and `scope` permissions.
+
 ### Flow
 
-- Create a new `AuthClient` object with your `clientId`, `clientSecret`,
-  `redirectUri`.
+- Create a new `AuthClient` object with your `clientId`, and `clientSecret`.
 - Redirect the user to Smartcar Connect using `getAuthUrl` with required `scope` or with one
   of our frontend SDKs.
 - The user will login, and then accept or deny your `scope`'s permissions.
@@ -72,13 +74,12 @@ const port = 4000;
 const client = new smartcar.AuthClient({
   clientId: '<Smartcar Client Id>', // fallback to SMARTCAR_CLIENT_ID ENV variable
   clientSecret: '<Smartcar Client Secret>', // fallback to SMARTCAR_CLIENT_SECRET ENV variable
-  redirectUri: '<Your callback URI>', // fallback to SMARTCAR_REDIRECT_URI ENV variable
   mode: 'test', // launch Smartcar Connect in test mode
 });
 
 // Redirect to Smartcar Connect
 app.get('/login', function(req, res) {
-  const link = client.getAuthUrl(['read_vehicle_info']);
+  const link = client.getAuthUrl();
 
   // redirect to the link
   res.redirect(link);
@@ -146,6 +147,9 @@ Note: In order to run tests locally the following environment variables would ha
 - `E2E_SMARTCAR_WEBHOOK_ID` - Webhook ID use in the webhook tests success case.
 - `BROWSER` - Web browser for tests (`chrome` or `firefox`, default: `firefox`).
 
+Optionally you can set:
+- `SELENIUM_REMOTE_URL` - URL for standalone Selenium server (e.g. `http://localhost:4444/wd/hub`).
+- `SELENIUM_BROWSER` - Browser to be used by standalone Selenium server (`chrome` or `firefox`, default: `firefox`).
 
 Your application needs to have https://example.com/auth set as a valid redirect URI
 
@@ -156,6 +160,10 @@ Your application needs to have https://example.com/auth set as a valid redirect 
 
 ## Supported Node.js Versions
 
-Smartcar aims to support the SDK on all Node.js versions that have a status of "Maintenance" or "Active LTS" as defined in the [Node.js Release schedule](https://github.com/nodejs/Release#release-schedule).
+Smartcar aims to support the SDK on all Node.js versions that have a status of "Maintenance"
+or "Active LTS" as defined in the
+[Node.js Release schedule](https://github.com/nodejs/Release#release-schedule).
 
-In accordance with the Semantic Versioning specification, the addition of support for new Node.js versions would result in a MINOR version bump and the removal of support for Node.js versions would result in a MAJOR version bump.
+In accordance with the Semantic Versioning specification, the addition of support
+for new Node.js versions would result in a MINOR version bump and the removal of support
+for Node.js versions would result in a MAJOR version bump.

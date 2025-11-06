@@ -112,12 +112,15 @@ the following fields :</p>
         * [.getUser(accessToken)](#module_smartcar.getUser) ⇒ [<code>User</code>](#module_smartcar..User)
         * [.getVehicles(accessToken, [paging])](#module_smartcar.getVehicles) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
         * [.getCompatibility(vin, scope, [country], [options])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
+        * [.getCompatibilityMatrix(region, [options])](#module_smartcar.getCompatibilityMatrix) ⇒ [<code>CompatibilityMatrix</code>](#module_smartcar..CompatibilityMatrix)
         * [.hashChallenge(amt, challenge)](#module_smartcar.hashChallenge) ⇒ <code>String</code>
         * [.verifyPayload(amt, signature, body)](#module_smartcar.verifyPayload) ⇒ <code>Boolean</code>
     * _inner_
         * [~User](#module_smartcar..User) : <code>Object</code>
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
         * [~Compatibility](#module_smartcar..Compatibility) : <code>Object</code>
+        * [~CompatibilityMatrixEntry](#module_smartcar..CompatibilityMatrixEntry) : <code>Object</code>
+        * [~CompatibilityMatrix](#module_smartcar..CompatibilityMatrix) : <code>Object</code>
         * [~GetConnections](#module_smartcar..GetConnections) ⇒ <code>Promise.&lt;GetConnections&gt;</code>
         * [~DeleteConnections](#module_smartcar..DeleteConnections) ⇒ <code>Promise.&lt;DeleteConnections&gt;</code>
 
@@ -220,6 +223,56 @@ _To use this function, please contact us!_
 | [options.testMode] | <code>Boolean</code> |  | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.mode] | <code>String</code> |  | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 | [options.testModeCompatibilityLevel] | <code>String</code> |  | This string determines which permissions the simulated vehicle is capable of. Possible Values can be found at this link: (https://smartcar.com/docs/integration-guide/test-your-integration/test-requests/#test-successful-api-requests-with-specific-vins) |
+
+**Example**
+```js
+// Called with country parameter
+const compatibility = await smartcar.getCompatibility(
+  '5YJ3E1EA7KF317XXX',
+  ['read_odometer', 'read_location'],
+  'US',
+  { mode: 'live' },
+);
+```
+**Example**
+```js
+// Called without country parameter
+const compatibility = await smartcar.getCompatibility(
+  '5YJ3E1EA7KF317XXX',
+  ['read_odometer', 'read_location'],
+  { mode: 'live' },
+);
+```
+<a name="module_smartcar.getCompatibilityMatrix"></a>
+
+### smartcar.getCompatibilityMatrix(region, [options]) ⇒ [<code>CompatibilityMatrix</code>](#module_smartcar..CompatibilityMatrix)
+Retrieve the Smartcar compatibility matrix for a given region.
+Provides the ability to filter by scope, make, and type.
+
+A compatible vehicle is a vehicle that:
+1. has the hardware required for internet connectivity,
+2. belongs to the makes and models Smartcar supports, and
+3. supports the permissions.
+
+_To use this function, please contact us!_
+
+**Kind**: static method of [<code>smartcar</code>](#module_smartcar)
+**Throws**:
+
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+  See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+  for all possible errors.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| region | <code>String</code> | the region to retrieve the compatibility matrix for |
+| [options] | <code>Object</code> |  |
+| [options.scope] | <code>Array.&lt;String&gt;</code> | list of permissions to filter the matrix by |
+| [options.make] | <code>Array.&lt;String&gt;</code> | list of makes to filter the matrix by |
+| [options.type] | <code>String</code> | Engine type to filter the matrix by (e.g., "ICE", "HEV", "PHEV", "BEV"). |
+| [options.mode] | <code>String</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
+| [options.version] | <code>String</code> | API version to use for the request |
 
 <a name="module_smartcar.hashChallenge"></a>
 
@@ -339,6 +392,107 @@ Verify webhook payload with AMT and signature.
  }
 }
 ```
+<a name="module_smartcar..CompatibilityMatrixEntry"></a>
+
+### smartcar~CompatibilityMatrixEntry : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| model | <code>String</code> |
+| startYear | <code>Number</code> |
+| endYear | <code>Number</code> |
+| type | <code>String</code> |
+| endpoints | <code>Array.&lt;String&gt;</code> |
+| permissions | <code>Array.&lt;String&gt;</code> |
+
+**Example**
+```js
+{
+  model: "LEAF",
+  startYear: 2018,
+  endYear: 2022,
+  type: "BEV",
+  endpoints: [
+    "EV battery",
+    "EV charging status",
+    "Location",
+    "Lock & unlock",
+    "Odometer"
+  ],
+  permissions: [
+    "read_battery",
+    "read_charge",
+    "read_location",
+    "control_security",
+    "read_odometer"
+  ]
+}
+```
+<a name="module_smartcar..CompatibilityMatrix"></a>
+
+### smartcar~CompatibilityMatrix : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| makes | <code>Object.&lt;String, Array.&lt;CompatibilityMatrixEntry&gt;&gt;</code> | A mapping of make names to arrays of CompatibilityMatrixEntry objects. |
+
+**Example**
+```js
+{
+  "NISSAN": [
+    {
+      "model": "LEAF",
+      "startYear": 2018,
+      "endYear": 2022,
+      "type": "BEV",
+      "endpoints": [
+        "EV battery",
+        "EV charging status",
+        "Location",
+        "Lock & unlock",
+        "Odometer"
+      ],
+      "permissions": [
+        "read_battery",
+        "read_charge",
+        "read_location",
+        "control_security",
+        "read_odometer"
+      ]
+    }
+  ],
+  "TESLA": [
+    {
+      "model": "3",
+      "startYear": 2017,
+      "endYear": 2023,
+      "type": "BEV",
+      "endpoints": [
+        "EV battery",
+        "EV charging status",
+        "EV start & stop charge",
+        "Location",
+        "Lock & unlock",
+        "Odometer",
+        "Tire pressure"
+      ],
+      "permissions": [
+        "read_battery",
+        "read_charge",
+        "control_charge",
+        "read_location",
+        "control_security",
+        "read_odometer",
+        "read_tires"
+      ]
+    }
+  ]
+}
+```
 <a name="module_smartcar..GetConnections"></a>
 
 ### smartcar~GetConnections ⇒ <code>Promise.&lt;GetConnections&gt;</code>
@@ -418,7 +572,7 @@ Create a Smartcar OAuth client for your application.
 | options | <code>Object</code> |  |  |
 | options.clientId | <code>String</code> |  | Application client id obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | options.clientSecret | <code>String</code> |  | The application's client secret. |
-| options.redirectUri | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. |
+| [options.redirectUri] | <code>String</code> |  | Redirect URI registered in the [application settings](https://developer.smartcar.com/apps). The given URL must exactly match one of the registered URLs. This parameter is optional and should normally be set within the Smartcar Dashboard. |
 | [options.testMode] | <code>Boolean</code> | <code>false</code> | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 
@@ -437,7 +591,7 @@ approval_prompt to `force`.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [scope] | <code>Array.&lt;String&gt;</code> | List of permissions your application requires. The valid permission names are found in the [API Reference](https://smartcar.com/docs/guides/scope/) |
+| [scope] | <code>Array.&lt;String&gt;</code> | List of permissions your application requires. The valid permission names are found in the [API Reference](https://smartcar.com/docs/guides/scope/). This is an optional parameter that should normally be set up within the Smartcar Dashboard. |
 | [options] | <code>Object</code> |  |
 | [options.forcePrompt] | <code>Boolean</code> | Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> | An optional value that sets the behavior of the grant dialog displayed to the user. Object can contain two keys :  - enabled - Boolean value, if set to `true`, `single_select` limits the user to    selecting only one vehicle.  - vin - String vin, if set, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
@@ -446,6 +600,20 @@ approval_prompt to `force`.
 | [options.flags] | <code>Object</code> | Object of flags where key is the name of the flag value is string or boolean value. |
 | [options.user] | <code>String</code> | An optional unique identifier for a vehicle owner. This identifier is used to aggregate analytics across Connect sessions for each vehicle owner. |
 
+**Example**
+```js
+// Called with `scope` parameter.
+authClient.getAuthUrl(['read_odometer', 'read_vehicle_info'], {
+  user: '61a3e3d2-5198-47ba-aabd-4623ce4a4042'
+});
+```
+**Example**
+```js
+// Called with only `options` parameter.
+authClient.getAuthUrl({
+  user: '61a3e3d2-5198-47ba-aabd-4623ce4a4042'
+});
+```
 **Example**
 ```js
 https://connect.smartcar.com/oauth/authorize?
@@ -696,10 +864,13 @@ Fetch the list of permissions that this application has been granted
 Fetches diagnostic system status information for the vehicle.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
-**Returns**: [<code>Promise.&lt;DiagnosticSystemStatusResponse&gt;</code>](#DiagnosticSystemStatusResponse) - - The response containing diagnostic system statuses.
+**Returns**: [<code>Promise.&lt;DiagnosticSystemStatusResponse&gt;</code>](#DiagnosticSystemStatusResponse) - -
+The response containing diagnostic system statuses.
 **Throws**:
 
-- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError. See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors) for all possible errors.
+- [<code>SmartcarError</code>](#SmartcarError) - an instance of SmartcarError.
+See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+for all possible errors.
 
 **Example**
 ```js
@@ -1627,148 +1798,4 @@ the following fields :
 | isLocked | <code>Boolean</code> | Whether the vehicle is locked or not. |
 | doors | <code>Array</code> | The status of each of the vehicle's doors. |
 | windows | <code>Array</code> | The status of each of the vehicle's windows. |
-| sunroof | <code>Array</code> | The status of each of the vehicle's sunroof. |
-| storage | <code>Array</code> | The status of each of the vehicle's storage. |
-| chargingPort | <code>Array</code> | The status of each of the vehicle's chargingPort. |
-| meta | [<code>Meta</code>](#Meta) |  |
-
-**Example**
-```js
-{
-   isLocked: true,
-   doors: [
-      {
-          type: 'frontLeft',
-          status: 'LOCKED',
-      },
-      {
-          type: 'frontRight',
-          status: 'LOCKED',
-      },
-      {
-          type: 'backLeft',
-          status: 'LOCKED',
-      },
-      {
-          type: 'backRight',
-          status: 'LOCKED',
-      },
-   ],
-   windows: [
-      {
-          type: 'frontLeft',
-          status: 'CLOSED',
-      },
-      {
-          type: 'frontRight',
-          status: 'CLOSED',
-      },
-      {
-          type: 'backLeft',
-          status: 'CLOSED',
-      },
-      {
-          type: 'backRight',
-          status: 'CLOSED',
-      },
-   ],
-   sunroof: [
-      {
-          type: 'sunroof',
-          status: 'CLOSED',
-      },
-   ],
-   storage: [
-      {
-          type: 'rear',
-          status: 'CLOSED',
-      },
-      {
-          type: 'front',
-          status: 'CLOSED',
-      },
-   ],
-   chargingPort: [
-      {
-          type: 'chargingPort',
-          status: 'CLOSED',
-      },
-   ],
-   meta: {
-       dataAge: new Date('2018-05-04T07:20:50.844Z'),
-       requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-       fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
-   },
-}
-```
-<a name="Location"></a>
-
-## Location : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| latitude | <code>Number</code> | The vehicle latitude (in degrees). |
-| longitude | <code>Number</code> | The vehicle longitude (in degrees). |
-| meta | [<code>Meta</code>](#Meta) |  |
-
-**Example**
-```js
-{
-  latitude: 37.400880,
-  longitude: -122.057804,
-  meta: {
-   dataAge: new Date('2018-05-04T07:20:50.844Z'),
-   unitSystem: 'imperial',
-   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-   fetchedAt: new Date('2022-01-20T02:55:25.041Z'),
-  }
-}
-```
-<a name="Attributes"></a>
-
-## Attributes : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| id | <code>String</code> | The vehicle's unique Smartcar identifier. |
-| make | <code>String</code> | The brand of the vehicle. |
-| model | <code>String</code> | The specific model of the vehicle. |
-| year | <code>Number</code> | The model year of the vehicle. |
-| meta | [<code>Meta</code>](#Meta) |  |
-
-**Example**
-```js
-{
-  id: '19c0cc8c-80e0-4182-9372-6ef903c7599c',
-  make: 'TESLA',
-  model: 'S',
-  year: 2017,
-  meta: {
-   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-  }
-}
-```
-<a name="ActionResponse"></a>
-
-## ActionResponse : <code>Object</code>
-**Kind**: global typedef
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| status | <code>String</code> | set to `success` on successful request |
-| meta | [<code>Meta</code>](#Meta) |  |
-
-**Example**
-```js
-{
-  status: 'success',
-  meta: {
-   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
-  }
-}
-```
+| sunroof | <code>Array</code> | The status of each of
