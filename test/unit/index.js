@@ -242,6 +242,50 @@ test('getCompatibility - with test_mode false [deprecated]', async function(t) {
   t.true(n.isDone());
 });
 
+test('getCompatibilityMatrix ', async function(t) {
+  const path = '/compatibility/matrix?mode=live&region=US';
+  const n = nock('https://api.smartcar.com/v6.6/')
+    .get(path)
+    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+    .reply(200, {
+      pizza: 'pasta',
+    });
+
+  const response = await smartcar.getCompatibilityMatrix('US', {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    testMode: false,
+  });
+
+  t.is(response.pizza, 'pasta');
+  t.true(n.isDone());
+});
+
+test('getCompatibilityMatrix - with options', async function(t) {
+  const type = 'BEV';
+  const make = 'TESLA';
+  const path = `/compatibility/matrix?mode=live&region=US&type=${type}&make=${make}`;
+  const n = nock('https://api.smartcar.com/v6.6/')
+    .get(path)
+    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+    .reply(200, {
+      pizza: 'pasta',
+    });
+
+  const response = await smartcar.getCompatibilityMatrix('US', {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret',
+    version: '6.6',
+    testMode: false,
+    make,
+    type,
+  });
+
+  t.is(response.pizza, 'pasta');
+  t.true(n.isDone());
+});
+
 test('getConnections - no filters', async function(t) {
   const n = nock('https://management.smartcar.com/v2.0/')
     .get('/management/connections')
