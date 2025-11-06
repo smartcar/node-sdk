@@ -560,8 +560,8 @@ test('getAuthUrl - single select with invalid enabled value', function(t) {
 
   let expected = 'https://connect.smartcar.com/oauth/authorize?';
   expected += `response_type=code&client_id=${CLIENT_ID}`;
-  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&approval_prompt=force';
+  expected += '&redirect_uri=https%3A%2F%2Finsurance.co%2Fcallback';
   expected += '&scope=read_odometer%20read_vehicle_info';
   expected += '&state=fakestate';
   expected += '&mode=live';
