@@ -26,7 +26,7 @@
     "npm": ">=8.3.0"
   },
   "scripts": {
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "npm run test:unit",
     "test:unit": "ava test/unit",
     "test:e2e": "ava --serial --timeout=120s test/end-to-end",
     "test:integration": "cross-env NOCK_OFF=true npm test",

@@ -242,137 +242,179 @@ test('getCompatibility - with test_mode false [deprecated]', async function(t) {
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - region only', async function(t) {
+test('getCompatibilityMatrix ', async function(t) {
+  const path = '/compatibility/matrix?mode=live&region=US';
   const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({region: 'US'})
+    .get(path)
     .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
     .reply(200, {
-      matrix: 'data',
+      pizza: 'pasta',
     });
 
   const response = await smartcar.getCompatibilityMatrix('US', {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
     version: '6.6',
+    testMode: false,
   });
 
-  t.is(response.matrix, 'data');
+  t.is(response.pizza, 'pasta');
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - with string scope', async function(t) {
+test('getCompatibilityMatrix - with options', async function(t) {
+  const type = 'BEV';
+  const make = 'TESLA';
+  const path = `/compatibility/matrix?mode=live&region=US&type=${type}&make=${make}`;
   const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({
-      region: 'US',
-      scope: 'read_location',
-    })
+    .get(path)
     .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
     .reply(200, {
-      matrix: 'data',
+      pizza: 'pasta',
     });
 
   const response = await smartcar.getCompatibilityMatrix('US', {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
     version: '6.6',
-    scope: 'read_location',
+    testMode: false,
+    make,
+    type,
   });
 
-  t.is(response.matrix, 'data');
+  t.is(response.pizza, 'pasta');
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - with array scope', async function(t) {
-  const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({
-      region: 'US',
-      scope: 'read_location read_odometer',
-    })
-    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+test('getConnections - no filters', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
     .reply(200, {
-      matrix: 'data',
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'user1', connectedAt: '2023-01-01'},
+        {vehicleId: 'vehicle2', userId: 'user2', connectedAt: '2023-01-02'},
+      ],
     });
 
-  const response = await smartcar.getCompatibilityMatrix('US', {
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-    version: '6.6',
-    scope: ['read_location', 'read_odometer'],
-  });
-
-  t.is(response.matrix, 'data');
+  const response = await smartcar.getConnections('fake-amt');
+  t.is(response.connections.length, 2);
+  t.is(response.connections[0].vehicleId, 'vehicle1');
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - with string make', async function(t) {
-  const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({
-      region: 'US',
-      make: 'TESLA',
-    })
-    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+test('getConnections - with userId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({user_id: 'test-user-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
     .reply(200, {
-      matrix: 'data',
+      connections: [
+        {
+          vehicleId: 'vehicle1',
+          userId: 'test-user-123',
+          connectedAt: '2023-01-01',
+        },
+      ],
     });
 
-  const response = await smartcar.getCompatibilityMatrix('US', {
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-    version: '6.6',
-    make: 'TESLA',
+  const response = await smartcar.getConnections('fake-amt', {
+    userId: 'test-user-123',
   });
-
-  t.is(response.matrix, 'data');
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].userId, 'test-user-123');
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - with array make', async function(t) {
-  const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({
-      region: 'US',
-      make: 'TESLA FORD',
-    })
-    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+test('getConnections - with vehicleId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({vehicle_id: 'test-vehicle-456'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
     .reply(200, {
-      matrix: 'data',
+      connections: [
+        {
+          vehicleId: 'test-vehicle-456',
+          userId: 'user1',
+          connectedAt: '2023-01-01',
+        },
+      ],
     });
 
-  const response = await smartcar.getCompatibilityMatrix('US', {
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-    version: '6.6',
-    make: ['TESLA', 'FORD'],
+  const response = await smartcar.getConnections('fake-amt', {
+    vehicleId: 'test-vehicle-456',
   });
-
-  t.is(response.matrix, 'data');
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'test-vehicle-456');
   t.true(n.isDone());
 });
 
-test('getCompatibilityMatrix - with type', async function(t) {
-  const n = nock('https://api.smartcar.com/v6.6/')
-    .get('/compatibility/matrix')
-    .query({
-      region: 'US',
-      type: 'ICE',
-    })
-    .matchHeader('Authorization', 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0')
+test('getConnections - with limit parameter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({limit: 10})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
     .reply(200, {
-      matrix: 'data',
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'user1', connectedAt: '2023-01-01'},
+      ],
+      paging: {cursor: 'next-page-cursor'},
     });
 
-  const response = await smartcar.getCompatibilityMatrix('US', {
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-    version: '6.6',
-    type: ['ICE'],
-  });
+  const response = await smartcar.getConnections('fake-amt', {}, {limit: 10});
+  t.is(response.connections.length, 1);
+  t.is(response.paging.cursor, 'next-page-cursor');
+  t.true(n.isDone());
+});
 
-  t.is(response.matrix, 'data');
+test('getConnections - with cursor parameter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({cursor: 'page-cursor-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle2', userId: 'user2', connectedAt: '2023-01-02'},
+      ],
+    });
+
+  const response = await smartcar.getConnections('fake-amt', {}, {
+    cursor: 'page-cursor-123',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'vehicle2');
+  t.true(n.isDone());
+});
+
+test('getConnections - with all parameters', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .get('/management/connections')
+    .query({
+      // eslint-disable-next-line camelcase
+      user_id: 'test-user-789',
+      limit: 5,
+      cursor: 'test-cursor',
+    })
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {
+          vehicleId: 'vehicle1',
+          userId: 'test-user-789',
+          connectedAt: '2023-01-01',
+        },
+      ],
+    });
+
+  const response = await smartcar.getConnections(
+    'fake-amt',
+    {userId: 'test-user-789'},
+    {limit: 5, cursor: 'test-cursor'},
+  );
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].userId, 'test-user-789');
   t.true(n.isDone());
 });
 
@@ -387,6 +429,47 @@ test('deleteConnections - both vehicleId and userId passed', async function(t) {
     error.message,
     'Filter can contain EITHER user_id OR vehicle_id, not both',
   );
+});
+
+test('deleteConnections - with userId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .delete('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({user_id: 'test-user-123'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'vehicle1', userId: 'test-user-123'},
+        {vehicleId: 'vehicle2', userId: 'test-user-123'},
+      ],
+    });
+
+  const response = await smartcar.deleteConnections('fake-amt', {
+    userId: 'test-user-123',
+  });
+  t.is(response.connections.length, 2);
+  t.is(response.connections[0].userId, 'test-user-123');
+  t.true(n.isDone());
+});
+
+test('deleteConnections - with vehicleId filter', async function(t) {
+  const n = nock('https://management.smartcar.com/v2.0/')
+    .delete('/management/connections')
+    // eslint-disable-next-line camelcase
+    .query({vehicle_id: 'test-vehicle-456'})
+    .matchHeader('Authorization', 'Basic ZGVmYXVsdDpmYWtlLWFtdA==')
+    .reply(200, {
+      connections: [
+        {vehicleId: 'test-vehicle-456', userId: 'user1'},
+      ],
+    });
+
+  const response = await smartcar.deleteConnections('fake-amt', {
+    vehicleId: 'test-vehicle-456',
+  });
+  t.is(response.connections.length, 1);
+  t.is(response.connections[0].vehicleId, 'test-vehicle-456');
+  t.true(n.isDone());
 });
 
 test('timeout', async function(t) {
