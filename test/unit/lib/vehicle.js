@@ -12,9 +12,96 @@ const TOKEN = '9ad942c6-32b8-4af2-ada6-5e8ecdbad9c2';
 
 const vehicle = new Vehicle(VID, TOKEN);
 
+const v3SignalsResponse = {
+  data: [
+    {
+      id: '<string>',
+      type: 'signal',
+      attributes: {
+        code: 'chargeVoltage',
+        name: 'Voltage',
+        group: 'Charge',
+        status: {
+          value: 'SUCCESS',
+        },
+        body: {
+          unit: 'volts',
+          value: 85,
+        },
+      },
+      meta: {
+        retrievedAt: 1696156800,
+        oemUpdatedAt: 1696156799,
+      },
+      links: {
+        self: '<string>',
+        values: '<string>',
+        vehicle: '<string>',
+      },
+    },
+  ],
+  meta: {
+    page: 1,
+    pageSize: 10,
+    totalCount: 5,
+  },
+  links: {
+    self: '/vehicles/vehicle123/signals?page=1&pageSize=10',
+    first: '/vehicles/vehicle123/signals?page=1&pageSize=10',
+    previous: null,
+    next: '/vehicles/vehicle123/signals?page=2&pageSize=10',
+    last: '/vehicles/vehicle123/signals?page=5&pageSize=10',
+  },
+  included: {
+    vehicle: {
+      id: '<string>',
+      type: 'vehicle',
+      attributes: {
+        make: '<string>',
+        model: '<string>',
+        year: 123,
+      },
+      links: {
+        self: '<string>',
+      },
+    },
+  },
+};
+
+const v3SignalResponse = {
+  id: '<string>',
+  type: 'signal',
+  attributes: {
+    code: 'odometer-traveleddistance',
+    name: 'TraveledDistance',
+    group: 'Odometer',
+    status: {
+      value: 'SUCCESS',
+    },
+    body: {
+      unit: 'km',
+      value: 100,
+    },
+  },
+  meta: {
+    retrievedAt: 1696156800,
+    oemUpdatedAt: 1696156799,
+  },
+  links: {
+    self: '<string>',
+    values: '<string>',
+    vehicle: '<string>',
+  },
+};
+
 const nocks = {
   base(version = vehicle.version, vid = VID, token = TOKEN) {
     return nock(`https://api.smartcar.com/v${version}/vehicles/${vid}`)
+      .matchHeader('User-Agent', USER_AGENT)
+      .matchHeader('Authorization', `Bearer ${token}`);
+  },
+  baseV3(vid = VID, token = TOKEN) {
+    return nock(`https://vehicle.api.smartcar.com/v3/vehicles/${vid}`)
       .matchHeader('User-Agent', USER_AGENT)
       .matchHeader('Authorization', `Bearer ${token}`);
   },
@@ -356,6 +443,39 @@ test('request - get charge limit', async function(t) {
   t.is(response.meta.requestId, 'requestId');
   t.is(response.limit, 0.7);
   t.true(t.context.n.isDone());
+});
+
+test.only('request - v3 signals', async function(t) {
+  sinon.restore(); // clear all spys
+
+  t.context.n = nocks
+    .baseV3()
+    .get('/signals')
+    .reply(200, v3SignalsResponse);
+
+  const serviceRequestSpy = sinon.spy(vehicle, 'request');
+
+  const response = await vehicle.getSignals();
+
+  t.true(serviceRequestSpy.calledOnceWith('get', 'signals'));
+  t.deepEqual(response.body.data, v3SignalsResponse.data);
+});
+
+test.only('request - v3 signal odometer-traveleddistance', async function(t) {
+  sinon.restore(); // clear all spys
+
+  const signalCode = 'odometer-traveleddistance';
+  t.context.n = nocks
+    .baseV3()
+    .get(`/signals/${signalCode}`)
+    .reply(200, v3SignalResponse);
+
+  const serviceRequestSpy = sinon.spy(vehicle, 'request');
+
+  const response = await vehicle.getSignal(signalCode);
+
+  t.true(serviceRequestSpy.calledOnceWith('get', `signals/${signalCode}`));
+  t.deepEqual(response.body.data, v3SignalResponse.data);
 });
 
 test('request - set charge limit', async function(t) {

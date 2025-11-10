@@ -166,6 +166,29 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
 };
 
 /**
+ * Return the vehicle.
+ * @async
+ * @method
+ * @param {String} accessToken - access token
+ * @param {String} vehicleId - vehicle id
+ * @param {Object} [paging]
+ * @param {Number} [paging.limit] - number of vehicles to return
+ * @param {Number} [paging.offset] - index to start vehicle list
+ * @return {module:smartcar~VehicleIds}
+ * @throws {SmartcarError} - an instance of SmartcarError.
+ *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+ *   for all possible errors.
+ */
+smartcar.getVehicle = async function(accessToken, vehicleId, paging = {}) {
+  const response = await new SmartcarService({
+    baseUrl: util.getUrl(vehicleId, '', '3'),
+    headers: {Authorization: `Bearer ${accessToken}`},
+    qs: paging,
+  }).request('get', '');
+  return response;
+};
+
+/**
  * @type {Object}
  * @typedef Compatibility
  * @property {Boolean} compatible
