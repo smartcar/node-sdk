@@ -445,7 +445,7 @@ test('request - get charge limit', async function(t) {
   t.true(t.context.n.isDone());
 });
 
-test.only('request - v3 signals', async function(t) {
+test('request - v3 signals', async function(t) {
   sinon.restore(); // clear all spys
 
   t.context.n = nocks
@@ -461,7 +461,7 @@ test.only('request - v3 signals', async function(t) {
   t.deepEqual(response.body.data, v3SignalsResponse.data);
 });
 
-test.only('request - v3 signal odometer-traveleddistance', async function(t) {
+test('request - v3 signal odometer-traveleddistance', async function(t) {
   sinon.restore(); // clear all spys
 
   const signalCode = 'odometer-traveleddistance';

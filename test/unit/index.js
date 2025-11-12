@@ -82,7 +82,7 @@ test('getVehicles - paging', async function(t) {
   t.true(n.isDone());
 });
 
-test.only('getVehicle - v3', async function(t) {
+test('getVehicle - v3', async function(t) {
 
   const vehicle = new smartcar.Vehicle();
   vehicle.id = v3VehiclesResponse.id;
@@ -293,6 +293,7 @@ test('getCompatibilityMatrix ', async function(t) {
 test('getCompatibilityMatrix - with options', async function(t) {
   const type = 'BEV';
   const make = 'TESLA';
+  // eslint-disable-next-line max-len
   const path = `/compatibility/matrix?mode=live&region=US&type=${type}&make=${make}`;
   const n = nock('https://api.smartcar.com/v6.6/')
     .get(path)
