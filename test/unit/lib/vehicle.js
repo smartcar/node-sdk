@@ -18,7 +18,7 @@ const v3SignalsResponse = {
       id: '<string>',
       type: 'signal',
       attributes: {
-        code: 'chargeVoltage',
+        code: 'charge-voltage',
         name: 'Voltage',
         group: 'Charge',
         status: {
