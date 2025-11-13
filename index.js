@@ -166,6 +166,11 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
 };
 
 
+/**
+ * @typedef {Object} VehicleRes
+ * @property {Vehicle} body - The vehicle response data.
+ * @property {Object} [headers] - Response headers
+ */
 
 /**
  * @type {Object}
@@ -199,7 +204,7 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
  * @method
  * @param {String} accessToken - access token
  * @param {String} vehicleId - vehicle id
- * @return {module:smartcar~Vehicle}
+ * @return {module:smartcar~VehicleRes}
  * @throws {SmartcarError} - an instance of SmartcarError.
  *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
  *   for all possible errors.
@@ -208,8 +213,12 @@ smartcar.getVehicle = async function(accessToken, vehicleId) {
   const response = await new SmartcarService({
     baseUrl: util.getUrl(vehicleId, '', '3'),
     headers: {Authorization: `Bearer ${accessToken}`},
+    apiVersion: '3',
   }).request('get', '');
-  return response;
+  return {
+    body: response,
+    headers: response.meta,
+  };
 };
 
 /**

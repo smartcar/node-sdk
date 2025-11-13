@@ -93,7 +93,7 @@ test('getVehicle - v3', async function(t) {
     .reply(200, v3VehiclesResponse);
 
   const res = await smartcar.getVehicle('simple', vehicle.id);
-  t.is(res.id, v3VehiclesResponse.id);
+  t.is(res.body.id, v3VehiclesResponse.id);
   t.true(n.isDone());
 });
 

@@ -52,7 +52,7 @@ test('getVehicle - v3', async(t) => {
   const vehicleId = v3TestVehicle.id;
   const response = await smartcar.getVehicle(token, vehicleId);
 
-  t.is(response.id, vehicleId);
+  t.is(response.body.id, vehicleId);
   delete env.SMARTCAR_API_V3_ORIGIN;
 
 });

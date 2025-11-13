@@ -70,7 +70,11 @@ the following fields :</p>
 <dd></dd>
 <dt><a href="#SignalsRes">SignalsRes</a> : <code>Object</code></dt>
 <dd></dd>
+<dt><a href="#SignalsResBody">SignalsResBody</a> : <code>Object</code></dt>
+<dd></dd>
 <dt><a href="#SignalRes">SignalRes</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#SignalResBody">SignalResBody</a> : <code>Object</code></dt>
 <dd></dd>
 <dt><a href="#Meta">Meta</a> : <code>Object</code></dt>
 <dd></dd>
@@ -115,7 +119,7 @@ the following fields :</p>
         * [.getApiVersion()](#module_smartcar.getApiVersion) ⇒ <code>String</code>
         * [.getUser(accessToken)](#module_smartcar.getUser) ⇒ [<code>User</code>](#module_smartcar..User)
         * [.getVehicles(accessToken, [paging])](#module_smartcar.getVehicles) ⇒ [<code>VehicleIds</code>](#module_smartcar..VehicleIds)
-        * [.getVehicle(accessToken, vehicleId)](#module_smartcar.getVehicle) ⇒ [<code>Vehicle</code>](#module_smartcar..Vehicle)
+        * [.getVehicle(accessToken, vehicleId)](#module_smartcar.getVehicle) ⇒ [<code>VehicleRes</code>](#module_smartcar..VehicleRes)
         * [.getCompatibility(vin, scope, [country], [options])](#module_smartcar.getCompatibility) ⇒ [<code>Compatibility</code>](#module_smartcar..Compatibility)
         * [.getCompatibilityMatrix(region, [options])](#module_smartcar.getCompatibilityMatrix) ⇒ [<code>CompatibilityMatrix</code>](#module_smartcar..CompatibilityMatrix)
         * [.hashChallenge(amt, challenge)](#module_smartcar.hashChallenge) ⇒ <code>String</code>
@@ -123,6 +127,7 @@ the following fields :</p>
     * _inner_
         * [~User](#module_smartcar..User) : <code>Object</code>
         * [~VehicleIds](#module_smartcar..VehicleIds) : <code>Object</code>
+        * [~VehicleRes](#module_smartcar..VehicleRes) : <code>Object</code>
         * [~Vehicle](#module_smartcar..Vehicle) : <code>Object</code>
         * [~Compatibility](#module_smartcar..Compatibility) : <code>Object</code>
         * [~CompatibilityMatrixEntry](#module_smartcar..CompatibilityMatrixEntry) : <code>Object</code>
@@ -202,7 +207,7 @@ Return list of the user's vehicles ids.
 
 <a name="module_smartcar.getVehicle"></a>
 
-### smartcar.getVehicle(accessToken, vehicleId) ⇒ [<code>Vehicle</code>](#module_smartcar..Vehicle)
+### smartcar.getVehicle(accessToken, vehicleId) ⇒ [<code>VehicleRes</code>](#module_smartcar..VehicleRes)
 Return basic info about a vehicle.
 
 **Kind**: static method of [<code>smartcar</code>](#module_smartcar)
@@ -375,6 +380,17 @@ Verify webhook payload with AMT and signature.
   }
 }
 ```
+<a name="module_smartcar..VehicleRes"></a>
+
+### smartcar~VehicleRes : <code>Object</code>
+**Kind**: inner typedef of [<code>smartcar</code>](#module_smartcar)
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| body | [<code>Vehicle</code>](#Vehicle) | The vehicle response data. |
+| [headers] | <code>Object</code> | Response headers |
+
 <a name="module_smartcar..Vehicle"></a>
 
 ### smartcar~Vehicle : <code>Object</code>
@@ -843,6 +859,7 @@ Initializes a new Service object to make requests to the Smartcar API.
 | [options.baseUrl] | <code>String</code> | Host/Base URL for the requests |
 | [options.auth] | <code>Object</code> | authorization options |
 | [options.headers] | <code>Object</code> | headers to add |
+| [options.apiVersion] | <code>Object</code> | API version to use for requests |
 
 <a name="Vehicle"></a>
 
@@ -861,7 +878,7 @@ Initializes a new Service object to make requests to the Smartcar API.
     * [.subscribe(webhookId)](#Vehicle+subscribe) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.unsubscribe(amt, webhookId)](#Vehicle+unsubscribe) ⇒ [<code>Promise.&lt;Meta&gt;</code>](#Meta)
     * [.batch(paths)](#Vehicle+batch) ⇒ [<code>Promise.&lt;Batch&gt;</code>](#Batch)
-    * [.request(method, path, body, headers)](#Vehicle+request) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.request(method, path, body, headers, apiVersion)](#Vehicle+request) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSignals()](#Vehicle+getSignals) ⇒ [<code>Promise.&lt;SignalsRes&gt;</code>](#SignalsRes)
     * [.getSignal(signalCode)](#Vehicle+getSignal) ⇒ [<code>Promise.&lt;SignalRes&gt;</code>](#SignalRes)
     * [.vin()](#Vehicle+vin) ⇒ [<code>Vin</code>](#Vin)
@@ -1130,7 +1147,7 @@ Make batch requests for supported items
 
 <a name="Vehicle+request"></a>
 
-### vehicle.request(method, path, body, headers) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+### vehicle.request(method, path, body, headers, apiVersion) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 General purpose method to make a request to a Smartcar endpoint.
 
 **Kind**: instance method of [<code>Vehicle</code>](#Vehicle)
@@ -1147,6 +1164,7 @@ General purpose method to make a request to a Smartcar endpoint.
 | path | <code>String</code> | The path to make the request to. |
 | body | <code>Object</code> | The request body. |
 | headers | <code>Object</code> | The headers to include in the request. |
+| apiVersion | <code>String</code> | The API version to use for the request. |
 
 <a name="Vehicle+getSignals"></a>
 
@@ -1633,7 +1651,18 @@ the following fields :
 
 | Name | Type | Description |
 | --- | --- | --- |
-| data | [<code>Array.&lt;SignalRes&gt;</code>](#SignalRes) | The array of signal objects. |
+| body | [<code>SignalsResBody</code>](#SignalsResBody) | The signal response data. |
+| [headers] | <code>Object</code> | Response headers |
+
+<a name="SignalsResBody"></a>
+
+## SignalsResBody : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | [<code>Array.&lt;SignalResBody&gt;</code>](#SignalResBody) | The array of signal objects. |
 
 **Example**
 ```js
@@ -1683,6 +1712,17 @@ the following fields :
 <a name="SignalRes"></a>
 
 ## SignalRes : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| body | [<code>SignalResBody</code>](#SignalResBody) | The signal response data. |
+| [headers] | <code>Object</code> | Response headers |
+
+<a name="SignalResBody"></a>
+
+## SignalResBody : <code>Object</code>
 **Kind**: global typedef
 **Properties**
 
@@ -1779,4 +1819,98 @@ the following fields :
 
 | Name | Type | Description |
 | --- | --- | --- |
-| isPluggedIn | <code>Boolean</code> | Indicates whether charging cable is   plugged in.
+| isPluggedIn | <code>Boolean</code> | Indicates whether charging cable is   plugged in. |
+| state | <code>String</code> | Indicates the current state of the charge   system. Can be `FULLY_CHARGED`, `CHARGING`, or `NOT_CHARGING`. |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  isPluggedIn: false,
+  state: "FULLY_CHARGED",
+  meta: {
+    dataAge: new Date('2018-05-04T07:20:50.844Z'),
+    fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
+  }
+}
+```
+<a name="Battery"></a>
+
+## Battery : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| range | <code>Number</code> | The estimated remaining distance the car can  travel (in kms or miles). Unit is passed as a parameter in vehicle constructor. |
+| percentRemaining | <code>Number</code> | The remaining level of charge in   the battery (in percent). |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  range: 40.5,
+  percentRemaining: 0.3,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
+  }
+}
+```
+<a name="BatteryCapacity"></a>
+
+## BatteryCapacity : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| capacity | <code>Number</code> | The total capacity of the vehicle's battery (in kilowatt-hours) |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+  capacity: 24,
+  meta: {
+   dataAge: new Date('2018-05-04T07:20:50.844Z'),
+   unitSystem: 'imperial',
+   requestId: '26c14915-0c26-43c5-8e42-9edfc2a66a0f',
+   fetchedAt: new Date('2018-05-04T07:20:51.844Z'),
+  }
+}
+```
+<a name="NominalCapacity"></a>
+
+## NominalCapacity : <code>Object</code>
+**Kind**: global typedef
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| availableCapacities | <code>Array</code> | A list of the rated nominal capacities available for a vehicle |
+| capacity | <code>Object</code> | The rated nominal capacity for the vehicle's battery in kWh |
+| url | <code>String</code> | A URL that will launch the flow for a vehicle owner to specify the correct battery capacity for a vehicle |
+| meta | [<code>Meta</code>](#Meta) |  |
+
+**Example**
+```js
+{
+ "availableCapacities": [
+       {
+           "capacity" :  70.9,
+          "description" : null
+      },
+      {
+          "capacity" :  80.9,
+          "description" : null
+      },
+      {
+          "capacity" :  90.9,
+          "description" : "BEV:Extended Range"
+      }
+  ],
+  "capacity": null,
+  "url" : "https://connect.smartcar.com/battery-capacity?vehicle_id=36ab27d0-fd9d-4455-823a-ce30af709ffc&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07&t
