@@ -7,6 +7,19 @@ const smartcar = require('../../');
 const SmartcarService = require('../../lib/smartcar-service');
 const SmartcarError = require('../../lib/smartcar-error');
 
+const v3VehiclesResponse = {
+  id: 'vehicleId123',
+  type: 'vehicle',
+  attributes: {
+    make: '<string>',
+    model: '<string>',
+    year: 123,
+  },
+  links: {
+    self: '<string>',
+  },
+};
+
 test('setApiVersion and getApiVersion', function(t) {
   let vehicle = new smartcar.Vehicle();
   t.is(vehicle.version, '2.0');
@@ -66,6 +79,21 @@ test('getVehicles - paging', async function(t) {
 
   const res = await smartcar.getVehicles('token', {limit: 1});
   t.is(res.vehicles.length, 1);
+  t.true(n.isDone());
+});
+
+test('getVehicle - v3', async function(t) {
+
+  const vehicle = new smartcar.Vehicle();
+  vehicle.id = v3VehiclesResponse.id;
+
+  const n = nock('https://vehicle.api.smartcar.com/v3/')
+    .get(`/vehicles/${vehicle.id}/`)
+    .matchHeader('Authorization', 'Bearer simple')
+    .reply(200, v3VehiclesResponse);
+
+  const res = await smartcar.getVehicle('simple', vehicle.id);
+  t.is(res.body.id, v3VehiclesResponse.id);
   t.true(n.isDone());
 });
 
@@ -265,6 +293,7 @@ test('getCompatibilityMatrix ', async function(t) {
 test('getCompatibilityMatrix - with options', async function(t) {
   const type = 'BEV';
   const make = 'TESLA';
+  // eslint-disable-next-line max-len
   const path = `/compatibility/matrix?mode=live&region=US&type=${type}&make=${make}`;
   const n = nock('https://api.smartcar.com/v6.6/')
     .get(path)

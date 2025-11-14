@@ -112,9 +112,20 @@ app.get('/callback', async function(req, res, next) {
   //   "model": "Model S",
   //   "year": 2014
   //   "meta": {
-  //     "requestId": "ada7207c-3c0a-4027-a47f-6215ce6f7b93"
+  //     "requestId": "ada7207c-3c0a-4027-a47f-6215ce6f7b93"
   //   }
   // }
+
+  // get signal all signal data for a vehicle
+  const response = await vehicle.getSignals();
+  console.log(response.body);
+
+
+  // or get a specific signal
+  const odometerResponse = await vehicle.getSignal('odometer-traveleddistance');
+  console.log(odometerResponse.body);
+
+  
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

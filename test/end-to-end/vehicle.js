@@ -1,6 +1,7 @@
 'use strict';
 const _ = require('lodash');
 const test = require('ava');
+const {env} = require('process');
 
 const smartcar = require('../../');
 const {getOrThrowConfig} = require('../../lib/util');
@@ -42,8 +43,13 @@ test.before(async(t) => {
     'required:control_charge',
   ]);
 
+  const v3TestVehicleId = 'tst2e255-d3c8-4f90-9fec-e6e68b98e9cb';
+  const v3TestToken = 'test-data-token';
+  const v3TestVehicle = new smartcar.Vehicle(v3TestVehicleId, v3TestToken);
+  const v3TestOrigin = 'https://kmr522c5xj.execute-api.us-west-2.amazonaws.com';
+
   smartcar.setApiVersion('1.0');
-  t.context = {volt, ford, kia};
+  t.context = {volt, ford, kia, v3TestVehicle, v3TestOrigin};
 });
 
 test('vehicle vin', async(t) => {
@@ -561,6 +567,8 @@ test('vehicle request - set charge limit', async(t) => {
   t.is(response.status, 'success');
 });
 
+
+
 test('vehicle request - diagnostic trouble codes', async(t) => {
   const response = await t.context.volt.diagnosticTroubleCodes();
 
@@ -634,7 +642,6 @@ test('vehicle batch - diagnostic system status', async(t) => {
   );
 });
 
-
 test('vehicle request - service history', async(t) => {
   const startDate = '2023-05-20';
   const endDate = '2024-02-10';
@@ -678,6 +685,26 @@ test('vehicle request - send invalid coordinates', async(t) => {
     }
   }
 });
+
+test('vehicle request - v3 get signals', async(t) => {
+  env.SMARTCAR_API_V3_ORIGIN = t.context.v3TestOrigin;
+  const response = await t.context.v3TestVehicle.getSignals();
+
+  t.is(response.body.data[0].attributes.status.value, 'SUCCESS');
+
+  delete env.SMARTCAR_API_V3_ORIGIN;
+});
+
+/* eslint-disable max-len */
+test('vehicle request - v3 get signal', async(t) => {
+  env.SMARTCAR_API_V3_ORIGIN = t.context.v3TestOrigin;
+  const response = await t.context.v3TestVehicle.getSignal('odometer-traveleddistance');
+
+  t.is(response.body.attributes.status.value, 'SUCCESS');
+
+  delete env.SMARTCAR_API_V3_ORIGIN;
+});
+
 
 test.after.always('vehicle disconnect', async(t) => {
   const response = await t.context.kia.disconnect();
