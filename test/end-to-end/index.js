@@ -21,7 +21,7 @@ test.before(async(t) => {
   const v3TestVehicleId = 'tst2e255-d3c8-4f90-9fec-e6e68b98e9cb';
   const v3TestToken = 'test-data-token';
   const v3TestVehicle = new smartcar.Vehicle(v3TestVehicleId, v3TestToken);
-  const v3TestOrigin = 'https://kmr522c5xj.execute-api.us-west-2.amazonaws.com';
+  const v3TestOrigin = 'https://vehicle.api.smartcar.com';
 
   t.context.v3TestVehicle = v3TestVehicle;
   t.context.v3TestOrigin = v3TestOrigin;

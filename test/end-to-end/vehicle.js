@@ -46,7 +46,7 @@ test.before(async(t) => {
   const v3TestVehicleId = 'tst2e255-d3c8-4f90-9fec-e6e68b98e9cb';
   const v3TestToken = 'test-data-token';
   const v3TestVehicle = new smartcar.Vehicle(v3TestVehicleId, v3TestToken);
-  const v3TestOrigin = 'https://kmr522c5xj.execute-api.us-west-2.amazonaws.com';
+  const v3TestOrigin = 'https://vehicle.api.smartcar.com';
 
   smartcar.setApiVersion('1.0');
   t.context = {volt, ford, kia, v3TestVehicle, v3TestOrigin};
@@ -302,9 +302,9 @@ test('vehicle subscribe - error', async(t) => {
 
 test('vehicle unsubscribe - error', async(t) => {
   const errorMessage = 'AUTHENTICATION:null - The authorization header'
-   + ' is missing or malformed, or it contains invalid or'
-   + ' expired authentication credentials. Please check for missing parameters,'
-   + ' spelling and casing mistakes, and other syntax issues.';
+    + ' is missing or malformed, or it contains invalid or'
+    + ' expired authentication credentials. Please check for missing parameters,'
+    + ' spelling and casing mistakes, and other syntax issues.';
   const error = await t.throwsAsync(
     t.context.volt.unsubscribe('amt', 'webhookID'),
   );
@@ -583,7 +583,7 @@ test('vehicle request - diagnostic trouble codes', async(t) => {
   response.activeCodes.forEach((code) => {
     t.truthy(typeof code.code === 'string');
     t.truthy(code.timestamp === null
-     || new Date(code.timestamp) instanceof Date);
+      || new Date(code.timestamp) instanceof Date);
   });
 
   t.truthy(response.meta.dataAge instanceof Date);
