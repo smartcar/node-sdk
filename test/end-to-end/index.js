@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const test = require('ava');
+const {env} = require('process');
 
 const smartcar = require('../../');
 const util = require('../../lib/util');
@@ -16,6 +17,14 @@ test.before(async(t) => {
   t.context.userId = userId;
   t.context.accessToken = accessToken;
   t.context.connectedVehicles = vehicles;
+
+  const v3TestVehicleId = 'tst2e255-d3c8-4f90-9fec-e6e68b98e9cb';
+  const v3TestToken = 'test-data-token';
+  const v3TestVehicle = new smartcar.Vehicle(v3TestVehicleId, v3TestToken);
+  const v3TestOrigin = 'https://vehicle.api.smartcar.com';
+
+  t.context.v3TestVehicle = v3TestVehicle;
+  t.context.v3TestOrigin = v3TestOrigin;
 });
 
 test('getVehicles', async(t) => {
@@ -33,6 +42,19 @@ test('getVehicles', async(t) => {
     t.deepEqual(vehicleId.length, 36);
   });
   t.deepEqual(response.meta.requestId.length, 36);
+});
+
+test('getVehicle - v3', async(t) => {
+
+  env.SMARTCAR_API_V3_ORIGIN = t.context.v3TestOrigin;
+  const {v3TestVehicle} = t.context;
+  const token = v3TestVehicle.token;
+  const vehicleId = v3TestVehicle.id;
+  const response = await smartcar.getVehicle(token, vehicleId);
+
+  t.is(response.body.id, vehicleId);
+  delete env.SMARTCAR_API_V3_ORIGIN;
+
 });
 
 test('getUser', async(t) => {

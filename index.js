@@ -165,6 +165,62 @@ smartcar.getVehicles = async function(accessToken, paging = {}) {
   return response;
 };
 
+
+/**
+ * @typedef {Object} VehicleRes
+ * @property {Vehicle} body - The vehicle response data.
+ * @property {Object} [headers] - Response headers
+ */
+
+/**
+ * @type {Object}
+ * @typedef Vehicle
+ * @property {String} id - Vehicle Id
+ * @property {String} type - Resource type
+ * @property {Object} attributes
+ * @property {String} attributes.make - Vehicle make
+ * @property {String} attributes.model - Vehicle model
+ * @property {Number} attributes.year - Vehicle year
+ * @property {Object} links
+ * @property {String} links.self - Link to vehicle resource
+ * @example
+ * {
+ *   "id": "36ab27d0-fd9d-4455-823a-ce30af709ffc",
+ *   "type": "vehicle",
+ *   "attributes": {
+ *     "make": "TESLA",
+ *     "model": "Model 3",
+ *     "year": 2019
+ *   },
+ *   "links": {
+ *     "self": "/vehicles/36ab27d0-fd9d-4455-823a-ce30af709ffc"
+ *   }
+ * }
+ */
+
+/**
+ * Return basic info about a vehicle.
+ * @async
+ * @method
+ * @param {String} accessToken - access token
+ * @param {String} vehicleId - vehicle id
+ * @return {module:smartcar~VehicleRes}
+ * @throws {SmartcarError} - an instance of SmartcarError.
+ *   See the [errors section](https://github.com/smartcar/node-sdk/tree/master/doc#errors)
+ *   for all possible errors.
+ */
+smartcar.getVehicle = async function(accessToken, vehicleId) {
+  const response = await new SmartcarService({
+    baseUrl: util.getUrl(vehicleId, '', '3'),
+    headers: {Authorization: `Bearer ${accessToken}`},
+    apiVersion: '3',
+  }).request('get', '');
+  return {
+    body: response,
+    headers: response.meta,
+  };
+};
+
 /**
  * @type {Object}
  * @typedef Compatibility
