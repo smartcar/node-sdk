@@ -1,5 +1,7 @@
 # Smartcar Node SDK [![Build Status][ci-image]][ci-url] [![npm version][npm-image]][npm-url]
 
+> **Maintenance mode.** This SDK receives security patches through December 1, 2026, then no further updates, including security. The package stays published and existing integrations keep working. For new integrations, call the Smartcar API directly over HTTP: [Making API Requests](https://smartcar.com/docs/getting-started/how-to/making-api-requests).
+
 The official Smartcar Node SDK.
 
 ## Overview
